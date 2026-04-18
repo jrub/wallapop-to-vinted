@@ -1,0 +1,15 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+.playwright-mcp/
+
+# generated data — not versioned
+data/downloaded_items.json
+data/migration.json
+data/auth_state.json
+data/images/
+data/logs/
+
+.DS_Store

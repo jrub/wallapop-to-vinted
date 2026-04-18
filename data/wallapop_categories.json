@@ -1,0 +1,9779 @@
+{
+  "100": {
+    "name": "Coches",
+    "path": [
+      "Coches"
+    ],
+    "leaf": true
+  },
+  "14000": {
+    "name": "Motos",
+    "path": [
+      "Motos"
+    ],
+    "leaf": true
+  },
+  "12800": {
+    "name": "Motor y accesorios",
+    "path": [
+      "Motor y accesorios"
+    ],
+    "leaf": false
+  },
+  "10164": {
+    "name": "GPS y electrónica",
+    "path": [
+      "Motor y accesorios",
+      "GPS y electrónica"
+    ],
+    "leaf": true
+  },
+  "10165": {
+    "name": "Herramientas",
+    "path": [
+      "Motor y accesorios",
+      "Herramientas"
+    ],
+    "leaf": true
+  },
+  "10167": {
+    "name": "Recambios de coches y furgonetas",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de coches y furgonetas"
+    ],
+    "leaf": false
+  },
+  "10328": {
+    "name": "Accesorios",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de coches y furgonetas",
+      "Accesorios"
+    ],
+    "leaf": true
+  },
+  "10329": {
+    "name": "Aceites, lubricantes y líquidos",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de coches y furgonetas",
+      "Aceites, lubricantes y líquidos"
+    ],
+    "leaf": true
+  },
+  "10330": {
+    "name": "Carrocerías",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de coches y furgonetas",
+      "Carrocerías"
+    ],
+    "leaf": true
+  },
+  "10331": {
+    "name": "Faros y luces indicadoras",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de coches y furgonetas",
+      "Faros y luces indicadoras"
+    ],
+    "leaf": true
+  },
+  "10332": {
+    "name": "Llantas",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de coches y furgonetas",
+      "Llantas"
+    ],
+    "leaf": true
+  },
+  "10333": {
+    "name": "Motor y piezas de motor",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de coches y furgonetas",
+      "Motor y piezas de motor"
+    ],
+    "leaf": true
+  },
+  "10334": {
+    "name": "Neumáticos",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de coches y furgonetas",
+      "Neumáticos"
+    ],
+    "leaf": true
+  },
+  "10335": {
+    "name": "Seguridad",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de coches y furgonetas",
+      "Seguridad"
+    ],
+    "leaf": true
+  },
+  "10336": {
+    "name": "Suspensión y dirección",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de coches y furgonetas",
+      "Suspensión y dirección"
+    ],
+    "leaf": true
+  },
+  "10337": {
+    "name": "Transmisión",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de coches y furgonetas",
+      "Transmisión"
+    ],
+    "leaf": true
+  },
+  "10338": {
+    "name": "Tuning",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de coches y furgonetas",
+      "Tuning"
+    ],
+    "leaf": true
+  },
+  "10168": {
+    "name": "Recambios de motos y cuatriciclos",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de motos y cuatriciclos"
+    ],
+    "leaf": false
+  },
+  "10339": {
+    "name": "Aceites, lubricantes y líquidos",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de motos y cuatriciclos",
+      "Aceites, lubricantes y líquidos"
+    ],
+    "leaf": true
+  },
+  "10340": {
+    "name": "Faros y luces indicadoras",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de motos y cuatriciclos",
+      "Faros y luces indicadoras"
+    ],
+    "leaf": true
+  },
+  "10439": {
+    "name": "Motor y piezas de motor",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de motos y cuatriciclos",
+      "Motor y piezas de motor"
+    ],
+    "leaf": true
+  },
+  "10440": {
+    "name": "Neumáticos",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de motos y cuatriciclos",
+      "Neumáticos"
+    ],
+    "leaf": true
+  },
+  "10341": {
+    "name": "Vestimenta y protección",
+    "path": [
+      "Motor y accesorios",
+      "Recambios de motos y cuatriciclos",
+      "Vestimenta y protección"
+    ],
+    "leaf": true
+  },
+  "10166": {
+    "name": "Otros",
+    "path": [
+      "Motor y accesorios",
+      "Otros"
+    ],
+    "leaf": true
+  },
+  "12465": {
+    "name": "Moda y accesorios",
+    "path": [
+      "Moda y accesorios"
+    ],
+    "leaf": false
+  },
+  "11002": {
+    "name": "Mujer",
+    "path": [
+      "Moda y accesorios",
+      "Mujer"
+    ],
+    "leaf": false
+  },
+  "11021": {
+    "name": "Calzado",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado"
+    ],
+    "leaf": false
+  },
+  "11022": {
+    "name": "Botas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Botas"
+    ],
+    "leaf": false
+  },
+  "9839": {
+    "name": "Botas a media pantorrilla",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Botas",
+      "Botas a media pantorrilla"
+    ],
+    "leaf": true
+  },
+  "9843": {
+    "name": "Botas de agua",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Botas",
+      "Botas de agua"
+    ],
+    "leaf": true
+  },
+  "9844": {
+    "name": "Botas de trabajo",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Botas",
+      "Botas de trabajo"
+    ],
+    "leaf": true
+  },
+  "9840": {
+    "name": "Botas hasta la rodilla",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Botas",
+      "Botas hasta la rodilla"
+    ],
+    "leaf": true
+  },
+  "9842": {
+    "name": "Botas para la nieve",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Botas",
+      "Botas para la nieve"
+    ],
+    "leaf": true
+  },
+  "9841": {
+    "name": "Botas por encima de la rodilla",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Botas",
+      "Botas por encima de la rodilla"
+    ],
+    "leaf": true
+  },
+  "9838": {
+    "name": "Botines",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Botas",
+      "Botines"
+    ],
+    "leaf": true
+  },
+  "9845": {
+    "name": "Otras botas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Botas",
+      "Otras botas"
+    ],
+    "leaf": true
+  },
+  "11028": {
+    "name": "Calzado deportivo",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo"
+    ],
+    "leaf": false
+  },
+  "9873": {
+    "name": "Botas de esquí",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Botas de esquí"
+    ],
+    "leaf": true
+  },
+  "9864": {
+    "name": "Botas de fútbol",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Botas de fútbol"
+    ],
+    "leaf": true
+  },
+  "9868": {
+    "name": "Botas de fútbol sala",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Botas de fútbol sala"
+    ],
+    "leaf": true
+  },
+  "9870": {
+    "name": "Botas de moto",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Botas de moto"
+    ],
+    "leaf": true
+  },
+  "9874": {
+    "name": "Botas de snowboard",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Botas de snowboard"
+    ],
+    "leaf": true
+  },
+  "9866": {
+    "name": "Botas y calzado de senderismo",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Botas y calzado de senderismo"
+    ],
+    "leaf": true
+  },
+  "9862": {
+    "name": "Calzado de ciclismo",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Calzado de ciclismo"
+    ],
+    "leaf": true
+  },
+  "9863": {
+    "name": "Calzado de danza",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Calzado de danza"
+    ],
+    "leaf": true
+  },
+  "9861": {
+    "name": "Calzado de escalada y búlder",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Calzado de escalada y búlder"
+    ],
+    "leaf": true
+  },
+  "9865": {
+    "name": "Calzado de golf",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Calzado de golf"
+    ],
+    "leaf": true
+  },
+  "9875": {
+    "name": "Calzado de natación y agua",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Calzado de natación y agua"
+    ],
+    "leaf": true
+  },
+  "9867": {
+    "name": "Patines de hielo",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Patines de hielo"
+    ],
+    "leaf": true
+  },
+  "9871": {
+    "name": "Patines de ruedas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Patines de ruedas"
+    ],
+    "leaf": true
+  },
+  "9860": {
+    "name": "Zapatillas de baloncesto",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Zapatillas de baloncesto"
+    ],
+    "leaf": true
+  },
+  "9872": {
+    "name": "Zapatillas de correr",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Zapatillas de correr"
+    ],
+    "leaf": true
+  },
+  "9869": {
+    "name": "Zapatillas de gimnasio",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Zapatillas de gimnasio"
+    ],
+    "leaf": true
+  },
+  "9876": {
+    "name": "Zapatillas de tenis",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Zapatillas de tenis"
+    ],
+    "leaf": true
+  },
+  "9877": {
+    "name": "Otro calzado deportivo",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Calzado deportivo",
+      "Otro calzado deportivo"
+    ],
+    "leaf": true
+  },
+  "11027": {
+    "name": "Pantuflas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Pantuflas"
+    ],
+    "leaf": true
+  },
+  "11025": {
+    "name": "Sandalias y chanclas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Sandalias y chanclas"
+    ],
+    "leaf": false
+  },
+  "9855": {
+    "name": "Chanclas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Sandalias y chanclas",
+      "Chanclas"
+    ],
+    "leaf": true
+  },
+  "9854": {
+    "name": "Chanclas de dedo",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Sandalias y chanclas",
+      "Chanclas de dedo"
+    ],
+    "leaf": true
+  },
+  "9853": {
+    "name": "Sandalias planas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Sandalias y chanclas",
+      "Sandalias planas"
+    ],
+    "leaf": true
+  },
+  "9856": {
+    "name": "Otras chanclas y sandalias",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Sandalias y chanclas",
+      "Otras chanclas y sandalias"
+    ],
+    "leaf": true
+  },
+  "11026": {
+    "name": "Tacones",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Tacones"
+    ],
+    "leaf": false
+  },
+  "9858": {
+    "name": "Sandalias de tacón",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Tacones",
+      "Sandalias de tacón"
+    ],
+    "leaf": true
+  },
+  "9857": {
+    "name": "Zapatos de salón",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Tacones",
+      "Zapatos de salón"
+    ],
+    "leaf": true
+  },
+  "9859": {
+    "name": "Otros tacones",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Tacones",
+      "Otros tacones"
+    ],
+    "leaf": true
+  },
+  "11029": {
+    "name": "Zapatillas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Zapatillas"
+    ],
+    "leaf": true
+  },
+  "11024": {
+    "name": "Zapatos planos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Zapatos planos"
+    ],
+    "leaf": false
+  },
+  "9848": {
+    "name": "Alpargatas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Zapatos planos",
+      "Alpargatas"
+    ],
+    "leaf": true
+  },
+  "9846": {
+    "name": "Bailarinas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Zapatos planos",
+      "Bailarinas"
+    ],
+    "leaf": true
+  },
+  "9850": {
+    "name": "Merceditas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Zapatos planos",
+      "Merceditas"
+    ],
+    "leaf": true
+  },
+  "9849": {
+    "name": "Zapatos con cordones",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Zapatos planos",
+      "Zapatos con cordones"
+    ],
+    "leaf": true
+  },
+  "9847": {
+    "name": "Zapatos náuticos y mocasines",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Zapatos planos",
+      "Zapatos náuticos y mocasines"
+    ],
+    "leaf": true
+  },
+  "9851": {
+    "name": "Otros zapatos planos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Zapatos planos",
+      "Otros zapatos planos"
+    ],
+    "leaf": true
+  },
+  "11023": {
+    "name": "Zuecos y mules",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Zuecos y mules"
+    ],
+    "leaf": true
+  },
+  "11030": {
+    "name": "Otro calzado",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Calzado",
+      "Otro calzado"
+    ],
+    "leaf": true
+  },
+  "11004": {
+    "name": "Ropa",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa"
+    ],
+    "leaf": false
+  },
+  "11010": {
+    "name": "Camisetas y tops",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops"
+    ],
+    "leaf": false
+  },
+  "9757": {
+    "name": "Blusas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Blusas"
+    ],
+    "leaf": true
+  },
+  "9769": {
+    "name": "Blusas con peplum",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Blusas con peplum"
+    ],
+    "leaf": true
+  },
+  "9766": {
+    "name": "Bodys",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Bodys"
+    ],
+    "leaf": true
+  },
+  "9756": {
+    "name": "Camisas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Camisas"
+    ],
+    "leaf": true
+  },
+  "9759": {
+    "name": "Camisetas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Camisetas"
+    ],
+    "leaf": true
+  },
+  "9763": {
+    "name": "Camisetas de manga corta",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Camisetas de manga corta"
+    ],
+    "leaf": true
+  },
+  "9765": {
+    "name": "Camisetas de manga larga",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Camisetas de manga larga"
+    ],
+    "leaf": true
+  },
+  "9764": {
+    "name": "Camisetas de manga ¾",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Camisetas de manga ¾"
+    ],
+    "leaf": true
+  },
+  "9760": {
+    "name": "Chalecos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Chalecos"
+    ],
+    "leaf": true
+  },
+  "9762": {
+    "name": "Crop tops",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Crop tops"
+    ],
+    "leaf": true
+  },
+  "9768": {
+    "name": "Cuello alto",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Cuello alto"
+    ],
+    "leaf": true
+  },
+  "9770": {
+    "name": "Cuello halter",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Cuello halter"
+    ],
+    "leaf": true
+  },
+  "9758": {
+    "name": "Sin mangas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Sin mangas"
+    ],
+    "leaf": true
+  },
+  "9767": {
+    "name": "Tops sin hombros",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Tops sin hombros"
+    ],
+    "leaf": true
+  },
+  "9761": {
+    "name": "Túnicas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Túnicas"
+    ],
+    "leaf": true
+  },
+  "9771": {
+    "name": "Otros tops y camisetas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Camisetas y tops",
+      "Otros tops y camisetas"
+    ],
+    "leaf": true
+  },
+  "11019": {
+    "name": "Disfraces y trajes especiales",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Disfraces y trajes especiales"
+    ],
+    "leaf": true
+  },
+  "11009": {
+    "name": "Faldas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Faldas"
+    ],
+    "leaf": false
+  },
+  "9747": {
+    "name": "Faldas acampanadas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Faldas",
+      "Faldas acampanadas"
+    ],
+    "leaf": true
+  },
+  "9748": {
+    "name": "Faldas ajustadas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Faldas",
+      "Faldas ajustadas"
+    ],
+    "leaf": true
+  },
+  "9752": {
+    "name": "Faldas de cintura alta",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Faldas",
+      "Faldas de cintura alta"
+    ],
+    "leaf": true
+  },
+  "9754": {
+    "name": "Faldas de tubo",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Faldas",
+      "Faldas de tubo"
+    ],
+    "leaf": true
+  },
+  "9745": {
+    "name": "Faldas midi",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Faldas",
+      "Faldas midi"
+    ],
+    "leaf": true
+  },
+  "9751": {
+    "name": "Faldas plisadas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Faldas",
+      "Faldas plisadas"
+    ],
+    "leaf": true
+  },
+  "9749": {
+    "name": "Faldas skater",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Faldas",
+      "Faldas skater"
+    ],
+    "leaf": true
+  },
+  "9753": {
+    "name": "Faldas tulipán",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Faldas",
+      "Faldas tulipán"
+    ],
+    "leaf": true
+  },
+  "9750": {
+    "name": "Faldas vaqueras",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Faldas",
+      "Faldas vaqueras"
+    ],
+    "leaf": true
+  },
+  "9746": {
+    "name": "Maxifaldas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Faldas",
+      "Maxifaldas"
+    ],
+    "leaf": true
+  },
+  "9744": {
+    "name": "Minifaldas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Faldas",
+      "Minifaldas"
+    ],
+    "leaf": true
+  },
+  "9755": {
+    "name": "Otras faldas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Faldas",
+      "Otras faldas"
+    ],
+    "leaf": true
+  },
+  "11006": {
+    "name": "Jerséis y sudaderas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Jerséis y sudaderas"
+    ],
+    "leaf": false
+  },
+  "9724": {
+    "name": "Boleros",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Boleros"
+    ],
+    "leaf": true
+  },
+  "9725": {
+    "name": "Chalecos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Chalecos"
+    ],
+    "leaf": true
+  },
+  "9723": {
+    "name": "Cárdigans",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Cárdigans"
+    ],
+    "leaf": true
+  },
+  "9721": {
+    "name": "Jerséis",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Jerséis"
+    ],
+    "leaf": true
+  },
+  "9722": {
+    "name": "Kimonos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Kimonos"
+    ],
+    "leaf": true
+  },
+  "9720": {
+    "name": "Sudaderas con y sin capucha",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Sudaderas con y sin capucha"
+    ],
+    "leaf": true
+  },
+  "9726": {
+    "name": "Otros jerséis y sudaderas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Otros jerséis y sudaderas"
+    ],
+    "leaf": true
+  },
+  "11016": {
+    "name": "Lencería y pijamas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Lencería y pijamas"
+    ],
+    "leaf": false
+  },
+  "9813": {
+    "name": "Accesorios de lencería",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Lencería y pijamas",
+      "Accesorios de lencería"
+    ],
+    "leaf": true
+  },
+  "9810": {
+    "name": "Batas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Lencería y pijamas",
+      "Batas"
+    ],
+    "leaf": true
+  },
+  "9806": {
+    "name": "Braguitas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Lencería y pijamas",
+      "Braguitas"
+    ],
+    "leaf": true
+  },
+  "9812": {
+    "name": "Calcetines",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Lencería y pijamas",
+      "Calcetines"
+    ],
+    "leaf": true
+  },
+  "9807": {
+    "name": "Conjuntos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Lencería y pijamas",
+      "Conjuntos"
+    ],
+    "leaf": true
+  },
+  "9808": {
+    "name": "Lencería moldeadora",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Lencería y pijamas",
+      "Lencería moldeadora"
+    ],
+    "leaf": true
+  },
+  "9811": {
+    "name": "Medias",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Lencería y pijamas",
+      "Medias"
+    ],
+    "leaf": true
+  },
+  "9809": {
+    "name": "Pijamas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Lencería y pijamas",
+      "Pijamas"
+    ],
+    "leaf": true
+  },
+  "9805": {
+    "name": "Sujetadores",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Lencería y pijamas",
+      "Sujetadores"
+    ],
+    "leaf": true
+  },
+  "9814": {
+    "name": "Otros",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Lencería y pijamas",
+      "Otros"
+    ],
+    "leaf": true
+  },
+  "11014": {
+    "name": "Monos cortos y largos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Monos cortos y largos"
+    ],
+    "leaf": false
+  },
+  "9799": {
+    "name": "Monos cortos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Monos cortos y largos",
+      "Monos cortos"
+    ],
+    "leaf": true
+  },
+  "9798": {
+    "name": "Monos largos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Monos cortos y largos",
+      "Monos largos"
+    ],
+    "leaf": true
+  },
+  "9800": {
+    "name": "Otros monos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Monos cortos y largos",
+      "Otros monos"
+    ],
+    "leaf": true
+  },
+  "11013": {
+    "name": "Pantalones cortos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones cortos"
+    ],
+    "leaf": false
+  },
+  "9795": {
+    "name": "Pantalones cortos cargo",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones cortos",
+      "Pantalones cortos cargo"
+    ],
+    "leaf": true
+  },
+  "9790": {
+    "name": "Pantalones cortos de cintura alta",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones cortos",
+      "Pantalones cortos de cintura alta"
+    ],
+    "leaf": true
+  },
+  "9789": {
+    "name": "Pantalones cortos de cintura baja",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones cortos",
+      "Pantalones cortos de cintura baja"
+    ],
+    "leaf": true
+  },
+  "9794": {
+    "name": "Pantalones cortos de cuero",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones cortos",
+      "Pantalones cortos de cuero"
+    ],
+    "leaf": true
+  },
+  "9793": {
+    "name": "Pantalones cortos de encaje",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones cortos",
+      "Pantalones cortos de encaje"
+    ],
+    "leaf": true
+  },
+  "9791": {
+    "name": "Pantalones cortos hasta la rodilla",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones cortos",
+      "Pantalones cortos hasta la rodilla"
+    ],
+    "leaf": true
+  },
+  "9792": {
+    "name": "Pantalones cortos vaqueros",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones cortos",
+      "Pantalones cortos vaqueros"
+    ],
+    "leaf": true
+  },
+  "9796": {
+    "name": "Pantalones ¾",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones cortos",
+      "Pantalones ¾"
+    ],
+    "leaf": true
+  },
+  "9797": {
+    "name": "Otros pantalones cortos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones cortos",
+      "Otros pantalones cortos"
+    ],
+    "leaf": true
+  },
+  "11012": {
+    "name": "Pantalones y leggings",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones y leggings"
+    ],
+    "leaf": false
+  },
+  "9786": {
+    "name": "Leggings",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones y leggings",
+      "Leggings"
+    ],
+    "leaf": true
+  },
+  "9787": {
+    "name": "Pantalones  harén",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones y leggings",
+      "Pantalones  harén"
+    ],
+    "leaf": true
+  },
+  "9781": {
+    "name": "Pantalones anchos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones y leggings",
+      "Pantalones anchos"
+    ],
+    "leaf": true
+  },
+  "9785": {
+    "name": "Pantalones de cuero",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones y leggings",
+      "Pantalones de cuero"
+    ],
+    "leaf": true
+  },
+  "9783": {
+    "name": "Pantalones de pinzas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones y leggings",
+      "Pantalones de pinzas"
+    ],
+    "leaf": true
+  },
+  "9782": {
+    "name": "Pantalones pitillo",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones y leggings",
+      "Pantalones pitillo"
+    ],
+    "leaf": true
+  },
+  "9784": {
+    "name": "Pantalones rectos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones y leggings",
+      "Pantalones rectos"
+    ],
+    "leaf": true
+  },
+  "9780": {
+    "name": "Pantalones tobilleros y chinos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones y leggings",
+      "Pantalones tobilleros y chinos"
+    ],
+    "leaf": true
+  },
+  "9788": {
+    "name": "Otros pantalones",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Pantalones y leggings",
+      "Otros pantalones"
+    ],
+    "leaf": true
+  },
+  "11017": {
+    "name": "Premamá",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Premamá"
+    ],
+    "leaf": false
+  },
+  "9822": {
+    "name": "Abrigos y chaquetas premamá",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Premamá",
+      "Abrigos y chaquetas premamá"
+    ],
+    "leaf": true
+  },
+  "9823": {
+    "name": "Bañadores y ropa de playa premamá",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Premamá",
+      "Bañadores y ropa de playa premamá"
+    ],
+    "leaf": true
+  },
+  "9817": {
+    "name": "Faldas premamá",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Premamá",
+      "Faldas premamá"
+    ],
+    "leaf": true
+  },
+  "9821": {
+    "name": "Jerseys premamá",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Premamá",
+      "Jerseys premamá"
+    ],
+    "leaf": true
+  },
+  "9820": {
+    "name": "Monos y monos premamá",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Premamá",
+      "Monos y monos premamá"
+    ],
+    "leaf": true
+  },
+  "9819": {
+    "name": "Pantalones cortos premamá",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Premamá",
+      "Pantalones cortos premamá"
+    ],
+    "leaf": true
+  },
+  "9818": {
+    "name": "Pantalones premamá",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Premamá",
+      "Pantalones premamá"
+    ],
+    "leaf": true
+  },
+  "9825": {
+    "name": "Ropa deportiva",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Premamá",
+      "Ropa deportiva"
+    ],
+    "leaf": true
+  },
+  "9824": {
+    "name": "Ropa interior premamá",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Premamá",
+      "Ropa interior premamá"
+    ],
+    "leaf": true
+  },
+  "9815": {
+    "name": "Tops premamá",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Premamá",
+      "Tops premamá"
+    ],
+    "leaf": true
+  },
+  "9816": {
+    "name": "Vestidos premamá",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Premamá",
+      "Vestidos premamá"
+    ],
+    "leaf": true
+  },
+  "9826": {
+    "name": "Otra ropa premamá",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Premamá",
+      "Otra ropa premamá"
+    ],
+    "leaf": true
+  },
+  "11005": {
+    "name": "Ropa de abrigo",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de abrigo"
+    ],
+    "leaf": false
+  },
+  "9701": {
+    "name": "Abrigos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de abrigo",
+      "Abrigos"
+    ],
+    "leaf": true
+  },
+  "9700": {
+    "name": "Capas y ponchos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de abrigo",
+      "Capas y ponchos"
+    ],
+    "leaf": true
+  },
+  "9702": {
+    "name": "Chalecos y gilets",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de abrigo",
+      "Chalecos y gilets"
+    ],
+    "leaf": true
+  },
+  "9705": {
+    "name": "Chaqueta bomber",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de abrigo",
+      "Chaqueta bomber"
+    ],
+    "leaf": true
+  },
+  "9703": {
+    "name": "Chaquetas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de abrigo",
+      "Chaquetas"
+    ],
+    "leaf": true
+  },
+  "9704": {
+    "name": "Chaquetas bolero",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de abrigo",
+      "Chaquetas bolero"
+    ],
+    "leaf": true
+  },
+  "9707": {
+    "name": "Chubasqueros",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de abrigo",
+      "Chubasqueros"
+    ],
+    "leaf": true
+  },
+  "9706": {
+    "name": "Gabardina",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de abrigo",
+      "Gabardina"
+    ],
+    "leaf": true
+  },
+  "9708": {
+    "name": "Parkas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de abrigo",
+      "Parkas"
+    ],
+    "leaf": true
+  },
+  "9709": {
+    "name": "Otras prendas exteriores",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de abrigo",
+      "Otras prendas exteriores"
+    ],
+    "leaf": true
+  },
+  "11015": {
+    "name": "Ropa de baño",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de baño"
+    ],
+    "leaf": false
+  },
+  "9801": {
+    "name": "Bañadores de una pieza",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de baño",
+      "Bañadores de una pieza"
+    ],
+    "leaf": true
+  },
+  "9802": {
+    "name": "Bikinis y tankinis",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de baño",
+      "Bikinis y tankinis"
+    ],
+    "leaf": true
+  },
+  "9803": {
+    "name": "Camisetas y pareos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de baño",
+      "Camisetas y pareos"
+    ],
+    "leaf": true
+  },
+  "9804": {
+    "name": "Otros bañadores y ropa de playa",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa de baño",
+      "Otros bañadores y ropa de playa"
+    ],
+    "leaf": true
+  },
+  "11018": {
+    "name": "Ropa deportiva",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa deportiva"
+    ],
+    "leaf": false
+  },
+  "9835": {
+    "name": "Accesorios deportivos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa deportiva",
+      "Accesorios deportivos"
+    ],
+    "leaf": true
+  },
+  "9828": {
+    "name": "Chándales",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa deportiva",
+      "Chándales"
+    ],
+    "leaf": true
+  },
+  "9832": {
+    "name": "Faldas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa deportiva",
+      "Faldas"
+    ],
+    "leaf": true
+  },
+  "9829": {
+    "name": "Pantalones",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa deportiva",
+      "Pantalones"
+    ],
+    "leaf": true
+  },
+  "9830": {
+    "name": "Pantalones cortos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa deportiva",
+      "Pantalones cortos"
+    ],
+    "leaf": true
+  },
+  "9827": {
+    "name": "Ropa de abrigo",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa deportiva",
+      "Ropa de abrigo"
+    ],
+    "leaf": true
+  },
+  "9834": {
+    "name": "Sudaderas con y sin capucha",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa deportiva",
+      "Sudaderas con y sin capucha"
+    ],
+    "leaf": true
+  },
+  "9836": {
+    "name": "Sujetadores deportivos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa deportiva",
+      "Sujetadores deportivos"
+    ],
+    "leaf": true
+  },
+  "9833": {
+    "name": "Tops y camisetas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa deportiva",
+      "Tops y camisetas"
+    ],
+    "leaf": true
+  },
+  "9831": {
+    "name": "Vestidos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa deportiva",
+      "Vestidos"
+    ],
+    "leaf": true
+  },
+  "9837": {
+    "name": "Otra ropa deportiva",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Ropa deportiva",
+      "Otra ropa deportiva"
+    ],
+    "leaf": true
+  },
+  "11054": {
+    "name": "Trajes y blazers",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Trajes y blazers"
+    ],
+    "leaf": false
+  },
+  "9727": {
+    "name": "Blazers",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Trajes y blazers",
+      "Blazers"
+    ],
+    "leaf": true
+  },
+  "9730": {
+    "name": "Piezas de traje",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Trajes y blazers",
+      "Piezas de traje"
+    ],
+    "leaf": true
+  },
+  "9729": {
+    "name": "Trajes de falda",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Trajes y blazers",
+      "Trajes de falda"
+    ],
+    "leaf": true
+  },
+  "9728": {
+    "name": "Trajes de pantalón",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Trajes y blazers",
+      "Trajes de pantalón"
+    ],
+    "leaf": true
+  },
+  "9731": {
+    "name": "Otros trajes y blazers",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Trajes y blazers",
+      "Otros trajes y blazers"
+    ],
+    "leaf": true
+  },
+  "11011": {
+    "name": "Vaqueros",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vaqueros"
+    ],
+    "leaf": false
+  },
+  "9774": {
+    "name": "Vaqueros acampanados",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vaqueros",
+      "Vaqueros acampanados"
+    ],
+    "leaf": true
+  },
+  "9772": {
+    "name": "Vaqueros boyfriend",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vaqueros",
+      "Vaqueros boyfriend"
+    ],
+    "leaf": true
+  },
+  "9775": {
+    "name": "Vaqueros de cintura alta",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vaqueros",
+      "Vaqueros de cintura alta"
+    ],
+    "leaf": true
+  },
+  "9777": {
+    "name": "Vaqueros pitillo",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vaqueros",
+      "Vaqueros pitillo"
+    ],
+    "leaf": true
+  },
+  "9773": {
+    "name": "Vaqueros recortados",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vaqueros",
+      "Vaqueros recortados"
+    ],
+    "leaf": true
+  },
+  "9778": {
+    "name": "Vaqueros rectos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vaqueros",
+      "Vaqueros rectos"
+    ],
+    "leaf": true
+  },
+  "9776": {
+    "name": "Vaqueros rotos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vaqueros",
+      "Vaqueros rotos"
+    ],
+    "leaf": true
+  },
+  "9779": {
+    "name": "Otros vaqueros",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vaqueros",
+      "Otros vaqueros"
+    ],
+    "leaf": true
+  },
+  "11008": {
+    "name": "Vestidos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vestidos"
+    ],
+    "leaf": false
+  },
+  "9732": {
+    "name": "Minivestidos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vestidos",
+      "Minivestidos"
+    ],
+    "leaf": true
+  },
+  "9737": {
+    "name": "Vestidos de invierno",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vestidos",
+      "Vestidos de invierno"
+    ],
+    "leaf": true
+  },
+  "9736": {
+    "name": "Vestidos de verano",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vestidos",
+      "Vestidos de verano"
+    ],
+    "leaf": true
+  },
+  "9738": {
+    "name": "Vestidos formales y de oficina",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vestidos",
+      "Vestidos formales y de oficina"
+    ],
+    "leaf": true
+  },
+  "9739": {
+    "name": "Vestidos informales",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vestidos",
+      "Vestidos informales"
+    ],
+    "leaf": true
+  },
+  "9734": {
+    "name": "Vestidos largos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vestidos",
+      "Vestidos largos"
+    ],
+    "leaf": true
+  },
+  "9733": {
+    "name": "Vestidos midi",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vestidos",
+      "Vestidos midi"
+    ],
+    "leaf": true
+  },
+  "9741": {
+    "name": "Vestidos negros",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vestidos",
+      "Vestidos negros"
+    ],
+    "leaf": true
+  },
+  "9735": {
+    "name": "Vestidos para ocasiones especiales",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vestidos",
+      "Vestidos para ocasiones especiales"
+    ],
+    "leaf": true
+  },
+  "9740": {
+    "name": "Vestidos sin tirantes",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vestidos",
+      "Vestidos sin tirantes"
+    ],
+    "leaf": true
+  },
+  "9742": {
+    "name": "Vestidos vaqueros",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vestidos",
+      "Vestidos vaqueros"
+    ],
+    "leaf": true
+  },
+  "9743": {
+    "name": "Otros vestidos",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Vestidos",
+      "Otros vestidos"
+    ],
+    "leaf": true
+  },
+  "11020": {
+    "name": "Otras prendas",
+    "path": [
+      "Moda y accesorios",
+      "Mujer",
+      "Ropa",
+      "Otras prendas"
+    ],
+    "leaf": true
+  },
+  "11003": {
+    "name": "Hombre",
+    "path": [
+      "Moda y accesorios",
+      "Hombre"
+    ],
+    "leaf": false
+  },
+  "11044": {
+    "name": "Calzado",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado"
+    ],
+    "leaf": false
+  },
+  "11047": {
+    "name": "Alpargatas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Alpargatas"
+    ],
+    "leaf": true
+  },
+  "11046": {
+    "name": "Botas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Botas"
+    ],
+    "leaf": false
+  },
+  "9928": {
+    "name": "Botas Chelsea y sin cordones",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Botas",
+      "Botas Chelsea y sin cordones"
+    ],
+    "leaf": true
+  },
+  "9931": {
+    "name": "Botas de agua",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Botas",
+      "Botas de agua"
+    ],
+    "leaf": true
+  },
+  "9930": {
+    "name": "Botas de nieve",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Botas",
+      "Botas de nieve"
+    ],
+    "leaf": true
+  },
+  "9932": {
+    "name": "Botas de trabajo",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Botas",
+      "Botas de trabajo"
+    ],
+    "leaf": true
+  },
+  "9929": {
+    "name": "Botas safari y con cordones",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Botas",
+      "Botas safari y con cordones"
+    ],
+    "leaf": true
+  },
+  "9933": {
+    "name": "Otras botas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Botas",
+      "Otras botas"
+    ],
+    "leaf": true
+  },
+  "11051": {
+    "name": "Calzado deportivo",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo"
+    ],
+    "leaf": false
+  },
+  "9956": {
+    "name": "Botas de esquí",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Botas de esquí"
+    ],
+    "leaf": true
+  },
+  "9947": {
+    "name": "Botas de fútbol",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Botas de fútbol"
+    ],
+    "leaf": true
+  },
+  "9951": {
+    "name": "Botas de fútbol sala",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Botas de fútbol sala"
+    ],
+    "leaf": true
+  },
+  "9953": {
+    "name": "Botas de moto",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Botas de moto"
+    ],
+    "leaf": true
+  },
+  "9957": {
+    "name": "Botas de snowboard",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Botas de snowboard"
+    ],
+    "leaf": true
+  },
+  "9949": {
+    "name": "Botas y calzado de senderismo",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Botas y calzado de senderismo"
+    ],
+    "leaf": true
+  },
+  "9945": {
+    "name": "Calzado de ciclismo",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Calzado de ciclismo"
+    ],
+    "leaf": true
+  },
+  "9946": {
+    "name": "Calzado de danza",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Calzado de danza"
+    ],
+    "leaf": true
+  },
+  "9944": {
+    "name": "Calzado de escalada y búlder",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Calzado de escalada y búlder"
+    ],
+    "leaf": true
+  },
+  "9948": {
+    "name": "Calzado de golf",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Calzado de golf"
+    ],
+    "leaf": true
+  },
+  "9958": {
+    "name": "Calzado de natación y agua",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Calzado de natación y agua"
+    ],
+    "leaf": true
+  },
+  "9950": {
+    "name": "Patines de hielo",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Patines de hielo"
+    ],
+    "leaf": true
+  },
+  "9954": {
+    "name": "Patines de ruedas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Patines de ruedas"
+    ],
+    "leaf": true
+  },
+  "9943": {
+    "name": "Zapatillas de baloncesto",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Zapatillas de baloncesto"
+    ],
+    "leaf": true
+  },
+  "9955": {
+    "name": "Zapatillas de correr",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Zapatillas de correr"
+    ],
+    "leaf": true
+  },
+  "9952": {
+    "name": "Zapatillas de gimnasio",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Zapatillas de gimnasio"
+    ],
+    "leaf": true
+  },
+  "9959": {
+    "name": "Zapatillas de tenis",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Zapatillas de tenis"
+    ],
+    "leaf": true
+  },
+  "9960": {
+    "name": "Otro calzado deportivo",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Calzado deportivo",
+      "Otro calzado deportivo"
+    ],
+    "leaf": true
+  },
+  "11050": {
+    "name": "Pantuflas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Pantuflas"
+    ],
+    "leaf": true
+  },
+  "11048": {
+    "name": "Sandalias y chanclas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Sandalias y chanclas"
+    ],
+    "leaf": false
+  },
+  "9937": {
+    "name": "Chanclas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Sandalias y chanclas",
+      "Chanclas"
+    ],
+    "leaf": true
+  },
+  "9935": {
+    "name": "Chanclas de dedo",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Sandalias y chanclas",
+      "Chanclas de dedo"
+    ],
+    "leaf": true
+  },
+  "9936": {
+    "name": "Sandalias",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Sandalias y chanclas",
+      "Sandalias"
+    ],
+    "leaf": true
+  },
+  "9934": {
+    "name": "Zuecos y mules",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Sandalias y chanclas",
+      "Zuecos y mules"
+    ],
+    "leaf": true
+  },
+  "9938": {
+    "name": "Otras sandalias y chanclas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Sandalias y chanclas",
+      "Otras sandalias y chanclas"
+    ],
+    "leaf": true
+  },
+  "11052": {
+    "name": "Zapatillas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Zapatillas"
+    ],
+    "leaf": true
+  },
+  "11049": {
+    "name": "Zapatos de vestir",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Zapatos de vestir"
+    ],
+    "leaf": false
+  },
+  "9939": {
+    "name": "Zapatos con cordones",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Zapatos de vestir",
+      "Zapatos con cordones"
+    ],
+    "leaf": true
+  },
+  "9940": {
+    "name": "Zapatos con hebilla",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Zapatos de vestir",
+      "Zapatos con hebilla"
+    ],
+    "leaf": true
+  },
+  "9941": {
+    "name": "Zapatos sin cordones",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Zapatos de vestir",
+      "Zapatos sin cordones"
+    ],
+    "leaf": true
+  },
+  "9942": {
+    "name": "Otros zapatos formales",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Zapatos de vestir",
+      "Otros zapatos formales"
+    ],
+    "leaf": true
+  },
+  "11045": {
+    "name": "Zapatos náuticos y mocasines",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Zapatos náuticos y mocasines"
+    ],
+    "leaf": true
+  },
+  "11053": {
+    "name": "Otro calzado",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Calzado",
+      "Otro calzado"
+    ],
+    "leaf": true
+  },
+  "11031": {
+    "name": "Ropa",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa"
+    ],
+    "leaf": false
+  },
+  "11040": {
+    "name": "Bañadores",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Bañadores"
+    ],
+    "leaf": true
+  },
+  "11039": {
+    "name": "Calcetines y ropa interior",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Calcetines y ropa interior"
+    ],
+    "leaf": false
+  },
+  "9916": {
+    "name": "Albornoces",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Calcetines y ropa interior",
+      "Albornoces"
+    ],
+    "leaf": true
+  },
+  "9915": {
+    "name": "Calcetines",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Calcetines y ropa interior",
+      "Calcetines"
+    ],
+    "leaf": true
+  },
+  "9914": {
+    "name": "Calzoncillos y bóxers",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Calcetines y ropa interior",
+      "Calzoncillos y bóxers"
+    ],
+    "leaf": true
+  },
+  "9918": {
+    "name": "Pijamas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Calcetines y ropa interior",
+      "Pijamas"
+    ],
+    "leaf": true
+  },
+  "9919": {
+    "name": "Otros calcetines y ropa interior",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Calcetines y ropa interior",
+      "Otros calcetines y ropa interior"
+    ],
+    "leaf": true
+  },
+  "11033": {
+    "name": "Camisas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Camisas"
+    ],
+    "leaf": true
+  },
+  "11042": {
+    "name": "Disfraces y trajes especiales",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Disfraces y trajes especiales"
+    ],
+    "leaf": true
+  },
+  "11036": {
+    "name": "Jerséis y sudaderas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Jerséis y sudaderas"
+    ],
+    "leaf": false
+  },
+  "9895": {
+    "name": "Cárdigans",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Cárdigans"
+    ],
+    "leaf": true
+  },
+  "9892": {
+    "name": "Jerséis",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Jerséis"
+    ],
+    "leaf": true
+  },
+  "9897": {
+    "name": "Jerséis con cuello de pico",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Jerséis con cuello de pico"
+    ],
+    "leaf": true
+  },
+  "9898": {
+    "name": "Jerséis con cuello de tortuga",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Jerséis con cuello de tortuga"
+    ],
+    "leaf": true
+  },
+  "9896": {
+    "name": "Jerséis de cuello redondo",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Jerséis de cuello redondo"
+    ],
+    "leaf": true
+  },
+  "9900": {
+    "name": "Jerséis de punto",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Jerséis de punto"
+    ],
+    "leaf": true
+  },
+  "9899": {
+    "name": "Jerséis largos",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Jerséis largos"
+    ],
+    "leaf": true
+  },
+  "9901": {
+    "name": "Jerséis sin mangas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Jerséis sin mangas"
+    ],
+    "leaf": true
+  },
+  "9894": {
+    "name": "Sudaderas con cremallera",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Sudaderas con cremallera"
+    ],
+    "leaf": true
+  },
+  "9893": {
+    "name": "Sudaderas con y sin capucha",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Sudaderas con y sin capucha"
+    ],
+    "leaf": true
+  },
+  "9902": {
+    "name": "Otros jerséis",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Jerséis y sudaderas",
+      "Otros jerséis"
+    ],
+    "leaf": true
+  },
+  "11037": {
+    "name": "Pantalones",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Pantalones"
+    ],
+    "leaf": false
+  },
+  "9903": {
+    "name": "Chinos",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Pantalones",
+      "Chinos"
+    ],
+    "leaf": true
+  },
+  "9904": {
+    "name": "Joggers",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Pantalones",
+      "Joggers"
+    ],
+    "leaf": true
+  },
+  "9908": {
+    "name": "Pantalones anchos",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Pantalones",
+      "Pantalones anchos"
+    ],
+    "leaf": true
+  },
+  "9906": {
+    "name": "Pantalones cortos",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Pantalones",
+      "Pantalones cortos"
+    ],
+    "leaf": true
+  },
+  "9907": {
+    "name": "Pantalones de pinzas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Pantalones",
+      "Pantalones de pinzas"
+    ],
+    "leaf": true
+  },
+  "9905": {
+    "name": "Pantalones pitillo",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Pantalones",
+      "Pantalones pitillo"
+    ],
+    "leaf": true
+  },
+  "9909": {
+    "name": "Otros pantalones",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Pantalones",
+      "Otros pantalones"
+    ],
+    "leaf": true
+  },
+  "11038": {
+    "name": "Pantalones cortos",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Pantalones cortos"
+    ],
+    "leaf": false
+  },
+  "9910": {
+    "name": "Pantalones cortos cargo",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Pantalones cortos",
+      "Pantalones cortos cargo"
+    ],
+    "leaf": true
+  },
+  "9911": {
+    "name": "Pantalones cortos chinos",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Pantalones cortos",
+      "Pantalones cortos chinos"
+    ],
+    "leaf": true
+  },
+  "9912": {
+    "name": "Pantalones cortos vaqueros",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Pantalones cortos",
+      "Pantalones cortos vaqueros"
+    ],
+    "leaf": true
+  },
+  "9913": {
+    "name": "Otros pantalones cortos",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Pantalones cortos",
+      "Otros pantalones cortos"
+    ],
+    "leaf": true
+  },
+  "11007": {
+    "name": "Ropa de abrigo",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa de abrigo"
+    ],
+    "leaf": false
+  },
+  "9711": {
+    "name": "Abrigos",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa de abrigo",
+      "Abrigos"
+    ],
+    "leaf": true
+  },
+  "9710": {
+    "name": "Capas y ponchos",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa de abrigo",
+      "Capas y ponchos"
+    ],
+    "leaf": true
+  },
+  "9712": {
+    "name": "Chalecos y gilets",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa de abrigo",
+      "Chalecos y gilets"
+    ],
+    "leaf": true
+  },
+  "9715": {
+    "name": "Chaqueta bomber",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa de abrigo",
+      "Chaqueta bomber"
+    ],
+    "leaf": true
+  },
+  "9713": {
+    "name": "Chaquetas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa de abrigo",
+      "Chaquetas"
+    ],
+    "leaf": true
+  },
+  "9714": {
+    "name": "Chaquetas bolero",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa de abrigo",
+      "Chaquetas bolero"
+    ],
+    "leaf": true
+  },
+  "9717": {
+    "name": "Chubasqueros",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa de abrigo",
+      "Chubasqueros"
+    ],
+    "leaf": true
+  },
+  "9716": {
+    "name": "Gabardina",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa de abrigo",
+      "Gabardina"
+    ],
+    "leaf": true
+  },
+  "9718": {
+    "name": "Parkas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa de abrigo",
+      "Parkas"
+    ],
+    "leaf": true
+  },
+  "9719": {
+    "name": "Otras prendas exteriores",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa de abrigo",
+      "Otras prendas exteriores"
+    ],
+    "leaf": true
+  },
+  "11041": {
+    "name": "Ropa deportiva",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa deportiva"
+    ],
+    "leaf": false
+  },
+  "9926": {
+    "name": "Accesorios deportivos",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa deportiva",
+      "Accesorios deportivos"
+    ],
+    "leaf": true
+  },
+  "9921": {
+    "name": "Chándales",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa deportiva",
+      "Chándales"
+    ],
+    "leaf": true
+  },
+  "9922": {
+    "name": "Pantalones",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa deportiva",
+      "Pantalones"
+    ],
+    "leaf": true
+  },
+  "9923": {
+    "name": "Pantalones cortos",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa deportiva",
+      "Pantalones cortos"
+    ],
+    "leaf": true
+  },
+  "9920": {
+    "name": "Ropa de abrigo",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa deportiva",
+      "Ropa de abrigo"
+    ],
+    "leaf": true
+  },
+  "9925": {
+    "name": "Sudaderas con y sin capucha",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa deportiva",
+      "Sudaderas con y sin capucha"
+    ],
+    "leaf": true
+  },
+  "9924": {
+    "name": "Tops y camisetas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa deportiva",
+      "Tops y camisetas"
+    ],
+    "leaf": true
+  },
+  "9927": {
+    "name": "Otra ropa deportiva",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Ropa deportiva",
+      "Otra ropa deportiva"
+    ],
+    "leaf": true
+  },
+  "11034": {
+    "name": "Tops y camisetas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Tops y camisetas"
+    ],
+    "leaf": false
+  },
+  "9883": {
+    "name": "Camisetas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Tops y camisetas",
+      "Camisetas"
+    ],
+    "leaf": true
+  },
+  "9884": {
+    "name": "Chalecos y camisetas sin mangas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Tops y camisetas",
+      "Chalecos y camisetas sin mangas"
+    ],
+    "leaf": true
+  },
+  "9885": {
+    "name": "Otros tops",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Tops y camisetas",
+      "Otros tops"
+    ],
+    "leaf": true
+  },
+  "11035": {
+    "name": "Trajes y americanas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Trajes y americanas"
+    ],
+    "leaf": false
+  },
+  "9888": {
+    "name": "Chalecos",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Trajes y americanas",
+      "Chalecos"
+    ],
+    "leaf": true
+  },
+  "9886": {
+    "name": "Chaquetas de traje y americanas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Trajes y americanas",
+      "Chaquetas de traje y americanas"
+    ],
+    "leaf": true
+  },
+  "9889": {
+    "name": "Conjuntos de traje",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Trajes y americanas",
+      "Conjuntos de traje"
+    ],
+    "leaf": true
+  },
+  "9887": {
+    "name": "Pantalones de traje",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Trajes y americanas",
+      "Pantalones de traje"
+    ],
+    "leaf": true
+  },
+  "9890": {
+    "name": "Trajes de boda",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Trajes y americanas",
+      "Trajes de boda"
+    ],
+    "leaf": true
+  },
+  "9891": {
+    "name": "Otros trajes y americanas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Trajes y americanas",
+      "Otros trajes y americanas"
+    ],
+    "leaf": true
+  },
+  "11032": {
+    "name": "Vaqueros",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Vaqueros"
+    ],
+    "leaf": false
+  },
+  "9880": {
+    "name": "Vaqueros ajustados",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Vaqueros",
+      "Vaqueros ajustados"
+    ],
+    "leaf": true
+  },
+  "9879": {
+    "name": "Vaqueros pitillo",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Vaqueros",
+      "Vaqueros pitillo"
+    ],
+    "leaf": true
+  },
+  "9881": {
+    "name": "Vaqueros rectos",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Vaqueros",
+      "Vaqueros rectos"
+    ],
+    "leaf": true
+  },
+  "9878": {
+    "name": "Vaqueros rotos",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Vaqueros",
+      "Vaqueros rotos"
+    ],
+    "leaf": true
+  },
+  "9882": {
+    "name": "Otros vaqueros",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Vaqueros",
+      "Otros vaqueros"
+    ],
+    "leaf": true
+  },
+  "11043": {
+    "name": "Otras prendas",
+    "path": [
+      "Moda y accesorios",
+      "Hombre",
+      "Ropa",
+      "Otras prendas"
+    ],
+    "leaf": true
+  },
+  "10436": {
+    "name": "Accesorios",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios"
+    ],
+    "leaf": false
+  },
+  "9645": {
+    "name": "Accesorios para el cabello",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Accesorios para el cabello"
+    ],
+    "leaf": true
+  },
+  "10152": {
+    "name": "Bolsos y mochilas",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas"
+    ],
+    "leaf": false
+  },
+  "9649": {
+    "name": "Billeteras",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Billeteras"
+    ],
+    "leaf": true
+  },
+  "9600": {
+    "name": "Bolsa de aseo",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Bolsa de aseo"
+    ],
+    "leaf": true
+  },
+  "9626": {
+    "name": "Bolsas de viaje",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Bolsas de viaje"
+    ],
+    "leaf": true
+  },
+  "9622": {
+    "name": "Bolsos de fiesta",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Bolsos de fiesta"
+    ],
+    "leaf": true
+  },
+  "9555": {
+    "name": "Bolsos de hombro",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Bolsos de hombro"
+    ],
+    "leaf": true
+  },
+  "9558": {
+    "name": "Bolsos de mano",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Bolsos de mano"
+    ],
+    "leaf": true
+  },
+  "9625": {
+    "name": "Bolsos estampados y bordados",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Bolsos estampados y bordados"
+    ],
+    "leaf": true
+  },
+  "9621": {
+    "name": "Bolsos tote",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Bolsos tote"
+    ],
+    "leaf": true
+  },
+  "9537": {
+    "name": "Carteras",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Carteras"
+    ],
+    "leaf": true
+  },
+  "9614": {
+    "name": "Equipaje y maletas",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Equipaje y maletas"
+    ],
+    "leaf": true
+  },
+  "9597": {
+    "name": "Maletines",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Maletines"
+    ],
+    "leaf": true
+  },
+  "9543": {
+    "name": "Mochilas",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Mochilas"
+    ],
+    "leaf": true
+  },
+  "9546": {
+    "name": "Monederos",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Monederos"
+    ],
+    "leaf": true
+  },
+  "9623": {
+    "name": "Neceseres",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Neceseres"
+    ],
+    "leaf": true
+  },
+  "9596": {
+    "name": "Riñoneras",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Riñoneras"
+    ],
+    "leaf": true
+  },
+  "9624": {
+    "name": "Satchels",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Satchels"
+    ],
+    "leaf": true
+  },
+  "9578": {
+    "name": "Otros bolsos",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bolsos y mochilas",
+      "Otros bolsos"
+    ],
+    "leaf": true
+  },
+  "10153": {
+    "name": "Bufandas y chales",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bufandas y chales"
+    ],
+    "leaf": false
+  },
+  "9551": {
+    "name": "Bufandas",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bufandas y chales",
+      "Bufandas"
+    ],
+    "leaf": true
+  },
+  "9628": {
+    "name": "Bufandas y chales de gran tamaño",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bufandas y chales",
+      "Bufandas y chales de gran tamaño"
+    ],
+    "leaf": true
+  },
+  "9629": {
+    "name": "Chales",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bufandas y chales",
+      "Chales"
+    ],
+    "leaf": true
+  },
+  "9552": {
+    "name": "Pañuelos",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bufandas y chales",
+      "Pañuelos"
+    ],
+    "leaf": true
+  },
+  "9627": {
+    "name": "Pañuelos de cabeza",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bufandas y chales",
+      "Pañuelos de cabeza"
+    ],
+    "leaf": true
+  },
+  "9630": {
+    "name": "Otras bufandas y chales",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Bufandas y chales",
+      "Otras bufandas y chales"
+    ],
+    "leaf": true
+  },
+  "9550": {
+    "name": "Cinturones",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Cinturones"
+    ],
+    "leaf": true
+  },
+  "9584": {
+    "name": "Corbatas y pañuelos",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Corbatas y pañuelos"
+    ],
+    "leaf": true
+  },
+  "9567": {
+    "name": "Gafas de sol",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Gafas de sol"
+    ],
+    "leaf": true
+  },
+  "9610": {
+    "name": "Guantes",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Guantes"
+    ],
+    "leaf": true
+  },
+  "9635": {
+    "name": "Paraguas",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Paraguas"
+    ],
+    "leaf": true
+  },
+  "9562": {
+    "name": "Relojes",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Relojes"
+    ],
+    "leaf": true
+  },
+  "10162": {
+    "name": "Sombreros y gorras",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Sombreros y gorras"
+    ],
+    "leaf": false
+  },
+  "9632": {
+    "name": "Boinas",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Sombreros y gorras",
+      "Boinas"
+    ],
+    "leaf": true
+  },
+  "9633": {
+    "name": "Diademas y cintas",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Sombreros y gorras",
+      "Diademas y cintas"
+    ],
+    "leaf": true
+  },
+  "9541": {
+    "name": "Gorras",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Sombreros y gorras",
+      "Gorras"
+    ],
+    "leaf": true
+  },
+  "9553": {
+    "name": "Gorros",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Sombreros y gorras",
+      "Gorros"
+    ],
+    "leaf": true
+  },
+  "9631": {
+    "name": "Gorros de invierno",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Sombreros y gorras",
+      "Gorros de invierno"
+    ],
+    "leaf": true
+  },
+  "9618": {
+    "name": "Sombreros",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Sombreros y gorras",
+      "Sombreros"
+    ],
+    "leaf": true
+  },
+  "9634": {
+    "name": "Otros sombreros y gorras",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Sombreros y gorras",
+      "Otros sombreros y gorras"
+    ],
+    "leaf": true
+  },
+  "9607": {
+    "name": "Otros accesorios",
+    "path": [
+      "Moda y accesorios",
+      "Accesorios",
+      "Otros accesorios"
+    ],
+    "leaf": true
+  },
+  "10156": {
+    "name": "Joyería",
+    "path": [
+      "Moda y accesorios",
+      "Joyería"
+    ],
+    "leaf": false
+  },
+  "9534": {
+    "name": "Anillos",
+    "path": [
+      "Moda y accesorios",
+      "Joyería",
+      "Anillos"
+    ],
+    "leaf": true
+  },
+  "9579": {
+    "name": "Broches",
+    "path": [
+      "Moda y accesorios",
+      "Joyería",
+      "Broches"
+    ],
+    "leaf": true
+  },
+  "9581": {
+    "name": "Cadenas",
+    "path": [
+      "Moda y accesorios",
+      "Joyería",
+      "Cadenas"
+    ],
+    "leaf": true
+  },
+  "9539": {
+    "name": "Colgantes",
+    "path": [
+      "Moda y accesorios",
+      "Joyería",
+      "Colgantes"
+    ],
+    "leaf": true
+  },
+  "9572": {
+    "name": "Collares",
+    "path": [
+      "Moda y accesorios",
+      "Joyería",
+      "Collares"
+    ],
+    "leaf": true
+  },
+  "9637": {
+    "name": "Conjuntos de joyas",
+    "path": [
+      "Moda y accesorios",
+      "Joyería",
+      "Conjuntos de joyas"
+    ],
+    "leaf": true
+  },
+  "9636": {
+    "name": "Cuentas",
+    "path": [
+      "Moda y accesorios",
+      "Joyería",
+      "Cuentas"
+    ],
+    "leaf": true
+  },
+  "9654": {
+    "name": "Gemelos",
+    "path": [
+      "Moda y accesorios",
+      "Joyería",
+      "Gemelos"
+    ],
+    "leaf": true
+  },
+  "9644": {
+    "name": "Joyeros",
+    "path": [
+      "Moda y accesorios",
+      "Joyería",
+      "Joyeros"
+    ],
+    "leaf": true
+  },
+  "9571": {
+    "name": "Pendientes",
+    "path": [
+      "Moda y accesorios",
+      "Joyería",
+      "Pendientes"
+    ],
+    "leaf": true
+  },
+  "9651": {
+    "name": "Piercings",
+    "path": [
+      "Moda y accesorios",
+      "Joyería",
+      "Piercings"
+    ],
+    "leaf": true
+  },
+  "9570": {
+    "name": "Pulseras",
+    "path": [
+      "Moda y accesorios",
+      "Joyería",
+      "Pulseras"
+    ],
+    "leaf": true
+  },
+  "9638": {
+    "name": "Tobilleras",
+    "path": [
+      "Moda y accesorios",
+      "Joyería",
+      "Tobilleras"
+    ],
+    "leaf": true
+  },
+  "9639": {
+    "name": "Otras joyas",
+    "path": [
+      "Moda y accesorios",
+      "Joyería",
+      "Otras joyas"
+    ],
+    "leaf": true
+  },
+  "10437": {
+    "name": "Belleza",
+    "path": [
+      "Moda y accesorios",
+      "Belleza"
+    ],
+    "leaf": false
+  },
+  "9617": {
+    "name": "Colonia",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Colonia"
+    ],
+    "leaf": true
+  },
+  "9662": {
+    "name": "Cuidado personal",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Cuidado personal"
+    ],
+    "leaf": false
+  },
+  "9672": {
+    "name": "Aftershave y colonia",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Cuidado personal",
+      "Aftershave y colonia"
+    ],
+    "leaf": true
+  },
+  "9671": {
+    "name": "Artículos y kits de cuidado personal",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Cuidado personal",
+      "Artículos y kits de cuidado personal"
+    ],
+    "leaf": true
+  },
+  "9669": {
+    "name": "Cuidado corporal",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Cuidado personal",
+      "Cuidado corporal"
+    ],
+    "leaf": true
+  },
+  "9667": {
+    "name": "Cuidado de las manos",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Cuidado personal",
+      "Cuidado de las manos"
+    ],
+    "leaf": true
+  },
+  "9668": {
+    "name": "Cuidado de las uñas",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Cuidado personal",
+      "Cuidado de las uñas"
+    ],
+    "leaf": true
+  },
+  "9670": {
+    "name": "Cuidado del cabello",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Cuidado personal",
+      "Cuidado del cabello"
+    ],
+    "leaf": true
+  },
+  "9666": {
+    "name": "Cuidado facial",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Cuidado personal",
+      "Cuidado facial"
+    ],
+    "leaf": true
+  },
+  "9673": {
+    "name": "Otros productos de cuidado personal",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Cuidado personal",
+      "Otros productos de cuidado personal"
+    ],
+    "leaf": true
+  },
+  "9590": {
+    "name": "Maquillaje",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Maquillaje"
+    ],
+    "leaf": true
+  },
+  "9603": {
+    "name": "Perfume",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Perfume"
+    ],
+    "leaf": true
+  },
+  "9660": {
+    "name": "Utensilios y accesorios",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Utensilios y accesorios"
+    ],
+    "leaf": false
+  },
+  "9663": {
+    "name": "Utensilios de afeitado",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Utensilios y accesorios",
+      "Utensilios de afeitado"
+    ],
+    "leaf": true
+  },
+  "9643": {
+    "name": "Utensilios de maquillaje",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Utensilios y accesorios",
+      "Utensilios de maquillaje"
+    ],
+    "leaf": true
+  },
+  "24000": {
+    "name": "Utensilios de peinado",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Utensilios y accesorios",
+      "Utensilios de peinado"
+    ],
+    "leaf": false
+  },
+  "9652": {
+    "name": "Cepillos para el pelo",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Utensilios y accesorios",
+      "Utensilios de peinado",
+      "Cepillos para el pelo"
+    ],
+    "leaf": true
+  },
+  "9611": {
+    "name": "Planchas para el pelo",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Utensilios y accesorios",
+      "Utensilios de peinado",
+      "Planchas para el pelo"
+    ],
+    "leaf": true
+  },
+  "9647": {
+    "name": "Rizadores",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Utensilios y accesorios",
+      "Utensilios de peinado",
+      "Rizadores"
+    ],
+    "leaf": true
+  },
+  "9648": {
+    "name": "Secadores",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Utensilios y accesorios",
+      "Utensilios de peinado",
+      "Secadores"
+    ],
+    "leaf": true
+  },
+  "9641": {
+    "name": "Utensilios para el cuidado corporal",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Utensilios y accesorios",
+      "Utensilios para el cuidado corporal"
+    ],
+    "leaf": true
+  },
+  "9640": {
+    "name": "Utensilios para el cuidado facial",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Utensilios y accesorios",
+      "Utensilios para el cuidado facial"
+    ],
+    "leaf": true
+  },
+  "9664": {
+    "name": "Utensilios para el cuidado personal",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Utensilios y accesorios",
+      "Utensilios para el cuidado personal"
+    ],
+    "leaf": true
+  },
+  "9642": {
+    "name": "Utensilios para las uñas",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Utensilios y accesorios",
+      "Utensilios para las uñas"
+    ],
+    "leaf": true
+  },
+  "9665": {
+    "name": "Otros utensilios",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Utensilios y accesorios",
+      "Otros utensilios"
+    ],
+    "leaf": true
+  },
+  "9674": {
+    "name": "Otros productos de belleza",
+    "path": [
+      "Moda y accesorios",
+      "Belleza",
+      "Otros productos de belleza"
+    ],
+    "leaf": true
+  },
+  "200": {
+    "name": "Inmobiliaria",
+    "path": [
+      "Inmobiliaria"
+    ],
+    "leaf": true
+  },
+  "24200": {
+    "name": "Tecnología y electrónica",
+    "path": [
+      "Tecnología y electrónica"
+    ],
+    "leaf": false
+  },
+  "10206": {
+    "name": "Imagen: televisores y proyectores",
+    "path": [
+      "Tecnología y electrónica",
+      "Imagen: televisores y proyectores"
+    ],
+    "leaf": false
+  },
+  "10414": {
+    "name": "TV",
+    "path": [
+      "Tecnología y electrónica",
+      "Imagen: televisores y proyectores",
+      "TV"
+    ],
+    "leaf": true
+  },
+  "10406": {
+    "name": "Proyectores",
+    "path": [
+      "Tecnología y electrónica",
+      "Imagen: televisores y proyectores",
+      "Proyectores"
+    ],
+    "leaf": true
+  },
+  "10405": {
+    "name": "Accesorios de televisores y proyectores",
+    "path": [
+      "Tecnología y electrónica",
+      "Imagen: televisores y proyectores",
+      "Accesorios de televisores y proyectores"
+    ],
+    "leaf": false
+  },
+  "24140": {
+    "name": "Lámparas proyector",
+    "path": [
+      "Tecnología y electrónica",
+      "Imagen: televisores y proyectores",
+      "Accesorios de televisores y proyectores",
+      "Lámparas proyector"
+    ],
+    "leaf": true
+  },
+  "24141": {
+    "name": "Pantallas de proyección",
+    "path": [
+      "Tecnología y electrónica",
+      "Imagen: televisores y proyectores",
+      "Accesorios de televisores y proyectores",
+      "Pantallas de proyección"
+    ],
+    "leaf": true
+  },
+  "24142": {
+    "name": "Soportes para proyectores",
+    "path": [
+      "Tecnología y electrónica",
+      "Imagen: televisores y proyectores",
+      "Accesorios de televisores y proyectores",
+      "Soportes para proyectores"
+    ],
+    "leaf": true
+  },
+  "24144": {
+    "name": "DVD y Blu-Ray",
+    "path": [
+      "Tecnología y electrónica",
+      "Imagen: televisores y proyectores",
+      "Accesorios de televisores y proyectores",
+      "DVD y Blu-Ray"
+    ],
+    "leaf": true
+  },
+  "24145": {
+    "name": "Soportes TV",
+    "path": [
+      "Tecnología y electrónica",
+      "Imagen: televisores y proyectores",
+      "Accesorios de televisores y proyectores",
+      "Soportes TV"
+    ],
+    "leaf": true
+  },
+  "10413": {
+    "name": "Mandos a distancia",
+    "path": [
+      "Tecnología y electrónica",
+      "Imagen: televisores y proyectores",
+      "Accesorios de televisores y proyectores",
+      "Mandos a distancia"
+    ],
+    "leaf": true
+  },
+  "24146": {
+    "name": "TDT",
+    "path": [
+      "Tecnología y electrónica",
+      "Imagen: televisores y proyectores",
+      "Accesorios de televisores y proyectores",
+      "TDT"
+    ],
+    "leaf": true
+  },
+  "24147": {
+    "name": "Muebles de TV",
+    "path": [
+      "Tecnología y electrónica",
+      "Imagen: televisores y proyectores",
+      "Accesorios de televisores y proyectores",
+      "Muebles de TV"
+    ],
+    "leaf": true
+  },
+  "24148": {
+    "name": "Marcos para TV",
+    "path": [
+      "Tecnología y electrónica",
+      "Imagen: televisores y proyectores",
+      "Accesorios de televisores y proyectores",
+      "Marcos para TV"
+    ],
+    "leaf": true
+  },
+  "10409": {
+    "name": "Otros accesorios de televisores y proyectores",
+    "path": [
+      "Tecnología y electrónica",
+      "Imagen: televisores y proyectores",
+      "Accesorios de televisores y proyectores",
+      "Otros accesorios de televisores y proyectores"
+    ],
+    "leaf": true
+  },
+  "24192": {
+    "name": "Otros artículos de imagen",
+    "path": [
+      "Tecnología y electrónica",
+      "Imagen: televisores y proyectores",
+      "Otros artículos de imagen"
+    ],
+    "leaf": true
+  },
+  "24149": {
+    "name": "Sonido: auriculares y altavoces",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces"
+    ],
+    "leaf": false
+  },
+  "10395": {
+    "name": "Auriculares",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "Auriculares"
+    ],
+    "leaf": true
+  },
+  "24150": {
+    "name": "Altavoces",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "Altavoces"
+    ],
+    "leaf": true
+  },
+  "24151": {
+    "name": "Home cinema y barras de sonido",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "Home cinema y barras de sonido"
+    ],
+    "leaf": true
+  },
+  "10205": {
+    "name": "Dispositivos de sonido",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "Dispositivos de sonido"
+    ],
+    "leaf": false
+  },
+  "24152": {
+    "name": "Despertadores digitales",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "Dispositivos de sonido",
+      "Despertadores digitales"
+    ],
+    "leaf": true
+  },
+  "24153": {
+    "name": "Grabadoras de voz",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "Dispositivos de sonido",
+      "Grabadoras de voz"
+    ],
+    "leaf": true
+  },
+  "24154": {
+    "name": "Karaoke",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "Dispositivos de sonido",
+      "Karaoke"
+    ],
+    "leaf": true
+  },
+  "24155": {
+    "name": "MP3 y MP4",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "Dispositivos de sonido",
+      "MP3 y MP4"
+    ],
+    "leaf": true
+  },
+  "24156": {
+    "name": "Radio",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "Dispositivos de sonido",
+      "Radio"
+    ],
+    "leaf": true
+  },
+  "24157": {
+    "name": "Radio CD",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "Dispositivos de sonido",
+      "Radio CD"
+    ],
+    "leaf": true
+  },
+  "24158": {
+    "name": "Reproductor CD",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "Dispositivos de sonido",
+      "Reproductor CD"
+    ],
+    "leaf": true
+  },
+  "24159": {
+    "name": "Otros dispositivos de audio",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "Dispositivos de sonido",
+      "Otros dispositivos de audio"
+    ],
+    "leaf": true
+  },
+  "10070": {
+    "name": "Tocadiscos",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "Tocadiscos"
+    ],
+    "leaf": true
+  },
+  "24160": {
+    "name": "DJ y audio profesional",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "DJ y audio profesional"
+    ],
+    "leaf": false
+  },
+  "24161": {
+    "name": "Accesorios de Grabación",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "DJ y audio profesional",
+      "Accesorios de Grabación"
+    ],
+    "leaf": true
+  },
+  "24162": {
+    "name": "Amplificadores",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "DJ y audio profesional",
+      "Amplificadores"
+    ],
+    "leaf": true
+  },
+  "24163": {
+    "name": "Receptores",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "DJ y audio profesional",
+      "Receptores"
+    ],
+    "leaf": true
+  },
+  "24164": {
+    "name": "Auriculares para DJ",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "DJ y audio profesional",
+      "Auriculares para DJ"
+    ],
+    "leaf": true
+  },
+  "24165": {
+    "name": "Controladores MIDI",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "DJ y audio profesional",
+      "Controladores MIDI"
+    ],
+    "leaf": true
+  },
+  "24166": {
+    "name": "Grabadoras",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "DJ y audio profesional",
+      "Grabadoras"
+    ],
+    "leaf": true
+  },
+  "24167": {
+    "name": "Maletas de DJ",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "DJ y audio profesional",
+      "Maletas de DJ"
+    ],
+    "leaf": true
+  },
+  "24168": {
+    "name": "Mesa de mezclas / DJ",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "DJ y audio profesional",
+      "Mesa de mezclas / DJ"
+    ],
+    "leaf": true
+  },
+  "24169": {
+    "name": "Micrófonos",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "DJ y audio profesional",
+      "Micrófonos"
+    ],
+    "leaf": true
+  },
+  "24170": {
+    "name": "Monitores de estudio",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "DJ y audio profesional",
+      "Monitores de estudio"
+    ],
+    "leaf": true
+  },
+  "24171": {
+    "name": "Pedales",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "DJ y audio profesional",
+      "Pedales"
+    ],
+    "leaf": true
+  },
+  "24172": {
+    "name": "Sintetizadores",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "DJ y audio profesional",
+      "Sintetizadores"
+    ],
+    "leaf": true
+  },
+  "24173": {
+    "name": "Otros dispositivos de sonido",
+    "path": [
+      "Tecnología y electrónica",
+      "Sonido: auriculares y altavoces",
+      "Otros dispositivos de sonido"
+    ],
+    "leaf": true
+  },
+  "10200": {
+    "name": "Fotografía: cámaras y drones",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones"
+    ],
+    "leaf": false
+  },
+  "10397": {
+    "name": "Cámaras",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Cámaras"
+    ],
+    "leaf": false
+  },
+  "24174": {
+    "name": "Reflex",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Cámaras",
+      "Reflex"
+    ],
+    "leaf": true
+  },
+  "24175": {
+    "name": "Compactas",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Cámaras",
+      "Compactas"
+    ],
+    "leaf": true
+  },
+  "24176": {
+    "name": "Sin espejo",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Cámaras",
+      "Sin espejo"
+    ],
+    "leaf": true
+  },
+  "24177": {
+    "name": "Vintage",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Cámaras",
+      "Vintage"
+    ],
+    "leaf": true
+  },
+  "24178": {
+    "name": "Instantáneas",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Cámaras",
+      "Instantáneas"
+    ],
+    "leaf": true
+  },
+  "10417": {
+    "name": "Cámaras de video",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Cámaras",
+      "Cámaras de video"
+    ],
+    "leaf": true
+  },
+  "24179": {
+    "name": "Otras cámaras",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Cámaras",
+      "Otras cámaras"
+    ],
+    "leaf": true
+  },
+  "10401": {
+    "name": "Objetivos",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Objetivos"
+    ],
+    "leaf": true
+  },
+  "10201": {
+    "name": "Drones",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Drones"
+    ],
+    "leaf": true
+  },
+  "24180": {
+    "name": "Accesorios de fotografía",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Accesorios de fotografía"
+    ],
+    "leaf": false
+  },
+  "10398": {
+    "name": "Flashes",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Accesorios de fotografía",
+      "Flashes"
+    ],
+    "leaf": true
+  },
+  "24181": {
+    "name": "Carretes fotográficos",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Accesorios de fotografía",
+      "Carretes fotográficos"
+    ],
+    "leaf": true
+  },
+  "24182": {
+    "name": "Filtros fotograficos",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Accesorios de fotografía",
+      "Filtros fotograficos"
+    ],
+    "leaf": true
+  },
+  "24183": {
+    "name": "Papel fotográfico",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Accesorios de fotografía",
+      "Papel fotográfico"
+    ],
+    "leaf": true
+  },
+  "24184": {
+    "name": "Grips",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Accesorios de fotografía",
+      "Grips"
+    ],
+    "leaf": true
+  },
+  "24185": {
+    "name": "Tapas y parasoles",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Accesorios de fotografía",
+      "Tapas y parasoles"
+    ],
+    "leaf": true
+  },
+  "10403": {
+    "name": "Trípodes y monopies",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Accesorios de fotografía",
+      "Trípodes y monopies"
+    ],
+    "leaf": true
+  },
+  "24186": {
+    "name": "Fundas de objetivos",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Accesorios de fotografía",
+      "Fundas de objetivos"
+    ],
+    "leaf": true
+  },
+  "24187": {
+    "name": "Fundas, mochilas y correas para cámara",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Accesorios de fotografía",
+      "Fundas, mochilas y correas para cámara"
+    ],
+    "leaf": true
+  },
+  "10203": {
+    "name": "Baterías y cargadores",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Accesorios de fotografía",
+      "Baterías y cargadores"
+    ],
+    "leaf": true
+  },
+  "24188": {
+    "name": "Álbumes de fotos",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Accesorios de fotografía",
+      "Álbumes de fotos"
+    ],
+    "leaf": true
+  },
+  "24189": {
+    "name": "Marcos de fotos",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Accesorios de fotografía",
+      "Marcos de fotos"
+    ],
+    "leaf": true
+  },
+  "24190": {
+    "name": "Libros de fotos",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Accesorios de fotografía",
+      "Libros de fotos"
+    ],
+    "leaf": true
+  },
+  "24191": {
+    "name": "Otros accesorios de fotografía",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Accesorios de fotografía",
+      "Otros accesorios de fotografía"
+    ],
+    "leaf": true
+  },
+  "10199": {
+    "name": "Cámaras de vigilancia",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Cámaras de vigilancia"
+    ],
+    "leaf": true
+  },
+  "24193": {
+    "name": "Otros articulos de fotografía",
+    "path": [
+      "Tecnología y electrónica",
+      "Fotografía: cámaras y drones",
+      "Otros articulos de fotografía"
+    ],
+    "leaf": true
+  },
+  "24201": {
+    "name": "Telefonía: móviles y smartwatches",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches"
+    ],
+    "leaf": false
+  },
+  "9447": {
+    "name": "Smartphones",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Smartphones"
+    ],
+    "leaf": true
+  },
+  "9487": {
+    "name": "Smartwatches y pulsera de actividad",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Smartwatches y pulsera de actividad"
+    ],
+    "leaf": true
+  },
+  "10175": {
+    "name": "Teléfonos vintage",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Teléfonos vintage"
+    ],
+    "leaf": true
+  },
+  "24102": {
+    "name": "Telefonos fijos",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Telefonos fijos"
+    ],
+    "leaf": true
+  },
+  "24103": {
+    "name": "Otros teléfonos",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Otros teléfonos"
+    ],
+    "leaf": true
+  },
+  "9375": {
+    "name": "Accesorios de móviles y smartwatches",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches"
+    ],
+    "leaf": false
+  },
+  "10427": {
+    "name": "Cargadores y cables para móviles",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches",
+      "Cargadores y cables para móviles"
+    ],
+    "leaf": true
+  },
+  "24104": {
+    "name": "Powerbanks",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches",
+      "Powerbanks"
+    ],
+    "leaf": true
+  },
+  "10428": {
+    "name": "Fundas y carcasas para móviles",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches",
+      "Fundas y carcasas para móviles"
+    ],
+    "leaf": true
+  },
+  "10423": {
+    "name": "Baterías para móviles",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches",
+      "Baterías para móviles"
+    ],
+    "leaf": true
+  },
+  "24105": {
+    "name": "Soportes para móviles",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches",
+      "Soportes para móviles"
+    ],
+    "leaf": true
+  },
+  "24106": {
+    "name": "Cristales templados para móviles",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches",
+      "Cristales templados para móviles"
+    ],
+    "leaf": true
+  },
+  "24107": {
+    "name": "Palos selfies",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches",
+      "Palos selfies"
+    ],
+    "leaf": true
+  },
+  "24108": {
+    "name": "Trípodes para móviles",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches",
+      "Trípodes para móviles"
+    ],
+    "leaf": true
+  },
+  "24109": {
+    "name": "Manos libres",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches",
+      "Manos libres"
+    ],
+    "leaf": true
+  },
+  "24110": {
+    "name": "Aros de luz para móviles",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches",
+      "Aros de luz para móviles"
+    ],
+    "leaf": true
+  },
+  "24111": {
+    "name": "Estabilizadores para móviles",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches",
+      "Estabilizadores para móviles"
+    ],
+    "leaf": true
+  },
+  "24112": {
+    "name": "Amplificadores de pantalla para móviles",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches",
+      "Amplificadores de pantalla para móviles"
+    ],
+    "leaf": true
+  },
+  "24113": {
+    "name": "Localizadores para móvil",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches",
+      "Localizadores para móvil"
+    ],
+    "leaf": true
+  },
+  "9388": {
+    "name": "Piezas de recambio",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches",
+      "Piezas de recambio"
+    ],
+    "leaf": true
+  },
+  "9370": {
+    "name": "Otros accesorios de móviles y smartwatches",
+    "path": [
+      "Tecnología y electrónica",
+      "Telefonía: móviles y smartwatches",
+      "Accesorios de móviles y smartwatches",
+      "Otros accesorios de móviles y smartwatches"
+    ],
+    "leaf": true
+  },
+  "24202": {
+    "name": "Informática: ordenadores y tablets",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets"
+    ],
+    "leaf": false
+  },
+  "10310": {
+    "name": "Portátiles",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Portátiles"
+    ],
+    "leaf": true
+  },
+  "10309": {
+    "name": "Ordenadores de sobremesa",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Ordenadores de sobremesa"
+    ],
+    "leaf": true
+  },
+  "10136": {
+    "name": "Realidad Virtual y aumentada",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Realidad Virtual y aumentada"
+    ],
+    "leaf": false
+  },
+  "24114": {
+    "name": "Gafas de realidad virtual",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Realidad Virtual y aumentada",
+      "Gafas de realidad virtual"
+    ],
+    "leaf": true
+  },
+  "24194": {
+    "name": "Otros accesorios de realidad virtual",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Realidad Virtual y aumentada",
+      "Otros accesorios de realidad virtual"
+    ],
+    "leaf": true
+  },
+  "9374": {
+    "name": "Tablets",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Tablets"
+    ],
+    "leaf": true
+  },
+  "24132": {
+    "name": "E-readers",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "E-readers"
+    ],
+    "leaf": true
+  },
+  "10134": {
+    "name": "Periféricos",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Periféricos"
+    ],
+    "leaf": false
+  },
+  "10307": {
+    "name": "Impresoras",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Periféricos",
+      "Impresoras"
+    ],
+    "leaf": true
+  },
+  "10133": {
+    "name": "Monitores",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Periféricos",
+      "Monitores"
+    ],
+    "leaf": true
+  },
+  "10311": {
+    "name": "Ratones",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Periféricos",
+      "Ratones"
+    ],
+    "leaf": true
+  },
+  "10312": {
+    "name": "Teclados",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Periféricos",
+      "Teclados"
+    ],
+    "leaf": true
+  },
+  "24133": {
+    "name": "Escáners",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Periféricos",
+      "Escáners"
+    ],
+    "leaf": true
+  },
+  "24134": {
+    "name": "Webcams",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Periféricos",
+      "Webcams"
+    ],
+    "leaf": true
+  },
+  "24135": {
+    "name": "Otros periféricos",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Periféricos",
+      "Otros periféricos"
+    ],
+    "leaf": true
+  },
+  "10304": {
+    "name": "Componentes y piezas de ordenador",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Componentes y piezas de ordenador"
+    ],
+    "leaf": true
+  },
+  "24136": {
+    "name": "Accesorios de informática",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Accesorios de informática"
+    ],
+    "leaf": false
+  },
+  "10305": {
+    "name": "Accesorios para portátiles",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Accesorios de informática",
+      "Accesorios para portátiles"
+    ],
+    "leaf": true
+  },
+  "24137": {
+    "name": "Accesorios para tablets",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Accesorios de informática",
+      "Accesorios para tablets"
+    ],
+    "leaf": true
+  },
+  "10306": {
+    "name": "Accesorios consumibles para impresoras",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Accesorios de informática",
+      "Accesorios consumibles para impresoras"
+    ],
+    "leaf": true
+  },
+  "10137": {
+    "name": "Software",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Accesorios de informática",
+      "Software"
+    ],
+    "leaf": true
+  },
+  "24138": {
+    "name": "Redes y conectividad",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Accesorios de informática",
+      "Redes y conectividad"
+    ],
+    "leaf": true
+  },
+  "10308": {
+    "name": "Discos duros externos",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Accesorios de informática",
+      "Discos duros externos"
+    ],
+    "leaf": true
+  },
+  "10130": {
+    "name": "Cables de informática",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Accesorios de informática",
+      "Cables de informática"
+    ],
+    "leaf": true
+  },
+  "24139": {
+    "name": "Pendrives y memorias USB",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Accesorios de informática",
+      "Pendrives y memorias USB"
+    ],
+    "leaf": true
+  },
+  "10135": {
+    "name": "Otros accesorios de informática",
+    "path": [
+      "Tecnología y electrónica",
+      "Informática: ordenadores y tablets",
+      "Accesorios de informática",
+      "Otros accesorios de informática"
+    ],
+    "leaf": true
+  },
+  "24203": {
+    "name": "Gaming: consolas y videojuegos",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos"
+    ],
+    "leaf": false
+  },
+  "10087": {
+    "name": "Consolas y accesorios",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "Consolas y accesorios"
+    ],
+    "leaf": false
+  },
+  "10088": {
+    "name": "Consolas",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "Consolas y accesorios",
+      "Consolas"
+    ],
+    "leaf": true
+  },
+  "10092": {
+    "name": "Accesorios y recambios de consolas",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "Consolas y accesorios",
+      "Accesorios y recambios de consolas"
+    ],
+    "leaf": true
+  },
+  "24115": {
+    "name": "PC gaming y streaming",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming"
+    ],
+    "leaf": false
+  },
+  "24116": {
+    "name": "Portátiles gaming",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming",
+      "Portátiles gaming"
+    ],
+    "leaf": true
+  },
+  "24117": {
+    "name": "Ordenadores sobremesa gaming",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming",
+      "Ordenadores sobremesa gaming"
+    ],
+    "leaf": true
+  },
+  "24118": {
+    "name": "Monitores gaming",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming",
+      "Monitores gaming"
+    ],
+    "leaf": true
+  },
+  "24119": {
+    "name": "Ratones gaming",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming",
+      "Ratones gaming"
+    ],
+    "leaf": true
+  },
+  "24120": {
+    "name": "Teclados gaming",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming",
+      "Teclados gaming"
+    ],
+    "leaf": true
+  },
+  "24121": {
+    "name": "Sillas gaming",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming",
+      "Sillas gaming"
+    ],
+    "leaf": true
+  },
+  "24122": {
+    "name": "Mesas gaming",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming",
+      "Mesas gaming"
+    ],
+    "leaf": true
+  },
+  "24123": {
+    "name": "Alfombrillas gaming",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming",
+      "Alfombrillas gaming"
+    ],
+    "leaf": true
+  },
+  "24124": {
+    "name": "Mandos para PC",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming",
+      "Mandos para PC"
+    ],
+    "leaf": true
+  },
+  "24125": {
+    "name": "Volantes para PC",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming",
+      "Volantes para PC"
+    ],
+    "leaf": true
+  },
+  "24126": {
+    "name": "Altavoces gaming",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming",
+      "Altavoces gaming"
+    ],
+    "leaf": true
+  },
+  "24127": {
+    "name": "Microfonos para PC gamer",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming",
+      "Microfonos para PC gamer"
+    ],
+    "leaf": true
+  },
+  "24128": {
+    "name": "Auriculares gaming",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming",
+      "Auriculares gaming"
+    ],
+    "leaf": true
+  },
+  "24129": {
+    "name": "Juegos para PC",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming",
+      "Juegos para PC"
+    ],
+    "leaf": true
+  },
+  "24130": {
+    "name": "Accesorios de PC gaming",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "PC gaming y streaming",
+      "Accesorios de PC gaming"
+    ],
+    "leaf": true
+  },
+  "24131": {
+    "name": "Videojuegos y más",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "Videojuegos y más"
+    ],
+    "leaf": false
+  },
+  "10093": {
+    "name": "Videojuegos",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "Videojuegos y más",
+      "Videojuegos"
+    ],
+    "leaf": true
+  },
+  "10089": {
+    "name": "Manuales y guías de videojuegos",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "Videojuegos y más",
+      "Manuales y guías de videojuegos"
+    ],
+    "leaf": true
+  },
+  "10090": {
+    "name": "Merchandising de videojuegos",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "Videojuegos y más",
+      "Merchandising de videojuegos"
+    ],
+    "leaf": true
+  },
+  "10091": {
+    "name": "Otros artículos de gaming",
+    "path": [
+      "Tecnología y electrónica",
+      "Gaming: consolas y videojuegos",
+      "Otros artículos de gaming"
+    ],
+    "leaf": true
+  },
+  "12579": {
+    "name": "Deporte y ocio",
+    "path": [
+      "Deporte y ocio"
+    ],
+    "leaf": false
+  },
+  "10094": {
+    "name": "Baloncesto",
+    "path": [
+      "Deporte y ocio",
+      "Baloncesto"
+    ],
+    "leaf": true
+  },
+  "10095": {
+    "name": "Balonmano",
+    "path": [
+      "Deporte y ocio",
+      "Balonmano"
+    ],
+    "leaf": true
+  },
+  "10096": {
+    "name": "Estáticas y elípticas",
+    "path": [
+      "Deporte y ocio",
+      "Estáticas y elípticas"
+    ],
+    "leaf": true
+  },
+  "10097": {
+    "name": "Fitness, running y yoga",
+    "path": [
+      "Deporte y ocio",
+      "Fitness, running y yoga"
+    ],
+    "leaf": true
+  },
+  "10098": {
+    "name": "Fútbol",
+    "path": [
+      "Deporte y ocio",
+      "Fútbol"
+    ],
+    "leaf": true
+  },
+  "10099": {
+    "name": "Golf",
+    "path": [
+      "Deporte y ocio",
+      "Golf"
+    ],
+    "leaf": true
+  },
+  "10100": {
+    "name": "Juegos recreativos y de mesa",
+    "path": [
+      "Deporte y ocio",
+      "Juegos recreativos y de mesa"
+    ],
+    "leaf": true
+  },
+  "10101": {
+    "name": "Manualidades",
+    "path": [
+      "Deporte y ocio",
+      "Manualidades"
+    ],
+    "leaf": true
+  },
+  "10102": {
+    "name": "Montaña y esquí",
+    "path": [
+      "Deporte y ocio",
+      "Montaña y esquí"
+    ],
+    "leaf": true
+  },
+  "10103": {
+    "name": "Natación y accesorios piscina",
+    "path": [
+      "Deporte y ocio",
+      "Natación y accesorios piscina"
+    ],
+    "leaf": true
+  },
+  "10105": {
+    "name": "Otros deportes",
+    "path": [
+      "Deporte y ocio",
+      "Otros deportes"
+    ],
+    "leaf": true
+  },
+  "10106": {
+    "name": "Patinetes y patinaje",
+    "path": [
+      "Deporte y ocio",
+      "Patinetes y patinaje"
+    ],
+    "leaf": true
+  },
+  "10107": {
+    "name": "Rugby",
+    "path": [
+      "Deporte y ocio",
+      "Rugby"
+    ],
+    "leaf": true
+  },
+  "10108": {
+    "name": "Tenis y pádel",
+    "path": [
+      "Deporte y ocio",
+      "Tenis y pádel"
+    ],
+    "leaf": true
+  },
+  "10109": {
+    "name": "Vóley",
+    "path": [
+      "Deporte y ocio",
+      "Vóley"
+    ],
+    "leaf": true
+  },
+  "10104": {
+    "name": "Otros",
+    "path": [
+      "Deporte y ocio",
+      "Otros"
+    ],
+    "leaf": true
+  },
+  "17000": {
+    "name": "Bicicletas",
+    "path": [
+      "Bicicletas"
+    ],
+    "leaf": false
+  },
+  "10055": {
+    "name": "Accesorios para bicicletas",
+    "path": [
+      "Bicicletas",
+      "Accesorios para bicicletas"
+    ],
+    "leaf": false
+  },
+  "10208": {
+    "name": "Bombas e infladores",
+    "path": [
+      "Bicicletas",
+      "Accesorios para bicicletas",
+      "Bombas e infladores"
+    ],
+    "leaf": true
+  },
+  "10209": {
+    "name": "Electrónica para bicicletas",
+    "path": [
+      "Bicicletas",
+      "Accesorios para bicicletas",
+      "Electrónica para bicicletas"
+    ],
+    "leaf": true
+  },
+  "10210": {
+    "name": "Luces",
+    "path": [
+      "Bicicletas",
+      "Accesorios para bicicletas",
+      "Luces"
+    ],
+    "leaf": true
+  },
+  "10211": {
+    "name": "Portabicicletas",
+    "path": [
+      "Bicicletas",
+      "Accesorios para bicicletas",
+      "Portabicicletas"
+    ],
+    "leaf": true
+  },
+  "10212": {
+    "name": "Rodillos",
+    "path": [
+      "Bicicletas",
+      "Accesorios para bicicletas",
+      "Rodillos"
+    ],
+    "leaf": true
+  },
+  "10056": {
+    "name": "Bicicletas y triciclos",
+    "path": [
+      "Bicicletas",
+      "Bicicletas y triciclos"
+    ],
+    "leaf": false
+  },
+  "10216": {
+    "name": "Bicicletas Infantiles",
+    "path": [
+      "Bicicletas",
+      "Bicicletas y triciclos",
+      "Bicicletas Infantiles"
+    ],
+    "leaf": true
+  },
+  "10213": {
+    "name": "Bicicletas ciudad",
+    "path": [
+      "Bicicletas",
+      "Bicicletas y triciclos",
+      "Bicicletas ciudad"
+    ],
+    "leaf": true
+  },
+  "10438": {
+    "name": "Bicicletas de carretera",
+    "path": [
+      "Bicicletas",
+      "Bicicletas y triciclos",
+      "Bicicletas de carretera"
+    ],
+    "leaf": true
+  },
+  "10215": {
+    "name": "Bicicletas eléctricas",
+    "path": [
+      "Bicicletas",
+      "Bicicletas y triciclos",
+      "Bicicletas eléctricas"
+    ],
+    "leaf": true
+  },
+  "10217": {
+    "name": "Bicicletas plegables",
+    "path": [
+      "Bicicletas",
+      "Bicicletas y triciclos",
+      "Bicicletas plegables"
+    ],
+    "leaf": true
+  },
+  "10218": {
+    "name": "Fixies",
+    "path": [
+      "Bicicletas",
+      "Bicicletas y triciclos",
+      "Fixies"
+    ],
+    "leaf": true
+  },
+  "10214": {
+    "name": "MTB",
+    "path": [
+      "Bicicletas",
+      "Bicicletas y triciclos",
+      "MTB"
+    ],
+    "leaf": true
+  },
+  "10219": {
+    "name": "Monociclos",
+    "path": [
+      "Bicicletas",
+      "Bicicletas y triciclos",
+      "Monociclos"
+    ],
+    "leaf": true
+  },
+  "10220": {
+    "name": "Triciclos",
+    "path": [
+      "Bicicletas",
+      "Bicicletas y triciclos",
+      "Triciclos"
+    ],
+    "leaf": true
+  },
+  "10058": {
+    "name": "Piezas y recambios de bici",
+    "path": [
+      "Bicicletas",
+      "Piezas y recambios de bici"
+    ],
+    "leaf": false
+  },
+  "10221": {
+    "name": "Cuadros",
+    "path": [
+      "Bicicletas",
+      "Piezas y recambios de bici",
+      "Cuadros"
+    ],
+    "leaf": true
+  },
+  "10223": {
+    "name": "Herramientas",
+    "path": [
+      "Bicicletas",
+      "Piezas y recambios de bici",
+      "Herramientas"
+    ],
+    "leaf": true
+  },
+  "10222": {
+    "name": "Neumáticos y cámaras",
+    "path": [
+      "Bicicletas",
+      "Piezas y recambios de bici",
+      "Neumáticos y cámaras"
+    ],
+    "leaf": true
+  },
+  "10224": {
+    "name": "Piezas",
+    "path": [
+      "Bicicletas",
+      "Piezas y recambios de bici",
+      "Piezas"
+    ],
+    "leaf": true
+  },
+  "10225": {
+    "name": "Recambios",
+    "path": [
+      "Bicicletas",
+      "Piezas y recambios de bici",
+      "Recambios"
+    ],
+    "leaf": true
+  },
+  "10226": {
+    "name": "Ruedas",
+    "path": [
+      "Bicicletas",
+      "Piezas y recambios de bici",
+      "Ruedas"
+    ],
+    "leaf": true
+  },
+  "10227": {
+    "name": "Sillín",
+    "path": [
+      "Bicicletas",
+      "Piezas y recambios de bici",
+      "Sillín"
+    ],
+    "leaf": true
+  },
+  "10059": {
+    "name": "Protección y vestimenta",
+    "path": [
+      "Bicicletas",
+      "Protección y vestimenta"
+    ],
+    "leaf": false
+  },
+  "10230": {
+    "name": "Alforjas",
+    "path": [
+      "Bicicletas",
+      "Protección y vestimenta",
+      "Alforjas"
+    ],
+    "leaf": true
+  },
+  "10228": {
+    "name": "Cascos",
+    "path": [
+      "Bicicletas",
+      "Protección y vestimenta",
+      "Cascos"
+    ],
+    "leaf": true
+  },
+  "10229": {
+    "name": "Gafas ciclismo y de sol",
+    "path": [
+      "Bicicletas",
+      "Protección y vestimenta",
+      "Gafas ciclismo y de sol"
+    ],
+    "leaf": true
+  },
+  "10231": {
+    "name": "Ropa ciclismo",
+    "path": [
+      "Bicicletas",
+      "Protección y vestimenta",
+      "Ropa ciclismo"
+    ],
+    "leaf": true
+  },
+  "10232": {
+    "name": "Zapatillas y cubrezapatillas",
+    "path": [
+      "Bicicletas",
+      "Protección y vestimenta",
+      "Zapatillas y cubrezapatillas"
+    ],
+    "leaf": true
+  },
+  "10057": {
+    "name": "Otros",
+    "path": [
+      "Bicicletas",
+      "Otros"
+    ],
+    "leaf": true
+  },
+  "12467": {
+    "name": "Hogar y jardín",
+    "path": [
+      "Hogar y jardín"
+    ],
+    "leaf": false
+  },
+  "10125": {
+    "name": "Muebles y organización",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización"
+    ],
+    "leaf": false
+  },
+  "24273": {
+    "name": "Camas y accesorios",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Camas y accesorios"
+    ],
+    "leaf": false
+  },
+  "10269": {
+    "name": "Colchones",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Camas y accesorios",
+      "Colchones"
+    ],
+    "leaf": true
+  },
+  "10270": {
+    "name": "Ropa de cama",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Camas y accesorios",
+      "Ropa de cama"
+    ],
+    "leaf": true
+  },
+  "24204": {
+    "name": "Estructura de camas",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Camas y accesorios",
+      "Estructura de camas"
+    ],
+    "leaf": true
+  },
+  "24205": {
+    "name": "Cabeceros y pies de cama",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Camas y accesorios",
+      "Cabeceros y pies de cama"
+    ],
+    "leaf": true
+  },
+  "10268": {
+    "name": "Almohadas y cojines",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Camas y accesorios",
+      "Almohadas y cojines"
+    ],
+    "leaf": true
+  },
+  "24206": {
+    "name": "Accesorios",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Camas y accesorios",
+      "Accesorios"
+    ],
+    "leaf": true
+  },
+  "24207": {
+    "name": "Mesas y mesitas",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Mesas y mesitas"
+    ],
+    "leaf": false
+  },
+  "24208": {
+    "name": "Escritorios",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Mesas y mesitas",
+      "Escritorios"
+    ],
+    "leaf": true
+  },
+  "24209": {
+    "name": "Mesas de comedor",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Mesas y mesitas",
+      "Mesas de comedor"
+    ],
+    "leaf": true
+  },
+  "24210": {
+    "name": "Mesas de centro y bajas",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Mesas y mesitas",
+      "Mesas de centro y bajas"
+    ],
+    "leaf": true
+  },
+  "24211": {
+    "name": "Mesitas de noche y auxiliares",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Mesas y mesitas",
+      "Mesitas de noche y auxiliares"
+    ],
+    "leaf": true
+  },
+  "24212": {
+    "name": "Tocadores",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Mesas y mesitas",
+      "Tocadores"
+    ],
+    "leaf": true
+  },
+  "10127": {
+    "name": "Muebles de almacenaje",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Muebles de almacenaje"
+    ],
+    "leaf": false
+  },
+  "10288": {
+    "name": "Almacenaje de oficina",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Muebles de almacenaje",
+      "Almacenaje de oficina"
+    ],
+    "leaf": true
+  },
+  "10292": {
+    "name": "Estanterías",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Muebles de almacenaje",
+      "Estanterías"
+    ],
+    "leaf": true
+  },
+  "24268": {
+    "name": "Muebles de salón y televisión",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Muebles de almacenaje",
+      "Muebles de salón y televisión"
+    ],
+    "leaf": true
+  },
+  "10289": {
+    "name": "Armarios",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Muebles de almacenaje",
+      "Armarios"
+    ],
+    "leaf": true
+  },
+  "24213": {
+    "name": "Vitrinas, aparadores y consolas",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Muebles de almacenaje",
+      "Vitrinas, aparadores y consolas"
+    ],
+    "leaf": true
+  },
+  "24214": {
+    "name": "Cómodas y cajoneras",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Muebles de almacenaje",
+      "Cómodas y cajoneras"
+    ],
+    "leaf": true
+  },
+  "24215": {
+    "name": "Zapateros",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Muebles de almacenaje",
+      "Zapateros"
+    ],
+    "leaf": true
+  },
+  "24216": {
+    "name": "Sofás y sillones",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Sofás y sillones"
+    ],
+    "leaf": false
+  },
+  "24217": {
+    "name": "Sofas y divanes",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Sofás y sillones",
+      "Sofas y divanes"
+    ],
+    "leaf": true
+  },
+  "24218": {
+    "name": "Sofa cama y futones",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Sofás y sillones",
+      "Sofa cama y futones"
+    ],
+    "leaf": true
+  },
+  "24219": {
+    "name": "Sillones y mecedoras",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Sofás y sillones",
+      "Sillones y mecedoras"
+    ],
+    "leaf": true
+  },
+  "24220": {
+    "name": "Puffs",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Sofás y sillones",
+      "Puffs"
+    ],
+    "leaf": true
+  },
+  "24221": {
+    "name": "Sillas y taburetes",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Sillas y taburetes"
+    ],
+    "leaf": true
+  },
+  "24222": {
+    "name": "Set de muebles",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Set de muebles"
+    ],
+    "leaf": false
+  },
+  "24223": {
+    "name": "Set de mesas y sillas",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Set de muebles",
+      "Set de mesas y sillas"
+    ],
+    "leaf": true
+  },
+  "24224": {
+    "name": "Set muebles habitación",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Set de muebles",
+      "Set muebles habitación"
+    ],
+    "leaf": true
+  },
+  "24225": {
+    "name": "Set de salón",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Set de muebles",
+      "Set de salón"
+    ],
+    "leaf": true
+  },
+  "24226": {
+    "name": "Carritos",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Carritos"
+    ],
+    "leaf": true
+  },
+  "10291": {
+    "name": "Cajas y organizadores",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Cajas y organizadores"
+    ],
+    "leaf": false
+  },
+  "24269": {
+    "name": "Colgadores, percheros y burras",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Cajas y organizadores",
+      "Colgadores, percheros y burras"
+    ],
+    "leaf": true
+  },
+  "10290": {
+    "name": "Baúles, cajas y cubos",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Cajas y organizadores",
+      "Baúles, cajas y cubos"
+    ],
+    "leaf": true
+  },
+  "24227": {
+    "name": "Cestas",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Cajas y organizadores",
+      "Cestas"
+    ],
+    "leaf": true
+  },
+  "24228": {
+    "name": "Almacenaje de joyas y maquillaje",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Cajas y organizadores",
+      "Almacenaje de joyas y maquillaje"
+    ],
+    "leaf": true
+  },
+  "24229": {
+    "name": "Basura y reciclaje",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Cajas y organizadores",
+      "Basura y reciclaje"
+    ],
+    "leaf": true
+  },
+  "24230": {
+    "name": "Organizadores",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Cajas y organizadores",
+      "Organizadores"
+    ],
+    "leaf": true
+  },
+  "10285": {
+    "name": "Antigüedades",
+    "path": [
+      "Hogar y jardín",
+      "Muebles y organización",
+      "Antigüedades"
+    ],
+    "leaf": true
+  },
+  "10119": {
+    "name": "Baño y accesorios",
+    "path": [
+      "Hogar y jardín",
+      "Baño y accesorios"
+    ],
+    "leaf": false
+  },
+  "24275": {
+    "name": "Inodoros y bidet",
+    "path": [
+      "Hogar y jardín",
+      "Baño y accesorios",
+      "Inodoros y bidet"
+    ],
+    "leaf": true
+  },
+  "24277": {
+    "name": "Duchas y bañeras",
+    "path": [
+      "Hogar y jardín",
+      "Baño y accesorios",
+      "Duchas y bañeras"
+    ],
+    "leaf": true
+  },
+  "10264": {
+    "name": "Picas y muebles baño",
+    "path": [
+      "Hogar y jardín",
+      "Baño y accesorios",
+      "Picas y muebles baño"
+    ],
+    "leaf": true
+  },
+  "24270": {
+    "name": "Grifería de baño",
+    "path": [
+      "Hogar y jardín",
+      "Baño y accesorios",
+      "Grifería de baño"
+    ],
+    "leaf": true
+  },
+  "10263": {
+    "name": "Textiles de baño",
+    "path": [
+      "Hogar y jardín",
+      "Baño y accesorios",
+      "Textiles de baño"
+    ],
+    "leaf": true
+  },
+  "10419": {
+    "name": "Accesorios baño",
+    "path": [
+      "Hogar y jardín",
+      "Baño y accesorios",
+      "Accesorios baño"
+    ],
+    "leaf": true
+  },
+  "10120": {
+    "name": "Cocina",
+    "path": [
+      "Hogar y jardín",
+      "Cocina"
+    ],
+    "leaf": false
+  },
+  "24231": {
+    "name": "Menaje para cocinar, comer y beber",
+    "path": [
+      "Hogar y jardín",
+      "Cocina",
+      "Menaje para cocinar, comer y beber"
+    ],
+    "leaf": false
+  },
+  "10267": {
+    "name": "Platos y vajilla",
+    "path": [
+      "Hogar y jardín",
+      "Cocina",
+      "Menaje para cocinar, comer y beber",
+      "Platos y vajilla"
+    ],
+    "leaf": true
+  },
+  "10266": {
+    "name": "Utensilios para cocinar",
+    "path": [
+      "Hogar y jardín",
+      "Cocina",
+      "Menaje para cocinar, comer y beber",
+      "Utensilios para cocinar"
+    ],
+    "leaf": true
+  },
+  "24271": {
+    "name": "Cristalería y jarras",
+    "path": [
+      "Hogar y jardín",
+      "Cocina",
+      "Menaje para cocinar, comer y beber",
+      "Cristalería y jarras"
+    ],
+    "leaf": true
+  },
+  "10420": {
+    "name": "Cubertería",
+    "path": [
+      "Hogar y jardín",
+      "Cocina",
+      "Menaje para cocinar, comer y beber",
+      "Cubertería"
+    ],
+    "leaf": true
+  },
+  "24272": {
+    "name": "Sartenes, ollas y batería de cocina",
+    "path": [
+      "Hogar y jardín",
+      "Cocina",
+      "Menaje para cocinar, comer y beber",
+      "Sartenes, ollas y batería de cocina"
+    ],
+    "leaf": true
+  },
+  "24232": {
+    "name": "Picas y muebles cocina",
+    "path": [
+      "Hogar y jardín",
+      "Cocina",
+      "Picas y muebles cocina"
+    ],
+    "leaf": true
+  },
+  "24233": {
+    "name": "Grifería de cocina",
+    "path": [
+      "Hogar y jardín",
+      "Cocina",
+      "Grifería de cocina"
+    ],
+    "leaf": true
+  },
+  "24234": {
+    "name": "Textiles de cocina y comedor",
+    "path": [
+      "Hogar y jardín",
+      "Cocina",
+      "Textiles de cocina y comedor"
+    ],
+    "leaf": true
+  },
+  "24235": {
+    "name": "Accesorios",
+    "path": [
+      "Hogar y jardín",
+      "Cocina",
+      "Accesorios"
+    ],
+    "leaf": true
+  },
+  "10122": {
+    "name": "Decoración y espejos",
+    "path": [
+      "Hogar y jardín",
+      "Decoración y espejos"
+    ],
+    "leaf": false
+  },
+  "24236": {
+    "name": "Fundas y cojines de sofá",
+    "path": [
+      "Hogar y jardín",
+      "Decoración y espejos",
+      "Fundas y cojines de sofá"
+    ],
+    "leaf": true
+  },
+  "24237": {
+    "name": "Decoración para pared y colgar",
+    "path": [
+      "Hogar y jardín",
+      "Decoración y espejos",
+      "Decoración para pared y colgar"
+    ],
+    "leaf": true
+  },
+  "10271": {
+    "name": "Decoración para festividades",
+    "path": [
+      "Hogar y jardín",
+      "Decoración y espejos",
+      "Decoración para festividades"
+    ],
+    "leaf": true
+  },
+  "24238": {
+    "name": "Espejos",
+    "path": [
+      "Hogar y jardín",
+      "Decoración y espejos",
+      "Espejos"
+    ],
+    "leaf": true
+  },
+  "10273": {
+    "name": "Cortinas",
+    "path": [
+      "Hogar y jardín",
+      "Decoración y espejos",
+      "Cortinas"
+    ],
+    "leaf": true
+  },
+  "10272": {
+    "name": "Alfombras",
+    "path": [
+      "Hogar y jardín",
+      "Decoración y espejos",
+      "Alfombras"
+    ],
+    "leaf": true
+  },
+  "24239": {
+    "name": "Jarrones y figuras decorativas",
+    "path": [
+      "Hogar y jardín",
+      "Decoración y espejos",
+      "Jarrones y figuras decorativas"
+    ],
+    "leaf": true
+  },
+  "24240": {
+    "name": "Velas y portavelas",
+    "path": [
+      "Hogar y jardín",
+      "Decoración y espejos",
+      "Velas y portavelas"
+    ],
+    "leaf": true
+  },
+  "24241": {
+    "name": "Otros",
+    "path": [
+      "Hogar y jardín",
+      "Decoración y espejos",
+      "Otros"
+    ],
+    "leaf": true
+  },
+  "10123": {
+    "name": "Iluminación",
+    "path": [
+      "Hogar y jardín",
+      "Iluminación"
+    ],
+    "leaf": false
+  },
+  "24242": {
+    "name": "Apliques, lámparas, pantallas y bases",
+    "path": [
+      "Hogar y jardín",
+      "Iluminación",
+      "Apliques, lámparas, pantallas y bases"
+    ],
+    "leaf": true
+  },
+  "24243": {
+    "name": "Bombillas",
+    "path": [
+      "Hogar y jardín",
+      "Iluminación",
+      "Bombillas"
+    ],
+    "leaf": true
+  },
+  "10281": {
+    "name": "Luces decorativas y de exterior",
+    "path": [
+      "Hogar y jardín",
+      "Iluminación",
+      "Luces decorativas y de exterior"
+    ],
+    "leaf": true
+  },
+  "24244": {
+    "name": "Iluminación inteligente",
+    "path": [
+      "Hogar y jardín",
+      "Iluminación",
+      "Iluminación inteligente"
+    ],
+    "leaf": true
+  },
+  "24245": {
+    "name": "Accesorios de iluminación",
+    "path": [
+      "Hogar y jardín",
+      "Iluminación",
+      "Accesorios de iluminación"
+    ],
+    "leaf": true
+  },
+  "10124": {
+    "name": "Jardín y exteriores",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores"
+    ],
+    "leaf": false
+  },
+  "10283": {
+    "name": "Muebles para exterior",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Muebles para exterior"
+    ],
+    "leaf": false
+  },
+  "24246": {
+    "name": "Sets de muebles de exterior",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Muebles para exterior",
+      "Sets de muebles de exterior"
+    ],
+    "leaf": true
+  },
+  "24247": {
+    "name": "Mesas de exterior",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Muebles para exterior",
+      "Mesas de exterior"
+    ],
+    "leaf": true
+  },
+  "24248": {
+    "name": "Sillas, sillones, sofás y tumbonas",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Muebles para exterior",
+      "Sillas, sillones, sofás y tumbonas"
+    ],
+    "leaf": true
+  },
+  "24249": {
+    "name": "Carpas, toldos y parasoles",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Muebles para exterior",
+      "Carpas, toldos y parasoles"
+    ],
+    "leaf": true
+  },
+  "24250": {
+    "name": "Armarios y almacenaje",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Muebles para exterior",
+      "Armarios y almacenaje"
+    ],
+    "leaf": true
+  },
+  "24251": {
+    "name": "Decoración",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Decoración"
+    ],
+    "leaf": true
+  },
+  "10282": {
+    "name": "Plantas y jardinería",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Plantas y jardinería"
+    ],
+    "leaf": false
+  },
+  "24252": {
+    "name": "Plantas",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Plantas y jardinería",
+      "Plantas"
+    ],
+    "leaf": true
+  },
+  "24253": {
+    "name": "Semillas y sustratos",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Plantas y jardinería",
+      "Semillas y sustratos"
+    ],
+    "leaf": true
+  },
+  "24254": {
+    "name": "Insecticidas y tratamiento para plantas",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Plantas y jardinería",
+      "Insecticidas y tratamiento para plantas"
+    ],
+    "leaf": true
+  },
+  "24255": {
+    "name": "Macetas",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Plantas y jardinería",
+      "Macetas"
+    ],
+    "leaf": true
+  },
+  "24256": {
+    "name": "Invernaderos y riego",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Plantas y jardinería",
+      "Invernaderos y riego"
+    ],
+    "leaf": true
+  },
+  "24257": {
+    "name": "Herramientas de jardinería",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Plantas y jardinería",
+      "Herramientas de jardinería"
+    ],
+    "leaf": true
+  },
+  "10280": {
+    "name": "Barbacoas",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Barbacoas"
+    ],
+    "leaf": true
+  },
+  "10284": {
+    "name": "Piscinas, spa y duchas de exterior",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Piscinas, spa y duchas de exterior"
+    ],
+    "leaf": true
+  },
+  "24258": {
+    "name": "Maquinaria de jardín",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Maquinaria de jardín"
+    ],
+    "leaf": true
+  },
+  "24259": {
+    "name": "Cesped, vallas y paneles",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Cesped, vallas y paneles"
+    ],
+    "leaf": true
+  },
+  "24260": {
+    "name": "Accesorios",
+    "path": [
+      "Hogar y jardín",
+      "Jardín y exteriores",
+      "Accesorios"
+    ],
+    "leaf": true
+  },
+  "24276": {
+    "name": "Calefacción y climatización",
+    "path": [
+      "Hogar y jardín",
+      "Calefacción y climatización"
+    ],
+    "leaf": false
+  },
+  "24261": {
+    "name": "Chimeneas, Estufas y radiadores",
+    "path": [
+      "Hogar y jardín",
+      "Calefacción y climatización",
+      "Chimeneas, Estufas y radiadores"
+    ],
+    "leaf": true
+  },
+  "24262": {
+    "name": "Aire acondicionado y ventiladores ",
+    "path": [
+      "Hogar y jardín",
+      "Calefacción y climatización",
+      "Aire acondicionado y ventiladores "
+    ],
+    "leaf": true
+  },
+  "24263": {
+    "name": "Combustibles y pellet",
+    "path": [
+      "Hogar y jardín",
+      "Calefacción y climatización",
+      "Combustibles y pellet"
+    ],
+    "leaf": true
+  },
+  "24264": {
+    "name": "Termostatos y válvulas termostáticas",
+    "path": [
+      "Hogar y jardín",
+      "Calefacción y climatización",
+      "Termostatos y válvulas termostáticas"
+    ],
+    "leaf": true
+  },
+  "24265": {
+    "name": "Calderas y termos eléctricos",
+    "path": [
+      "Hogar y jardín",
+      "Calefacción y climatización",
+      "Calderas y termos eléctricos"
+    ],
+    "leaf": true
+  },
+  "24266": {
+    "name": "Purificador y humificador",
+    "path": [
+      "Hogar y jardín",
+      "Calefacción y climatización",
+      "Purificador y humificador"
+    ],
+    "leaf": true
+  },
+  "24267": {
+    "name": "Otros",
+    "path": [
+      "Hogar y jardín",
+      "Calefacción y climatización",
+      "Otros"
+    ],
+    "leaf": true
+  },
+  "10118": {
+    "name": "Artículos para mascotas",
+    "path": [
+      "Hogar y jardín",
+      "Artículos para mascotas"
+    ],
+    "leaf": false
+  },
+  "10262": {
+    "name": "Accesorios de paseo",
+    "path": [
+      "Hogar y jardín",
+      "Artículos para mascotas",
+      "Accesorios de paseo"
+    ],
+    "leaf": true
+  },
+  "10257": {
+    "name": "Camas",
+    "path": [
+      "Hogar y jardín",
+      "Artículos para mascotas",
+      "Camas"
+    ],
+    "leaf": true
+  },
+  "10258": {
+    "name": "Corrales",
+    "path": [
+      "Hogar y jardín",
+      "Artículos para mascotas",
+      "Corrales"
+    ],
+    "leaf": true
+  },
+  "10259": {
+    "name": "Higiene",
+    "path": [
+      "Hogar y jardín",
+      "Artículos para mascotas",
+      "Higiene"
+    ],
+    "leaf": true
+  },
+  "10260": {
+    "name": "Jaulas",
+    "path": [
+      "Hogar y jardín",
+      "Artículos para mascotas",
+      "Jaulas"
+    ],
+    "leaf": true
+  },
+  "10261": {
+    "name": "Juguetes",
+    "path": [
+      "Hogar y jardín",
+      "Artículos para mascotas",
+      "Juguetes"
+    ],
+    "leaf": true
+  },
+  "13100": {
+    "name": "Electrodomésticos",
+    "path": [
+      "Electrodomésticos"
+    ],
+    "leaf": false
+  },
+  "10111": {
+    "name": "Electrodomésticos de cocina",
+    "path": [
+      "Electrodomésticos",
+      "Electrodomésticos de cocina"
+    ],
+    "leaf": true
+  },
+  "10112": {
+    "name": "Lavandería y plancha",
+    "path": [
+      "Electrodomésticos",
+      "Lavandería y plancha"
+    ],
+    "leaf": true
+  },
+  "10113": {
+    "name": "Pequeños electrodomésticos",
+    "path": [
+      "Electrodomésticos",
+      "Pequeños electrodomésticos"
+    ],
+    "leaf": true
+  },
+  "10114": {
+    "name": "Piezas y recambios",
+    "path": [
+      "Electrodomésticos",
+      "Piezas y recambios"
+    ],
+    "leaf": true
+  },
+  "10115": {
+    "name": "Vitrocerámica",
+    "path": [
+      "Electrodomésticos",
+      "Vitrocerámica"
+    ],
+    "leaf": true
+  },
+  "10441": {
+    "name": "Otros",
+    "path": [
+      "Electrodomésticos",
+      "Otros"
+    ],
+    "leaf": true
+  },
+  "12463": {
+    "name": "Cine, libros y música",
+    "path": [
+      "Cine, libros y música"
+    ],
+    "leaf": false
+  },
+  "24002": {
+    "name": "Cine y series",
+    "path": [
+      "Cine, libros y música",
+      "Cine y series"
+    ],
+    "leaf": false
+  },
+  "10067": {
+    "name": "Películas y Series",
+    "path": [
+      "Cine, libros y música",
+      "Cine y series",
+      "Películas y Series"
+    ],
+    "leaf": false
+  },
+  "24008": {
+    "name": "Cine",
+    "path": [
+      "Cine, libros y música",
+      "Cine y series",
+      "Películas y Series",
+      "Cine"
+    ],
+    "leaf": true
+  },
+  "24010": {
+    "name": "Cine infantil",
+    "path": [
+      "Cine, libros y música",
+      "Cine y series",
+      "Películas y Series",
+      "Cine infantil"
+    ],
+    "leaf": true
+  },
+  "24009": {
+    "name": "Series",
+    "path": [
+      "Cine, libros y música",
+      "Cine y series",
+      "Películas y Series",
+      "Series"
+    ],
+    "leaf": true
+  },
+  "24011": {
+    "name": "Otras películas y series",
+    "path": [
+      "Cine, libros y música",
+      "Cine y series",
+      "Películas y Series",
+      "Otras películas y series"
+    ],
+    "leaf": true
+  },
+  "10068": {
+    "name": "Pósters y merchandising de cine y TV",
+    "path": [
+      "Cine, libros y música",
+      "Cine y series",
+      "Pósters y merchandising de cine y TV"
+    ],
+    "leaf": true
+  },
+  "24003": {
+    "name": "Libros, cómics y revistas",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas"
+    ],
+    "leaf": false
+  },
+  "10061": {
+    "name": "Cómics y novelas gráficas",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Cómics y novelas gráficas"
+    ],
+    "leaf": false
+  },
+  "24035": {
+    "name": "Artbooks",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Cómics y novelas gráficas",
+      "Artbooks"
+    ],
+    "leaf": true
+  },
+  "24036": {
+    "name": "Arte original de cómics",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Cómics y novelas gráficas",
+      "Arte original de cómics"
+    ],
+    "leaf": true
+  },
+  "24037": {
+    "name": "Cómics americanos",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Cómics y novelas gráficas",
+      "Cómics americanos"
+    ],
+    "leaf": true
+  },
+  "24038": {
+    "name": "Cómics francobelgas y europeos",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Cómics y novelas gráficas",
+      "Cómics francobelgas y europeos"
+    ],
+    "leaf": true
+  },
+  "24039": {
+    "name": "Fanzines y clubs de fans",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Cómics y novelas gráficas",
+      "Fanzines y clubs de fans"
+    ],
+    "leaf": true
+  },
+  "24040": {
+    "name": "Guías de precios y del comprador",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Cómics y novelas gráficas",
+      "Guías de precios y del comprador"
+    ],
+    "leaf": true
+  },
+  "24041": {
+    "name": "Manga",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Cómics y novelas gráficas",
+      "Manga"
+    ],
+    "leaf": true
+  },
+  "24042": {
+    "name": "Merchandising y memorabilia",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Cómics y novelas gráficas",
+      "Merchandising y memorabilia"
+    ],
+    "leaf": true
+  },
+  "24043": {
+    "name": "Otras tradiciones de cómics",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Cómics y novelas gráficas",
+      "Otras tradiciones de cómics"
+    ],
+    "leaf": true
+  },
+  "24044": {
+    "name": "Otros comics",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Cómics y novelas gráficas",
+      "Otros comics"
+    ],
+    "leaf": true
+  },
+  "10064": {
+    "name": "Libros",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros"
+    ],
+    "leaf": false
+  },
+  "10251": {
+    "name": "Ficción",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "Ficción"
+    ],
+    "leaf": false
+  },
+  "24096": {
+    "name": "Ciencia ficción y fantasía",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "Ficción",
+      "Ciencia ficción y fantasía"
+    ],
+    "leaf": true
+  },
+  "24092": {
+    "name": "Crimen y misterio",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "Ficción",
+      "Crimen y misterio"
+    ],
+    "leaf": true
+  },
+  "24093": {
+    "name": "Humor",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "Ficción",
+      "Humor"
+    ],
+    "leaf": true
+  },
+  "24090": {
+    "name": "Literatura clásica",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "Ficción",
+      "Literatura clásica"
+    ],
+    "leaf": true
+  },
+  "24091": {
+    "name": "Novela contemporánea",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "Ficción",
+      "Novela contemporánea"
+    ],
+    "leaf": true
+  },
+  "24095": {
+    "name": "Novela romántica",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "Ficción",
+      "Novela romántica"
+    ],
+    "leaf": true
+  },
+  "24094": {
+    "name": "Poesía y teatro",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "Ficción",
+      "Poesía y teatro"
+    ],
+    "leaf": true
+  },
+  "24097": {
+    "name": "Otros libros de ficción",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "Ficción",
+      "Otros libros de ficción"
+    ],
+    "leaf": true
+  },
+  "10249": {
+    "name": "Infantil y juvenil",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "Infantil y juvenil"
+    ],
+    "leaf": false
+  },
+  "24100": {
+    "name": "Bebés",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "Infantil y juvenil",
+      "Bebés"
+    ],
+    "leaf": true
+  },
+  "24098": {
+    "name": "Infantil",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "Infantil y juvenil",
+      "Infantil"
+    ],
+    "leaf": true
+  },
+  "24099": {
+    "name": "Juvenil",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "Infantil y juvenil",
+      "Juvenil"
+    ],
+    "leaf": true
+  },
+  "10250": {
+    "name": "No ficción",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción"
+    ],
+    "leaf": false
+  },
+  "24080": {
+    "name": "Aficiones y manualidades",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Aficiones y manualidades"
+    ],
+    "leaf": true
+  },
+  "24073": {
+    "name": "Arte y entretenimiento",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Arte y entretenimiento"
+    ],
+    "leaf": true
+  },
+  "24101": {
+    "name": "Autoayuda",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Autoayuda"
+    ],
+    "leaf": true
+  },
+  "24074": {
+    "name": "Biografías",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Biografías"
+    ],
+    "leaf": true
+  },
+  "24086": {
+    "name": "Ciencias y naturaleza",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Ciencias y naturaleza"
+    ],
+    "leaf": true
+  },
+  "24087": {
+    "name": "Deportes",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Deportes"
+    ],
+    "leaf": true
+  },
+  "24084": {
+    "name": "Diccionarios y libros de consulta",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Diccionarios y libros de consulta"
+    ],
+    "leaf": true
+  },
+  "24075": {
+    "name": "Economía y empresa",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Economía y empresa"
+    ],
+    "leaf": true
+  },
+  "24077": {
+    "name": "Gastronomía",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Gastronomía"
+    ],
+    "leaf": true
+  },
+  "24079": {
+    "name": "Historia",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Historia"
+    ],
+    "leaf": true
+  },
+  "24076": {
+    "name": "Informática y tecnología",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Informática y tecnología"
+    ],
+    "leaf": true
+  },
+  "24081": {
+    "name": "Pedagogía y familia",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Pedagogía y familia"
+    ],
+    "leaf": true
+  },
+  "24082": {
+    "name": "Política y sociología",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Política y sociología"
+    ],
+    "leaf": true
+  },
+  "24083": {
+    "name": "Profesiones y especialidades",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Profesiones y especialidades"
+    ],
+    "leaf": true
+  },
+  "24085": {
+    "name": "Religión",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Religión"
+    ],
+    "leaf": true
+  },
+  "24078": {
+    "name": "Salud y bienestar",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Salud y bienestar"
+    ],
+    "leaf": true
+  },
+  "24088": {
+    "name": "Viajes",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Viajes"
+    ],
+    "leaf": true
+  },
+  "24089": {
+    "name": "Otros (no ficción)",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Otros (no ficción)"
+    ],
+    "leaf": true
+  },
+  "10248": {
+    "name": "Escolares y de texto",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Libros",
+      "No ficción",
+      "Escolares y de texto"
+    ],
+    "leaf": true
+  },
+  "10069": {
+    "name": "Revistas",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas"
+    ],
+    "leaf": false
+  },
+  "24012": {
+    "name": "Antiguas y de coleccionista",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Antiguas y de coleccionista"
+    ],
+    "leaf": true
+  },
+  "24014": {
+    "name": "Arquitectura, arte y diseño",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Arquitectura, arte y diseño"
+    ],
+    "leaf": true
+  },
+  "24016": {
+    "name": "Ciencia",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Ciencia"
+    ],
+    "leaf": true
+  },
+  "24018": {
+    "name": "Cine y televisión",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Cine y televisión"
+    ],
+    "leaf": true
+  },
+  "24020": {
+    "name": "Cocina",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Cocina"
+    ],
+    "leaf": true
+  },
+  "24022": {
+    "name": "Deportes",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Deportes"
+    ],
+    "leaf": true
+  },
+  "24024": {
+    "name": "Femeninas",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Femeninas"
+    ],
+    "leaf": true
+  },
+  "24026": {
+    "name": "Fotografía",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Fotografía"
+    ],
+    "leaf": true
+  },
+  "24030": {
+    "name": "Historia y política",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Historia y política"
+    ],
+    "leaf": true
+  },
+  "24013": {
+    "name": "Hogar y decoración",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Hogar y decoración"
+    ],
+    "leaf": true
+  },
+  "24015": {
+    "name": "Infantiles y juveniles",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Infantiles y juveniles"
+    ],
+    "leaf": true
+  },
+  "24017": {
+    "name": "Informática e internet",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Informática e internet"
+    ],
+    "leaf": true
+  },
+  "24019": {
+    "name": "Jardinería",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Jardinería"
+    ],
+    "leaf": true
+  },
+  "24028": {
+    "name": "LGBTIQ+",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "LGBTIQ+"
+    ],
+    "leaf": true
+  },
+  "24021": {
+    "name": "Manualidades",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Manualidades"
+    ],
+    "leaf": true
+  },
+  "24023": {
+    "name": "Masculinas",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Masculinas"
+    ],
+    "leaf": true
+  },
+  "24025": {
+    "name": "Moda y estilo de vida",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Moda y estilo de vida"
+    ],
+    "leaf": true
+  },
+  "24027": {
+    "name": "Música, danza y teatro",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Música, danza y teatro"
+    ],
+    "leaf": true
+  },
+  "24029": {
+    "name": "Naturaleza y geografía",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Naturaleza y geografía"
+    ],
+    "leaf": true
+  },
+  "24031": {
+    "name": "Negocios",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Negocios"
+    ],
+    "leaf": true
+  },
+  "24032": {
+    "name": "Transportes",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Transportes"
+    ],
+    "leaf": true
+  },
+  "24033": {
+    "name": "Viajes y aventura",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Viajes y aventura"
+    ],
+    "leaf": true
+  },
+  "24034": {
+    "name": "Otras revistas",
+    "path": [
+      "Cine, libros y música",
+      "Libros, cómics y revistas",
+      "Revistas",
+      "Otras revistas"
+    ],
+    "leaf": true
+  },
+  "24001": {
+    "name": "Música",
+    "path": [
+      "Cine, libros y música",
+      "Música"
+    ],
+    "leaf": false
+  },
+  "10060": {
+    "name": "CDs, Vinilos y Casetes",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "CDs, Vinilos y Casetes"
+    ],
+    "leaf": false
+  },
+  "24005": {
+    "name": "Casetes",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "CDs, Vinilos y Casetes",
+      "Casetes"
+    ],
+    "leaf": true
+  },
+  "24006": {
+    "name": "Otros formatos de audio",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "CDs, Vinilos y Casetes",
+      "Otros formatos de audio"
+    ],
+    "leaf": true
+  },
+  "10234": {
+    "name": "CDs Música",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "CDs, Vinilos y Casetes",
+      "CDs Música"
+    ],
+    "leaf": true
+  },
+  "10233": {
+    "name": "CDs idiomas",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "CDs, Vinilos y Casetes",
+      "CDs idiomas"
+    ],
+    "leaf": true
+  },
+  "10235": {
+    "name": "Vinilos",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "CDs, Vinilos y Casetes",
+      "Vinilos"
+    ],
+    "leaf": true
+  },
+  "10062": {
+    "name": "Equipo profesional de sonido",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Equipo profesional de sonido"
+    ],
+    "leaf": false
+  },
+  "10236": {
+    "name": "Cables",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Equipo profesional de sonido",
+      "Cables"
+    ],
+    "leaf": true
+  },
+  "10237": {
+    "name": "Compresores y ecualizadores",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Equipo profesional de sonido",
+      "Compresores y ecualizadores"
+    ],
+    "leaf": true
+  },
+  "10238": {
+    "name": "Dispositivos de grabación",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Equipo profesional de sonido",
+      "Dispositivos de grabación"
+    ],
+    "leaf": true
+  },
+  "10239": {
+    "name": "Mesas de mezclas y DJ",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Equipo profesional de sonido",
+      "Mesas de mezclas y DJ"
+    ],
+    "leaf": true
+  },
+  "10240": {
+    "name": "Micrófonos y accesorios",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Equipo profesional de sonido",
+      "Micrófonos y accesorios"
+    ],
+    "leaf": true
+  },
+  "10063": {
+    "name": "Instrumentos musicales",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales"
+    ],
+    "leaf": false
+  },
+  "24007": {
+    "name": "Other type of instruments",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Other type of instruments"
+    ],
+    "leaf": true
+  },
+  "10245": {
+    "name": "Instrumentos de Percusión",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de Percusión"
+    ],
+    "leaf": false
+  },
+  "24064": {
+    "name": "Cajas",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de Percusión",
+      "Cajas"
+    ],
+    "leaf": true
+  },
+  "24068": {
+    "name": "Claves",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de Percusión",
+      "Claves"
+    ],
+    "leaf": true
+  },
+  "24067": {
+    "name": "Pandereta",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de Percusión",
+      "Pandereta"
+    ],
+    "leaf": true
+  },
+  "24065": {
+    "name": "Platos",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de Percusión",
+      "Platos"
+    ],
+    "leaf": true
+  },
+  "24066": {
+    "name": "Tambores",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de Percusión",
+      "Tambores"
+    ],
+    "leaf": true
+  },
+  "24069": {
+    "name": "Otros instrumentos de percusión",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de Percusión",
+      "Otros instrumentos de percusión"
+    ],
+    "leaf": true
+  },
+  "10243": {
+    "name": "Instrumentos de cuerda",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de cuerda"
+    ],
+    "leaf": false
+  },
+  "24052": {
+    "name": "Arpa",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de cuerda",
+      "Arpa"
+    ],
+    "leaf": true
+  },
+  "24049": {
+    "name": "Banjo",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de cuerda",
+      "Banjo"
+    ],
+    "leaf": true
+  },
+  "24048": {
+    "name": "Contrabajo",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de cuerda",
+      "Contrabajo"
+    ],
+    "leaf": true
+  },
+  "24050": {
+    "name": "Mandolina",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de cuerda",
+      "Mandolina"
+    ],
+    "leaf": true
+  },
+  "24051": {
+    "name": "Ukelele",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de cuerda",
+      "Ukelele"
+    ],
+    "leaf": true
+  },
+  "24046": {
+    "name": "Viola",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de cuerda",
+      "Viola"
+    ],
+    "leaf": true
+  },
+  "24047": {
+    "name": "Violonchelo",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de cuerda",
+      "Violonchelo"
+    ],
+    "leaf": true
+  },
+  "24045": {
+    "name": "Violín",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de cuerda",
+      "Violín"
+    ],
+    "leaf": true
+  },
+  "24053": {
+    "name": "Otros instrumentos de cuerda",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de cuerda",
+      "Otros instrumentos de cuerda"
+    ],
+    "leaf": true
+  },
+  "10241": {
+    "name": "Bajos",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de cuerda",
+      "Bajos"
+    ],
+    "leaf": true
+  },
+  "10242": {
+    "name": "Guitarras",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de cuerda",
+      "Guitarras"
+    ],
+    "leaf": true
+  },
+  "10244": {
+    "name": "Instrumentos de viento",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de viento"
+    ],
+    "leaf": false
+  },
+  "24057": {
+    "name": "Armónica",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de viento",
+      "Armónica"
+    ],
+    "leaf": true
+  },
+  "24061": {
+    "name": "Bajón",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de viento",
+      "Bajón"
+    ],
+    "leaf": true
+  },
+  "24058": {
+    "name": "Clarinete",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de viento",
+      "Clarinete"
+    ],
+    "leaf": true
+  },
+  "24060": {
+    "name": "Corneta",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de viento",
+      "Corneta"
+    ],
+    "leaf": true
+  },
+  "24055": {
+    "name": "Flauta",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de viento",
+      "Flauta"
+    ],
+    "leaf": true
+  },
+  "24054": {
+    "name": "Flauta dulce",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de viento",
+      "Flauta dulce"
+    ],
+    "leaf": true
+  },
+  "24056": {
+    "name": "Flautín",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de viento",
+      "Flautín"
+    ],
+    "leaf": true
+  },
+  "24062": {
+    "name": "Saxofón",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de viento",
+      "Saxofón"
+    ],
+    "leaf": true
+  },
+  "24059": {
+    "name": "Trompeta",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de viento",
+      "Trompeta"
+    ],
+    "leaf": true
+  },
+  "24063": {
+    "name": "Otros instrumentos de viento",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Instrumentos de viento",
+      "Otros instrumentos de viento"
+    ],
+    "leaf": true
+  },
+  "10246": {
+    "name": "Pianos y teclados",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Pianos y teclados"
+    ],
+    "leaf": false
+  },
+  "24070": {
+    "name": "Pianos",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Pianos y teclados",
+      "Pianos"
+    ],
+    "leaf": true
+  },
+  "24071": {
+    "name": "Teclados",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Pianos y teclados",
+      "Teclados"
+    ],
+    "leaf": true
+  },
+  "24072": {
+    "name": "Otros pianos y teclados",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Instrumentos musicales",
+      "Pianos y teclados",
+      "Otros pianos y teclados"
+    ],
+    "leaf": true
+  },
+  "10066": {
+    "name": "Partituras y libretos",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Partituras y libretos"
+    ],
+    "leaf": true
+  },
+  "24004": {
+    "name": "Pósters y merchandising de música",
+    "path": [
+      "Cine, libros y música",
+      "Música",
+      "Pósters y merchandising de música"
+    ],
+    "leaf": true
+  },
+  "12461": {
+    "name": "Niños y bebés",
+    "path": [
+      "Niños y bebés"
+    ],
+    "leaf": false
+  },
+  "10177": {
+    "name": "Accesorios de baño",
+    "path": [
+      "Niños y bebés",
+      "Accesorios de baño"
+    ],
+    "leaf": true
+  },
+  "10178": {
+    "name": "Alimentación del bebé",
+    "path": [
+      "Niños y bebés",
+      "Alimentación del bebé"
+    ],
+    "leaf": false
+  },
+  "10342": {
+    "name": "Baberos y paños",
+    "path": [
+      "Niños y bebés",
+      "Alimentación del bebé",
+      "Baberos y paños"
+    ],
+    "leaf": true
+  },
+  "10343": {
+    "name": "Batidoras y mezcladores",
+    "path": [
+      "Niños y bebés",
+      "Alimentación del bebé",
+      "Batidoras y mezcladores"
+    ],
+    "leaf": true
+  },
+  "10344": {
+    "name": "Biberones & calientabiberones",
+    "path": [
+      "Niños y bebés",
+      "Alimentación del bebé",
+      "Biberones & calientabiberones"
+    ],
+    "leaf": true
+  },
+  "10345": {
+    "name": "Chupetes",
+    "path": [
+      "Niños y bebés",
+      "Alimentación del bebé",
+      "Chupetes"
+    ],
+    "leaf": true
+  },
+  "10346": {
+    "name": "Utensilios y cubertería",
+    "path": [
+      "Niños y bebés",
+      "Alimentación del bebé",
+      "Utensilios y cubertería"
+    ],
+    "leaf": true
+  },
+  "10179": {
+    "name": "Artículos de maternidad",
+    "path": [
+      "Niños y bebés",
+      "Artículos de maternidad"
+    ],
+    "leaf": false
+  },
+  "10347": {
+    "name": "Lactancia",
+    "path": [
+      "Niños y bebés",
+      "Artículos de maternidad",
+      "Lactancia"
+    ],
+    "leaf": true
+  },
+  "10348": {
+    "name": "Libros para madres y padres",
+    "path": [
+      "Niños y bebés",
+      "Artículos de maternidad",
+      "Libros para madres y padres"
+    ],
+    "leaf": true
+  },
+  "10180": {
+    "name": "Artículos escolares",
+    "path": [
+      "Niños y bebés",
+      "Artículos escolares"
+    ],
+    "leaf": false
+  },
+  "10349": {
+    "name": "Mochilas",
+    "path": [
+      "Niños y bebés",
+      "Artículos escolares",
+      "Mochilas"
+    ],
+    "leaf": true
+  },
+  "10350": {
+    "name": "Porta meriendas",
+    "path": [
+      "Niños y bebés",
+      "Artículos escolares",
+      "Porta meriendas"
+    ],
+    "leaf": true
+  },
+  "10351": {
+    "name": "Uniformes",
+    "path": [
+      "Niños y bebés",
+      "Artículos escolares",
+      "Uniformes"
+    ],
+    "leaf": true
+  },
+  "10182": {
+    "name": "Cunas y camas",
+    "path": [
+      "Niños y bebés",
+      "Cunas y camas"
+    ],
+    "leaf": false
+  },
+  "10356": {
+    "name": "Camas infantiles",
+    "path": [
+      "Niños y bebés",
+      "Cunas y camas",
+      "Camas infantiles"
+    ],
+    "leaf": true
+  },
+  "10357": {
+    "name": "Cunas",
+    "path": [
+      "Niños y bebés",
+      "Cunas y camas",
+      "Cunas"
+    ],
+    "leaf": true
+  },
+  "10358": {
+    "name": "Iluminación infantil",
+    "path": [
+      "Niños y bebés",
+      "Cunas y camas",
+      "Iluminación infantil"
+    ],
+    "leaf": true
+  },
+  "10359": {
+    "name": "Ropa de cama infantil",
+    "path": [
+      "Niños y bebés",
+      "Cunas y camas",
+      "Ropa de cama infantil"
+    ],
+    "leaf": true
+  },
+  "10360": {
+    "name": "Ropa de cuna",
+    "path": [
+      "Niños y bebés",
+      "Cunas y camas",
+      "Ropa de cuna"
+    ],
+    "leaf": true
+  },
+  "10361": {
+    "name": "Sacos de dormir",
+    "path": [
+      "Niños y bebés",
+      "Cunas y camas",
+      "Sacos de dormir"
+    ],
+    "leaf": true
+  },
+  "10183": {
+    "name": "Disfraces infantiles",
+    "path": [
+      "Niños y bebés",
+      "Disfraces infantiles"
+    ],
+    "leaf": true
+  },
+  "10184": {
+    "name": "Juguetes, juegos y peluches",
+    "path": [
+      "Niños y bebés",
+      "Juguetes, juegos y peluches"
+    ],
+    "leaf": false
+  },
+  "10362": {
+    "name": "Juegos de mesa",
+    "path": [
+      "Niños y bebés",
+      "Juguetes, juegos y peluches",
+      "Juegos de mesa"
+    ],
+    "leaf": true
+  },
+  "10363": {
+    "name": "Juguetes",
+    "path": [
+      "Niños y bebés",
+      "Juguetes, juegos y peluches",
+      "Juguetes"
+    ],
+    "leaf": true
+  },
+  "10364": {
+    "name": "Peluches",
+    "path": [
+      "Niños y bebés",
+      "Juguetes, juegos y peluches",
+      "Peluches"
+    ],
+    "leaf": true
+  },
+  "10185": {
+    "name": "Mobiliario infantil",
+    "path": [
+      "Niños y bebés",
+      "Mobiliario infantil"
+    ],
+    "leaf": true
+  },
+  "10187": {
+    "name": "Ropa infantil",
+    "path": [
+      "Niños y bebés",
+      "Ropa infantil"
+    ],
+    "leaf": false
+  },
+  "10365": {
+    "name": "0-6 meses (68 cm)",
+    "path": [
+      "Niños y bebés",
+      "Ropa infantil",
+      "0-6 meses (68 cm)"
+    ],
+    "leaf": true
+  },
+  "10374": {
+    "name": "6-9 meses (74 cm)",
+    "path": [
+      "Niños y bebés",
+      "Ropa infantil",
+      "6-9 meses (74 cm)"
+    ],
+    "leaf": true
+  },
+  "10376": {
+    "name": "9-12 meses (80 cm)",
+    "path": [
+      "Niños y bebés",
+      "Ropa infantil",
+      "9-12 meses (80 cm)"
+    ],
+    "leaf": true
+  },
+  "10367": {
+    "name": "12-18 meses (86 cm)",
+    "path": [
+      "Niños y bebés",
+      "Ropa infantil",
+      "12-18 meses (86 cm)"
+    ],
+    "leaf": true
+  },
+  "10369": {
+    "name": "18-24 meses (92 cm)",
+    "path": [
+      "Niños y bebés",
+      "Ropa infantil",
+      "18-24 meses (92 cm)"
+    ],
+    "leaf": true
+  },
+  "10370": {
+    "name": "2-3 años (98 cm)",
+    "path": [
+      "Niños y bebés",
+      "Ropa infantil",
+      "2-3 años (98 cm)"
+    ],
+    "leaf": true
+  },
+  "10371": {
+    "name": "3-4 años (104 cm)",
+    "path": [
+      "Niños y bebés",
+      "Ropa infantil",
+      "3-4 años (104 cm)"
+    ],
+    "leaf": true
+  },
+  "10372": {
+    "name": "4-5 años (110 cm)",
+    "path": [
+      "Niños y bebés",
+      "Ropa infantil",
+      "4-5 años (110 cm)"
+    ],
+    "leaf": true
+  },
+  "10373": {
+    "name": "6-7 años (116 cm)",
+    "path": [
+      "Niños y bebés",
+      "Ropa infantil",
+      "6-7 años (116 cm)"
+    ],
+    "leaf": true
+  },
+  "10375": {
+    "name": "8-9 años (130 cm)",
+    "path": [
+      "Niños y bebés",
+      "Ropa infantil",
+      "8-9 años (130 cm)"
+    ],
+    "leaf": true
+  },
+  "10366": {
+    "name": "10-12 años (150 cm)",
+    "path": [
+      "Niños y bebés",
+      "Ropa infantil",
+      "10-12 años (150 cm)"
+    ],
+    "leaf": true
+  },
+  "10368": {
+    "name": "13-14 años (164 cm)",
+    "path": [
+      "Niños y bebés",
+      "Ropa infantil",
+      "13-14 años (164 cm)"
+    ],
+    "leaf": true
+  },
+  "10188": {
+    "name": "Seguridad y cuidado",
+    "path": [
+      "Niños y bebés",
+      "Seguridad y cuidado"
+    ],
+    "leaf": false
+  },
+  "10377": {
+    "name": "Arneses de seguridad",
+    "path": [
+      "Niños y bebés",
+      "Seguridad y cuidado",
+      "Arneses de seguridad"
+    ],
+    "leaf": true
+  },
+  "10378": {
+    "name": "Monitores para bebés",
+    "path": [
+      "Niños y bebés",
+      "Seguridad y cuidado",
+      "Monitores para bebés"
+    ],
+    "leaf": true
+  },
+  "10379": {
+    "name": "Pegatinas para el coche",
+    "path": [
+      "Niños y bebés",
+      "Seguridad y cuidado",
+      "Pegatinas para el coche"
+    ],
+    "leaf": true
+  },
+  "10380": {
+    "name": "Puertas de seguridad y parques",
+    "path": [
+      "Niños y bebés",
+      "Seguridad y cuidado",
+      "Puertas de seguridad y parques"
+    ],
+    "leaf": true
+  },
+  "10381": {
+    "name": "Termómetros para bebés",
+    "path": [
+      "Niños y bebés",
+      "Seguridad y cuidado",
+      "Termómetros para bebés"
+    ],
+    "leaf": true
+  },
+  "10181": {
+    "name": "Transporte del bebé",
+    "path": [
+      "Niños y bebés",
+      "Transporte del bebé"
+    ],
+    "leaf": false
+  },
+  "10352": {
+    "name": "Cochecitos",
+    "path": [
+      "Niños y bebés",
+      "Transporte del bebé",
+      "Cochecitos"
+    ],
+    "leaf": true
+  },
+  "10353": {
+    "name": "Portabebés",
+    "path": [
+      "Niños y bebés",
+      "Transporte del bebé",
+      "Portabebés"
+    ],
+    "leaf": true
+  },
+  "10354": {
+    "name": "Sillas de coche",
+    "path": [
+      "Niños y bebés",
+      "Transporte del bebé",
+      "Sillas de coche"
+    ],
+    "leaf": true
+  },
+  "10355": {
+    "name": "Sillas de paseo",
+    "path": [
+      "Niños y bebés",
+      "Transporte del bebé",
+      "Sillas de paseo"
+    ],
+    "leaf": true
+  },
+  "10189": {
+    "name": "Tronas y andadores",
+    "path": [
+      "Niños y bebés",
+      "Tronas y andadores"
+    ],
+    "leaf": false
+  },
+  "10382": {
+    "name": "Andadores",
+    "path": [
+      "Niños y bebés",
+      "Tronas y andadores",
+      "Andadores"
+    ],
+    "leaf": true
+  },
+  "10383": {
+    "name": "Correpasillos",
+    "path": [
+      "Niños y bebés",
+      "Tronas y andadores",
+      "Correpasillos"
+    ],
+    "leaf": true
+  },
+  "10384": {
+    "name": "Tronas",
+    "path": [
+      "Niños y bebés",
+      "Tronas y andadores",
+      "Tronas"
+    ],
+    "leaf": true
+  },
+  "10186": {
+    "name": "Otros",
+    "path": [
+      "Niños y bebés",
+      "Otros"
+    ],
+    "leaf": true
+  },
+  "18000": {
+    "name": "Coleccionismo",
+    "path": [
+      "Coleccionismo"
+    ],
+    "leaf": false
+  },
+  "10071": {
+    "name": "Antigüedades",
+    "path": [
+      "Coleccionismo",
+      "Antigüedades"
+    ],
+    "leaf": true
+  },
+  "10072": {
+    "name": "Artesanías y decoración",
+    "path": [
+      "Coleccionismo",
+      "Artesanías y decoración"
+    ],
+    "leaf": true
+  },
+  "10073": {
+    "name": "Artículos de escritorio",
+    "path": [
+      "Coleccionismo",
+      "Artículos de escritorio"
+    ],
+    "leaf": true
+  },
+  "10074": {
+    "name": "Banderas",
+    "path": [
+      "Coleccionismo",
+      "Banderas"
+    ],
+    "leaf": true
+  },
+  "10075": {
+    "name": "Coches y motocicletas",
+    "path": [
+      "Coleccionismo",
+      "Coches y motocicletas"
+    ],
+    "leaf": true
+  },
+  "10076": {
+    "name": "Coleccionismo deportivo",
+    "path": [
+      "Coleccionismo",
+      "Coleccionismo deportivo"
+    ],
+    "leaf": true
+  },
+  "10077": {
+    "name": "Coleccionismo militar",
+    "path": [
+      "Coleccionismo",
+      "Coleccionismo militar"
+    ],
+    "leaf": true
+  },
+  "10078": {
+    "name": "Filatelia y sellos",
+    "path": [
+      "Coleccionismo",
+      "Filatelia y sellos"
+    ],
+    "leaf": true
+  },
+  "10079": {
+    "name": "Imanes",
+    "path": [
+      "Coleccionismo",
+      "Imanes"
+    ],
+    "leaf": true
+  },
+  "10080": {
+    "name": "Llaveros",
+    "path": [
+      "Coleccionismo",
+      "Llaveros"
+    ],
+    "leaf": true
+  },
+  "10081": {
+    "name": "Monedas y billetes",
+    "path": [
+      "Coleccionismo",
+      "Monedas y billetes"
+    ],
+    "leaf": true
+  },
+  "10082": {
+    "name": "Muñecos",
+    "path": [
+      "Coleccionismo",
+      "Muñecos"
+    ],
+    "leaf": true
+  },
+  "10083": {
+    "name": "Naipes",
+    "path": [
+      "Coleccionismo",
+      "Naipes"
+    ],
+    "leaf": true
+  },
+  "10085": {
+    "name": "Postales y suvenires",
+    "path": [
+      "Coleccionismo",
+      "Postales y suvenires"
+    ],
+    "leaf": true
+  },
+  "10086": {
+    "name": "Relojes",
+    "path": [
+      "Coleccionismo",
+      "Relojes"
+    ],
+    "leaf": true
+  },
+  "10084": {
+    "name": "Otros",
+    "path": [
+      "Coleccionismo",
+      "Otros"
+    ],
+    "leaf": true
+  },
+  "19000": {
+    "name": "Construcción y reformas",
+    "path": [
+      "Construcción y reformas"
+    ],
+    "leaf": false
+  },
+  "10138": {
+    "name": "Balcones",
+    "path": [
+      "Construcción y reformas",
+      "Balcones"
+    ],
+    "leaf": true
+  },
+  "10141": {
+    "name": "Electricidad e Iluminación",
+    "path": [
+      "Construcción y reformas",
+      "Electricidad e Iluminación"
+    ],
+    "leaf": true
+  },
+  "10142": {
+    "name": "Escaleras y andamios",
+    "path": [
+      "Construcción y reformas",
+      "Escaleras y andamios"
+    ],
+    "leaf": true
+  },
+  "10143": {
+    "name": "Ferretería",
+    "path": [
+      "Construcción y reformas",
+      "Ferretería"
+    ],
+    "leaf": true
+  },
+  "10144": {
+    "name": "Herramientas y maquinaria",
+    "path": [
+      "Construcción y reformas",
+      "Herramientas y maquinaria"
+    ],
+    "leaf": false
+  },
+  "10317": {
+    "name": "Herramientas",
+    "path": [
+      "Construcción y reformas",
+      "Herramientas y maquinaria",
+      "Herramientas"
+    ],
+    "leaf": true
+  },
+  "10318": {
+    "name": "Herramientas eléctricas",
+    "path": [
+      "Construcción y reformas",
+      "Herramientas y maquinaria",
+      "Herramientas eléctricas"
+    ],
+    "leaf": true
+  },
+  "10319": {
+    "name": "Maquinaria",
+    "path": [
+      "Construcción y reformas",
+      "Herramientas y maquinaria",
+      "Maquinaria"
+    ],
+    "leaf": true
+  },
+  "10145": {
+    "name": "Madera y otros materiales",
+    "path": [
+      "Construcción y reformas",
+      "Madera y otros materiales"
+    ],
+    "leaf": true
+  },
+  "10147": {
+    "name": "Pavimentos y revestimientos",
+    "path": [
+      "Construcción y reformas",
+      "Pavimentos y revestimientos"
+    ],
+    "leaf": false
+  },
+  "10320": {
+    "name": "Baldosas y azulejos",
+    "path": [
+      "Construcción y reformas",
+      "Pavimentos y revestimientos",
+      "Baldosas y azulejos"
+    ],
+    "leaf": true
+  },
+  "10321": {
+    "name": "Parquet",
+    "path": [
+      "Construcción y reformas",
+      "Pavimentos y revestimientos",
+      "Parquet"
+    ],
+    "leaf": true
+  },
+  "10148": {
+    "name": "Pinturas y barnices",
+    "path": [
+      "Construcción y reformas",
+      "Pinturas y barnices"
+    ],
+    "leaf": false
+  },
+  "10322": {
+    "name": "Barnices",
+    "path": [
+      "Construcción y reformas",
+      "Pinturas y barnices",
+      "Barnices"
+    ],
+    "leaf": true
+  },
+  "10323": {
+    "name": "Pinturas",
+    "path": [
+      "Construcción y reformas",
+      "Pinturas y barnices",
+      "Pinturas"
+    ],
+    "leaf": true
+  },
+  "10149": {
+    "name": "Puertas y ventanas",
+    "path": [
+      "Construcción y reformas",
+      "Puertas y ventanas"
+    ],
+    "leaf": false
+  },
+  "10324": {
+    "name": "Cristales",
+    "path": [
+      "Construcción y reformas",
+      "Puertas y ventanas",
+      "Cristales"
+    ],
+    "leaf": true
+  },
+  "10325": {
+    "name": "Puertas",
+    "path": [
+      "Construcción y reformas",
+      "Puertas y ventanas",
+      "Puertas"
+    ],
+    "leaf": true
+  },
+  "10326": {
+    "name": "Puertas correderas",
+    "path": [
+      "Construcción y reformas",
+      "Puertas y ventanas",
+      "Puertas correderas"
+    ],
+    "leaf": true
+  },
+  "10327": {
+    "name": "Ventanas",
+    "path": [
+      "Construcción y reformas",
+      "Puertas y ventanas",
+      "Ventanas"
+    ],
+    "leaf": true
+  },
+  "10146": {
+    "name": "Otros",
+    "path": [
+      "Construcción y reformas",
+      "Otros"
+    ],
+    "leaf": true
+  },
+  "20000": {
+    "name": "Industria y agricultura",
+    "path": [
+      "Industria y agricultura"
+    ],
+    "leaf": false
+  },
+  "10128": {
+    "name": "Agricultura",
+    "path": [
+      "Industria y agricultura",
+      "Agricultura"
+    ],
+    "leaf": false
+  },
+  "10293": {
+    "name": "Herramientas agrícolas",
+    "path": [
+      "Industria y agricultura",
+      "Agricultura",
+      "Herramientas agrícolas"
+    ],
+    "leaf": true
+  },
+  "10294": {
+    "name": "Insumos agrícolas",
+    "path": [
+      "Industria y agricultura",
+      "Agricultura",
+      "Insumos agrícolas"
+    ],
+    "leaf": true
+  },
+  "10295": {
+    "name": "Maquinaria",
+    "path": [
+      "Industria y agricultura",
+      "Agricultura",
+      "Maquinaria"
+    ],
+    "leaf": true
+  },
+  "10296": {
+    "name": "Repuestos",
+    "path": [
+      "Industria y agricultura",
+      "Agricultura",
+      "Repuestos"
+    ],
+    "leaf": true
+  },
+  "10297": {
+    "name": "Tractores",
+    "path": [
+      "Industria y agricultura",
+      "Agricultura",
+      "Tractores"
+    ],
+    "leaf": true
+  },
+  "10298": {
+    "name": "Vehículos",
+    "path": [
+      "Industria y agricultura",
+      "Agricultura",
+      "Vehículos"
+    ],
+    "leaf": true
+  },
+  "10129": {
+    "name": "Industria",
+    "path": [
+      "Industria y agricultura",
+      "Industria"
+    ],
+    "leaf": false
+  },
+  "10299": {
+    "name": "Equipamiento industrial",
+    "path": [
+      "Industria y agricultura",
+      "Industria",
+      "Equipamiento industrial"
+    ],
+    "leaf": true
+  },
+  "10300": {
+    "name": "Herramientas",
+    "path": [
+      "Industria y agricultura",
+      "Industria",
+      "Herramientas"
+    ],
+    "leaf": true
+  },
+  "10301": {
+    "name": "Insumos industriales",
+    "path": [
+      "Industria y agricultura",
+      "Industria",
+      "Insumos industriales"
+    ],
+    "leaf": true
+  },
+  "10302": {
+    "name": "Repuestos de herramientas",
+    "path": [
+      "Industria y agricultura",
+      "Industria",
+      "Repuestos de herramientas"
+    ],
+    "leaf": true
+  },
+  "10303": {
+    "name": "Repuestos de maquinaria",
+    "path": [
+      "Industria y agricultura",
+      "Industria",
+      "Repuestos de maquinaria"
+    ],
+    "leaf": true
+  },
+  "21000": {
+    "name": "Empleo",
+    "path": [
+      "Empleo"
+    ],
+    "leaf": false
+  },
+  "10116": {
+    "name": "Busco empleo",
+    "path": [
+      "Empleo",
+      "Busco empleo"
+    ],
+    "leaf": true
+  },
+  "10117": {
+    "name": "Ofertas de empleo",
+    "path": [
+      "Empleo",
+      "Ofertas de empleo"
+    ],
+    "leaf": true
+  },
+  "13200": {
+    "name": "Servicios",
+    "path": [
+      "Servicios"
+    ],
+    "leaf": false
+  },
+  "10190": {
+    "name": "Clases y entrenamiento",
+    "path": [
+      "Servicios",
+      "Clases y entrenamiento"
+    ],
+    "leaf": false
+  },
+  "10385": {
+    "name": "Clases de idiomas",
+    "path": [
+      "Servicios",
+      "Clases y entrenamiento",
+      "Clases de idiomas"
+    ],
+    "leaf": true
+  },
+  "10386": {
+    "name": "Personal trainers",
+    "path": [
+      "Servicios",
+      "Clases y entrenamiento",
+      "Personal trainers"
+    ],
+    "leaf": true
+  },
+  "10387": {
+    "name": "Tutores y soporte escolar",
+    "path": [
+      "Servicios",
+      "Clases y entrenamiento",
+      "Tutores y soporte escolar"
+    ],
+    "leaf": true
+  },
+  "10191": {
+    "name": "Cuidadoras y niñeras",
+    "path": [
+      "Servicios",
+      "Cuidadoras y niñeras"
+    ],
+    "leaf": false
+  },
+  "10388": {
+    "name": "Cuidadores de ancianos",
+    "path": [
+      "Servicios",
+      "Cuidadoras y niñeras",
+      "Cuidadores de ancianos"
+    ],
+    "leaf": true
+  },
+  "10389": {
+    "name": "Niñeras",
+    "path": [
+      "Servicios",
+      "Cuidadoras y niñeras",
+      "Niñeras"
+    ],
+    "leaf": true
+  },
+  "10192": {
+    "name": "Mudanzas y transporte",
+    "path": [
+      "Servicios",
+      "Mudanzas y transporte"
+    ],
+    "leaf": false
+  },
+  "10390": {
+    "name": "Mensajería",
+    "path": [
+      "Servicios",
+      "Mudanzas y transporte",
+      "Mensajería"
+    ],
+    "leaf": true
+  },
+  "10391": {
+    "name": "Mudanzas",
+    "path": [
+      "Servicios",
+      "Mudanzas y transporte",
+      "Mudanzas"
+    ],
+    "leaf": true
+  },
+  "10392": {
+    "name": "Transporte",
+    "path": [
+      "Servicios",
+      "Mudanzas y transporte",
+      "Transporte"
+    ],
+    "leaf": true
+  },
+  "10194": {
+    "name": "Reparaciones",
+    "path": [
+      "Servicios",
+      "Reparaciones"
+    ],
+    "leaf": true
+  },
+  "10195": {
+    "name": "Servicios de limpieza",
+    "path": [
+      "Servicios",
+      "Servicios de limpieza"
+    ],
+    "leaf": true
+  },
+  "10196": {
+    "name": "Servicios del hogar",
+    "path": [
+      "Servicios",
+      "Servicios del hogar"
+    ],
+    "leaf": false
+  },
+  "10393": {
+    "name": "Albañil",
+    "path": [
+      "Servicios",
+      "Servicios del hogar",
+      "Albañil"
+    ],
+    "leaf": true
+  },
+  "10394": {
+    "name": "Electricista",
+    "path": [
+      "Servicios",
+      "Servicios del hogar",
+      "Electricista"
+    ],
+    "leaf": true
+  },
+  "10197": {
+    "name": "Terapia y crecimiento personal",
+    "path": [
+      "Servicios",
+      "Terapia y crecimiento personal"
+    ],
+    "leaf": true
+  },
+  "10193": {
+    "name": "Otros",
+    "path": [
+      "Servicios",
+      "Otros"
+    ],
+    "leaf": true
+  },
+  "12485": {
+    "name": "Otros",
+    "path": [
+      "Otros"
+    ],
+    "leaf": true
+  }
+}

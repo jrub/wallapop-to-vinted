@@ -1,0 +1,400 @@
+{
+  "9487": {
+    "name": "Smartwatches y pulsera de actividad",
+    "vinted": [
+      "Electrónica",
+      "Wearables",
+      "Relojes inteligentes"
+    ],
+    "attributes": {
+      "brand_select_dropdown_input": {
+        "label": "Marca",
+        "from": "brand",
+        "kind": "combobox",
+        "fallback": "no_brand",
+        "observed_options": [
+          "Principal",
+          "Principal",
+          "Orange",
+          "Once",
+          "Cuero",
+          "Apple",
+          "Samsung",
+          "Garmin",
+          "Smart Watch",
+          "Huawei",
+          "Xiaomi",
+          "Fitbit",
+          "Amazfit",
+          "Galaxy",
+          "Polar",
+          "Smart",
+          "Suunto",
+          "Redmi",
+          "Amazon",
+          "Fossil",
+          "Michael Kors",
+          "VTech",
+          "Google",
+          "Ice Watch",
+          "Radley",
+          "Honor",
+          "Shein",
+          "Orologio",
+          "Decathlon",
+          "Forever"
+        ]
+      },
+      "size_select_dropdown_input": {
+        "label": "Talla",
+        "from": null,
+        "kind": "combobox",
+        "observed_options": [
+          "Principal",
+          "Principal",
+          "Hasta 30 mm",
+          "30–38 mm",
+          "39–42 mm",
+          "43–46 mm",
+          "47 mm o más",
+          "Talla única",
+          "Mediano\nPara artículos que quepan en una caja de zapatos.",
+          "Grande\nPara artículos que quepan en una caja de mudanza."
+        ]
+      },
+      "color_select_dropdown_input": {
+        "label": "Color",
+        "from": "color",
+        "kind": "combobox"
+      }
+    }
+  },
+  "9713": {
+    "name": "Chaquetas",
+    "vinted": [
+      "Hombre",
+      "Ropa",
+      "Abrigos y chaquetas",
+      "Chaquetas"
+    ],
+    "attributes": {}
+  },
+  "10073": {
+    "name": "Artículos de escritorio",
+    "vinted": [
+      "Hobbies y coleccionismo",
+      "Memorabilia"
+    ],
+    "attributes": {}
+  },
+  "10093": {
+    "name": "Videojuegos PC",
+    "vinted": [
+      "Electrónica",
+      "Videojuegos y consolas",
+      "Juegos"
+    ],
+    "attributes": {
+      "category_video_game_ratings": {
+        "label": "Clasificación de contenidos",
+        "from": null,
+        "kind": "dropdown",
+        "default": "PEGI 12"
+      }
+    }
+  },
+  "10135": {
+    "name": "Otros accesorios de informática",
+    "vinted": [
+      "Electrónica",
+      "Ordenadores y accesorios",
+      "Piezas y componentes de ordenadores"
+    ],
+    "attributes": {}
+  },
+  "10175": {
+    "name": "Teléfonos vintage",
+    "vinted": [
+      "Electrónica",
+      "Teléfonos móviles y comunicación",
+      "Teléfonos móviles"
+    ],
+    "attributes": {
+      "brand_select_dropdown_input": {
+        "label": "Marca",
+        "from": "brand",
+        "kind": "combobox",
+        "fallback": "no_brand",
+        "observed_options": [
+          "Principal",
+          "Principal",
+          "Pepino",
+          "Vodafone",
+          "Apple",
+          "Samsung",
+          "Xiaomi",
+          "Nokia",
+          "Huawei",
+          "Redmi",
+          "Motorola",
+          "OPPO",
+          "Galaxy",
+          "Honor",
+          "Realme",
+          "Google",
+          "LG",
+          "Sony",
+          "Alcatel",
+          "Sony Ericsson",
+          "ZTE",
+          "OnePlus",
+          "BlackBerry",
+          "Poco",
+          "TCL",
+          "Max",
+          "Brondi",
+          "Vivo",
+          "Wiko",
+          "Cover"
+        ]
+      },
+      "category_internal_memory_capacity": {
+        "label": "Almacenamiento",
+        "from": "storage_capacity",
+        "kind": "dropdown"
+      },
+      "category_sim_lock": {
+        "label": "Bloqueo de la SIM",
+        "from": null,
+        "kind": "dropdown",
+        "default": "Desbloqueada"
+      },
+      "color_select_dropdown_input": {
+        "label": "Color",
+        "from": "color",
+        "kind": "combobox",
+        "observed_options": [
+          "Principal",
+          "Principal",
+          "Plateado",
+          "Beige",
+          "Negro",
+          "Gris",
+          "Blanco",
+          "Crema",
+          "Beige",
+          "Naranja pastel",
+          "Naranja",
+          "Coral",
+          "Rojo",
+          "Burdeos",
+          "Fucsia",
+          "Rosa",
+          "Morado",
+          "Lila",
+          "Azul claro",
+          "Azul",
+          "Azul marino",
+          "Turquesa",
+          "Menta",
+          "Verde",
+          "Verde oscuro",
+          "Caqui",
+          "Marrón",
+          "Mostaza",
+          "Amarillo",
+          "Plateado"
+        ]
+      }
+    }
+  },
+  "10234": {
+    "name": "CDs Música",
+    "vinted": [
+      "Entretenimiento",
+      "Música"
+    ],
+    "attributes": {}
+  },
+  "10248": {
+    "name": "Escolares y de texto",
+    "vinted": [
+      "Entretenimiento",
+      "Libros",
+      "No ficción"
+    ],
+    "attributes": {}
+  },
+  "10269": {
+    "name": "Colchones",
+    "vinted": [
+      "Hogar",
+      "Muebles"
+    ],
+    "attributes": {}
+  },
+  "10289": {
+    "name": "Armarios",
+    "vinted": [
+      "Hogar",
+      "Muebles"
+    ],
+    "attributes": {}
+  },
+  "10304": {
+    "name": "Componentes y soportes",
+    "vinted": [
+      "Electrónica",
+      "Ordenadores y accesorios",
+      "Piezas y componentes de ordenadores"
+    ],
+    "attributes": {}
+  },
+  "10307": {
+    "name": "Impresoras",
+    "vinted": [
+      "Electrónica",
+      "Ordenadores y accesorios",
+      "Impresoras y accesorios"
+    ],
+    "attributes": {}
+  },
+  "10309": {
+    "name": "Ordenadores de sobremesa",
+    "vinted": [
+      "Electrónica",
+      "Ordenadores y accesorios",
+      "Ordenadores de sobremesa"
+    ],
+    "attributes": {
+      "category_computer_operating_system": {
+        "label": "Sistema operativo (recomendado)",
+        "from": "operating_system"
+      },
+      "category_computer_storage_capacity": {
+        "label": "Capacidad de almacenamiento",
+        "from": "storage_capacity"
+      },
+      "category_computer_ram": {
+        "label": "RAM",
+        "from": "ram"
+      },
+      "brand_select_dropdown_input": {
+        "label": "Marca",
+        "kind": "combobox",
+        "from": "brand",
+        "fallback": "no_brand"
+      },
+      "color_select_dropdown_input": {
+        "label": "Color",
+        "kind": "combobox",
+        "from": "color"
+      }
+    }
+  },
+  "18000": {
+    "name": "Coleccionismo",
+    "vinted": [
+      "Hobbies y coleccionismo",
+      "Cartas coleccionables"
+    ],
+    "attributes": {}
+  },
+  "24076": {
+    "name": "Libros informática y tecnología",
+    "vinted": [
+      "Entretenimiento",
+      "Libros",
+      "No ficción"
+    ],
+    "attributes": {}
+  },
+  "24077": {
+    "name": "Libros de cocina",
+    "vinted": [
+      "Entretenimiento",
+      "Libros",
+      "No ficción"
+    ],
+    "attributes": {}
+  },
+  "24083": {
+    "name": "Libros no ficción",
+    "vinted": [
+      "Entretenimiento",
+      "Libros",
+      "No ficción"
+    ],
+    "attributes": {}
+  },
+  "24086": {
+    "name": "Enciclopedias y atlas",
+    "vinted": [
+      "Entretenimiento",
+      "Libros",
+      "No ficción"
+    ],
+    "attributes": {}
+  },
+  "24093": {
+    "name": "Humor",
+    "vinted": [
+      "Entretenimiento",
+      "Libros",
+      "Ficción"
+    ],
+    "attributes": {}
+  },
+  "24095": {
+    "name": "Libros ficción",
+    "vinted": [
+      "Entretenimiento",
+      "Libros",
+      "Ficción"
+    ],
+    "attributes": {}
+  },
+  "24101": {
+    "name": "Libros autoayuda",
+    "vinted": [
+      "Entretenimiento",
+      "Libros",
+      "No ficción"
+    ],
+    "attributes": {}
+  },
+  "24129": {
+    "name": "Videojuegos retro",
+    "vinted": [
+      "Electrónica",
+      "Videojuegos y consolas",
+      "Juegos"
+    ],
+    "attributes": {
+      "category_video_game_ratings": {
+        "label": "Clasificación de contenidos",
+        "from": null,
+        "kind": "dropdown",
+        "default": "PEGI 12"
+      }
+    }
+  },
+  "24138": {
+    "name": "Dispositivos de red",
+    "vinted": [
+      "Electrónica",
+      "Ordenadores y accesorios",
+      "Dispositivos de red"
+    ],
+    "attributes": {}
+  },
+  "24202": {
+    "name": "Informática: ordenadores y tablets",
+    "vinted": [
+      "Electrónica",
+      "Ordenadores y accesorios",
+      "Dispositivos de red"
+    ],
+    "attributes": {}
+  }
+}
