@@ -130,7 +130,7 @@ def _guess_wallapop_key(label: str, attributes: dict) -> str | None:
     return None
 
 if not CATEGORIES_PATH.exists():
-    print(f"ERROR: No se encuentra {CATEGORIES_PATH}. Ejecuta primero extract_wallapop.py")
+    print(f"ERROR: {CATEGORIES_PATH} not found. Run extract_wallapop.py first.")
     sys.exit(1)
 with open(CATEGORIES_PATH, encoding="utf-8") as _f:
     _CATEGORIES = json.load(_f)  # wallapop category_id → {name, vinted: [...nav path]}
@@ -213,10 +213,10 @@ def select_category(page, nav: list) -> bool:
             btn.wait_for(state="visible", timeout=5000)
             btn.click()
             human_delay(0.4, 0.8)
-        print(f"    Categoría: {' > '.join(nav)}")
+        print(f"    Category: {' > '.join(nav)}")
         return True
     except Exception as e:
-        print(f"    AVISO: no se pudo seleccionar categoría {nav}: {e}")
+        print(f"    WARNING: could not select category {nav}: {e}")
         try:
             page.keyboard.press("Escape")
         except Exception:
@@ -234,7 +234,7 @@ def set_condition(page) -> bool:
         page.locator('div[role="button"]').filter(
             has=page.locator(f':text-is("{VINTED_CONDITION}")')
         ).first.click()
-        print(f"    Estado: {VINTED_CONDITION}")
+        print(f"    Condition: {VINTED_CONDITION}")
         return True
     except Exception:
         return False
@@ -291,7 +291,7 @@ def scan_dynamic_fields(page) -> list[dict]:
         }
         """) or []
     except Exception as e:
-        print(f"    AVISO: no se pudo escanear campos dinámicos: {e}")
+        print(f"    WARNING: could not scan dynamic fields: {e}")
         return []
 
 
@@ -348,7 +348,7 @@ def fill_dropdown(page, testid: str, value: str) -> tuple[bool, list[str]]:
         human_delay(0.2, 0.4)
         return False, options
     except Exception as e:
-        print(f"    AVISO: fill_dropdown({testid}, {value!r}) falló: {e}")
+        print(f"    WARNING: fill_dropdown({testid}, {value!r}) failed: {e}")
         try:
             page.keyboard.press("Escape")
         except Exception:
@@ -402,7 +402,7 @@ def fill_combobox(page, testid: str, value: str) -> tuple[bool, list[str]]:
         human_delay(0.2, 0.4)
         return False, options
     except Exception as e:
-        print(f"    AVISO: fill_combobox({testid}, {value!r}) falló: {e}")
+        print(f"    WARNING: fill_combobox({testid}, {value!r}) failed: {e}")
         try:
             page.keyboard.press("Escape")
         except Exception:
@@ -445,10 +445,10 @@ def select_package_size(page, up_to_kg: str | float | None) -> bool:
         page.locator(f"[data-testid='{chosen}']").click()
         human_delay(0.3, 0.6)
         chosen_kg = next(kg for kg, t in parsed if t == chosen)
-        print(f"    Paquete envío: {chosen_kg:g} kg (para {weight:g} kg)")
+        print(f"    Shipping package: {chosen_kg:g} kg (for {weight:g} kg)")
         return True
     except Exception as e:
-        print(f"    AVISO: no se pudo elegir tamaño de paquete: {e}")
+        print(f"    WARNING: could not pick package size: {e}")
         return False
 
 
@@ -595,7 +595,7 @@ def publish_or_draft(
     pub = _find_publish_button(page)
     if pub is None:
         buttons = _dump_form_buttons(page)
-        print(f"    AVISO: botón 'Publicar' no visible. Botones del formulario: {buttons}")
+        print(f"    WARNING: publish button not visible. Form buttons: {buttons}")
     else:
         try:
             pub.hover()
@@ -608,15 +608,15 @@ def publish_or_draft(
             human_delay(1, 2)
             if not _is_form_url(page.url):
                 vinted_id = _extract_item_id_from_url(page.url) or f"published-{fallback_id_seed}"
-                print(f"    Publicado: {page.url}")
+                print(f"    Published: {page.url}")
                 return vinted_id, "published", []
             errors = collect_form_errors(page)
             if errors:
-                print(f"    Publicación rechazada: {errors[:4]}")
+                print(f"    Publish rejected: {errors[:4]}")
             else:
-                print(f"    Click en 'Subir' sin navegación ni errores inline — URL sigue: {page.url}")
+                print(f"    Clicked publish but no navigation or inline errors — URL still: {page.url}")
         except Exception as e:
-            print(f"    AVISO: fallo al publicar: {e}")
+            print(f"    WARNING: publish failed: {e}")
 
     if not save_as_draft_on_fail:
         # Retry mode: the draft already exists; leave it as-is and report errors.
@@ -633,19 +633,19 @@ def publish_or_draft(
             pass
         human_delay(1, 2)
         if _is_form_url(page.url):
-            print(f"    Error: borrador no guardado — URL: {page.url}")
+            print(f"    Error: draft not saved — URL: {page.url}")
             return "", "failed", errors
         vinted_id = _extract_item_id_from_url(page.url) or f"draft-{fallback_id_seed}"
-        print(f"    Borrador guardado: {page.url} (id registrado: {vinted_id})")
+        print(f"    Draft saved: {page.url} (recorded id: {vinted_id})")
         return vinted_id, "draft", errors
     except Exception as e:
-        print(f"    Error al guardar borrador: {e}")
+        print(f"    Error saving draft: {e}")
         return "", "failed", errors
 
 
 def login(page, visible: bool = True):
     """Log in to Vinted. Waits up to 2 minutes for manual captcha resolution if needed."""
-    print("Haciendo login en Vinted...")
+    print("Logging in to Vinted...")
     page.goto(f"{BASE_URL}/member/signup/select_type")
     page.wait_for_load_state("networkidle")
     human_delay(1, 2)
@@ -785,7 +785,7 @@ def get_member_url(page) -> str:
         page.wait_for_load_state("domcontentloaded")
         human_delay(1.5, 2.5)
     except Exception as e:
-        print(f"    AVISO: no se pudo navegar a home: {e}")
+        print(f"    WARNING: could not navigate to home: {e}")
 
     try:
         data = page.evaluate(
@@ -805,11 +805,11 @@ def get_member_url(page) -> str:
             uid = user.get("id") or data["data"].get("id")
             if uid:
                 return f"{BASE_URL}/member/{uid}"
-            print(f"    API OK pero sin id — claves: {list(data['data'].keys())[:10]}")
+            print(f"    API OK but no id — keys: {list(data['data'].keys())[:10]}")
         elif data.get("body"):
             print(f"    body: {data['body'][:200]}")
     except Exception as e:
-        print(f"    AVISO: fetch in-page falló: {e}")
+        print(f"    WARNING: in-page fetch failed: {e}")
 
     # localStorage is the most reliable hint: Vinted's React app caches the signed-in
     # user payload there. The key name varies by deploy, so we walk every entry looking
@@ -842,11 +842,11 @@ def get_member_url(page) -> str:
             }"""
         )
         if uid:
-            print(f"    Perfil (localStorage): {uid}")
+            print(f"    Profile (localStorage): {uid}")
             return f"{BASE_URL}/member/{uid}"
-        print(f"    localStorage sin usuario reconocible.")
+        print(f"    localStorage has no recognisable user.")
     except Exception as e:
-        print(f"    AVISO: error leyendo localStorage: {e}")
+        print(f"    WARNING: error reading localStorage: {e}")
 
     # Last resort: navigate to a user-scoped settings page and read /member/<id> links.
     try:
@@ -866,11 +866,11 @@ def get_member_url(page) -> str:
         m = re.search(r"/member/(\d+)", href)
         if m:
             return f"{BASE_URL}/member/{m.group(1)}"
-        print(f"    /settings/profile tampoco expone /member/<id>.")
+        print(f"    /settings/profile also does not expose /member/<id>.")
     except Exception as e:
-        print(f"    AVISO: error en /settings/profile: {e}")
+        print(f"    WARNING: error on /settings/profile: {e}")
 
-    raise RuntimeError("No se pudo derivar la URL del perfil — ¿sesión expirada?")
+    raise RuntimeError("Could not derive the profile URL — session expired?")
 
 
 def scrape_drafts(page, member_url: str) -> list[dict]:
@@ -878,8 +878,8 @@ def scrape_drafts(page, member_url: str) -> list[dict]:
 
     Each entry: {"item_id": str, "edit_url": str, "title": str}.
     Identifies drafts via the presence of `[data-testid$="--status-text"]` with text
-    "Borrador" inside the item card, and extracts the edit URL from the nested
-    `a[href$="/edit"]`.
+    "Borrador" (Spanish for "draft") inside the item card, and extracts the edit URL
+    from the nested `a[href$="/edit"]`.
     """
     # `networkidle` hangs on profile pages (persistent image/analytics traffic);
     # `domcontentloaded` + scrolling is enough for the card list to hydrate.
@@ -910,13 +910,13 @@ def scrape_drafts(page, member_url: str) -> list[dict]:
                 .slice(0, 20).map(t => ({ text: (t.innerText || '').trim().slice(0,40), href: t.getAttribute('href') || '' }))
             })"""
         ) or {}
-        print(f"    Diag perfil: url={diag.get('url')}")
+        print(f"    Profile diag: url={diag.get('url')}")
         print(f"      status-text={diag.get('status_text_count')} samples={diag.get('status_text_samples')}")
         print(f"      edit-links={diag.get('edit_link_count')} samples={diag.get('edit_link_samples')}")
         print(f"      product-cards={diag.get('product_card_count')}  item-links={diag.get('any_item_link_count')}")
         print(f"      tabs={diag.get('tabs')}")
     except Exception as e:
-        print(f"    AVISO: diag falló: {e}")
+        print(f"    WARNING: diagnostic failed: {e}")
 
     # On the owner's profile, every draft renders a pair of `<a href="/items/<id>/edit">`
     # links (image and title both link to the edit page). Published items show a regular
@@ -1031,7 +1031,7 @@ def fill_dynamic_attributes(
     for f in extra:
         if f["testid"] not in seen:
             fields.append(f)
-    print(f"    Campos detectados: {[(f.get('testid'), f.get('label'), f.get('kind')) for f in fields]}")
+    print(f"    Fields detected: {[(f.get('testid'), f.get('label'), f.get('kind')) for f in fields]}")
     for f in fields:
         testid = f.get("testid") or ""
         label = f.get("label") or ""
@@ -1075,7 +1075,7 @@ def fill_dynamic_attributes(
             if ok:
                 print(f"    {label}: {value_mapped}")
             else:
-                print(f"    AVISO: no se encontró opción {value_mapped!r} en {label!r}")
+                print(f"    WARNING: option {value_mapped!r} not found in {label!r}")
                 # Brand combobox: fall back to "Publicar sin marca" if we can find it
                 if cfg.get("fallback") == "no_brand" and select_no_brand(page, testid):
                     print(f"    {label}: Publicar sin marca (fallback)")
@@ -1102,7 +1102,7 @@ def fill_dynamic_attributes(
         try:
             _save_categories()
         except Exception as e:
-            print(f"    AVISO: no se pudo escribir category_mapping.json: {e}")
+            print(f"    WARNING: could not write category_mapping.json: {e}")
 
     return missing, new_mappings, unresolved
 
@@ -1118,17 +1118,17 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
 
     title = item.get("title", "")
     if not title:
-        print("  AVISO: artículo sin título, saltando.")
-        return {**empty, "error": "sin título"}
-    print(f"  Subiendo: {title}")
+        print("  WARNING: item has no title, skipping.")
+        return {**empty, "error": "no title"}
+    print(f"  Uploading: {title}")
 
     _ITEMS_NEW = f"{BASE_URL}/items/new"
     page.goto(_ITEMS_NEW)
     try:
         page.wait_for_url(lambda url: _ITEMS_NEW in url, timeout=120000)
     except PlaywrightTimeout:
-        print(f"    Error: no se llegó a /items/new (URL: {page.url})")
-        return {**empty, "error": "no /items/new"}
+        print(f"    Error: did not reach /items/new (URL: {page.url})")
+        return {**empty, "error": "did not reach /items/new"}
 
     # DataDome can interstitialise any request (not just login) when it flags the
     # session as suspicious. Catch it here so we abort cleanly instead of marking
@@ -1140,28 +1140,28 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
             "input[data-testid='title--input']", state="visible", timeout=15000
         )
     except PlaywrightTimeout:
-        print("    Error: el formulario no se cargó correctamente.")
-        return {**empty, "error": "formulario no cargado"}
+        print("    Error: the form did not load correctly.")
+        return {**empty, "error": "form did not load"}
     human_delay(1, 2)
 
     image_paths = [p for p in item.get("images", []) if p and Path(p).exists()]
     if not image_paths:
-        print(f"    AVISO: No hay imágenes para '{title}', saltando.")
-        return {**empty, "error": "sin imágenes"}
+        print(f"    WARNING: no images for '{title}', skipping.")
+        return {**empty, "error": "no images"}
 
     try:
         page.locator("input[data-testid='add-photos-input']").set_input_files(image_paths)
         human_delay(2, 4)
     except Exception as e:
-        print(f"    Error subiendo imágenes: {e}")
-        return {**empty, "error": f"imágenes: {e}"}
+        print(f"    Error uploading images: {e}")
+        return {**empty, "error": f"images: {e}"}
 
     try:
         human_type(page.locator("input[data-testid='title--input']"), title)
         human_delay(0.5, 1)
     except Exception as e:
-        print(f"    Error rellenando título: {e}")
-        return {**empty, "error": f"título: {e}"}
+        print(f"    Error filling title: {e}")
+        return {**empty, "error": f"title: {e}"}
 
     description = item.get("description", "")
     if description:
@@ -1182,7 +1182,7 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
         set_condition(page)
         human_delay(0.5, 1.0)
     else:
-        print(f"    AVISO: sin categoría para category_id={cat_id}")
+        print(f"    WARNING: no category mapping for category_id={cat_id}")
 
     missing, new_mappings, unresolved = [], [], []
     if cat_id and nav:
@@ -1205,7 +1205,7 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
         except Exception:
             pass
     else:
-        print(f"    AVISO: precio 0 — déjalo vacío y rellénalo en el borrador.")
+        print(f"    WARNING: price is 0 — leaving it blank; fill it in the draft.")
 
     vinted_id, status, errors = publish_or_draft(page, fallback_id_seed=str(item.get("id", "")))
     return {
@@ -1230,7 +1230,7 @@ def retry_draft_item(page, item: dict, draft_edit_url: str, draft_item_id: str, 
              "error": "", "new_mappings": [], "unresolved": []}
 
     title = item.get("title", "")
-    print(f"  Reintentando draft {draft_item_id}: {title}")
+    print(f"  Retrying draft {draft_item_id}: {title}")
     page.goto(draft_edit_url)
     # Same reason as in upload_item: abort early if DataDome is interstitialising the page
     _abort_if_captcha(page, visible)
@@ -1239,8 +1239,8 @@ def retry_draft_item(page, item: dict, draft_edit_url: str, draft_item_id: str, 
             "input[data-testid='title--input']", state="visible", timeout=30000
         )
     except PlaywrightTimeout:
-        print("    Error: el formulario del draft no se cargó.")
-        return {**empty, "status": "failed", "error": "draft no cargó"}
+        print("    Error: the draft form did not load.")
+        return {**empty, "status": "failed", "error": "draft did not load"}
     human_delay(1.5, 2.5)
 
     cat_id = str(item.get("category_id") or "")
@@ -1269,16 +1269,16 @@ def retry_draft_item(page, item: dict, draft_edit_url: str, draft_item_id: str, 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--limit", type=int, default=None, help="Máximo de artículos a procesar")
+    parser.add_argument("--limit", type=int, default=None, help="Max number of items to process")
     parser.add_argument(
         "--no-learn",
         action="store_true",
-        help="No escribir mapeos auto-aprendidos en data/category_mapping.json",
+        help="Do not write auto-learned mappings to data/category_mapping.json",
     )
     parser.add_argument(
         "--retry-drafts",
         action="store_true",
-        help="En vez de subir items nuevos, abre cada borrador existente en Vinted e intenta publicarlo.",
+        help="Instead of uploading new items, open each existing draft on Vinted and try to publish it.",
     )
     parser.add_argument(
         "--visible",
@@ -1289,11 +1289,11 @@ def main():
     args = parser.parse_args()
 
     if not EMAIL or not PASSWORD:
-        print("ERROR: Define VINTED_EMAIL y VINTED_PASSWORD en tu archivo .env")
+        print("ERROR: set VINTED_EMAIL and VINTED_PASSWORD in your .env file")
         sys.exit(1)
 
     if not ITEMS_PATH.exists():
-        print(f"ERROR: No se encuentra {ITEMS_PATH}. Ejecuta primero extract_wallapop.py")
+        print(f"ERROR: {ITEMS_PATH} not found. Run extract_wallapop.py first.")
         sys.exit(1)
 
     items_data = json.loads(ITEMS_PATH.read_text(encoding="utf-8"))
@@ -1308,8 +1308,8 @@ def main():
     migration = load_migration()
     already_done = sum(1 for v in migration.values() if v.get("vinted_id"))
     if already_done:
-        print(f"Artículos ya subidos (se saltarán): {already_done}")
-    print(f"Artículos a procesar: {len(items)}")
+        print(f"Items already uploaded (will be skipped): {already_done}")
+    print(f"Items to process: {len(items)}")
 
     published = 0
     drafted = 0
@@ -1336,7 +1336,7 @@ def main():
         )
         if AUTH_STATE_PATH.exists():
             ctx_kwargs["storage_state"] = str(AUTH_STATE_PATH)
-            print("Sesión guardada encontrada.")
+            print("Saved session found.")
 
         context = browser.new_context(**ctx_kwargs)
 
@@ -1373,25 +1373,25 @@ def main():
         if any(p in page.url for p in _AUTH_PATHS):
             login(page, visible=args.visible)
             context.storage_state(path=str(AUTH_STATE_PATH))
-            print(f"  Sesión guardada en {AUTH_STATE_PATH}")
+            print(f"  Session saved to {AUTH_STATE_PATH}")
         elif _ITEMS_NEW in page.url:
-            print("  Sesión activa.")
+            print("  Session is active.")
             context.storage_state(path=str(AUTH_STATE_PATH))  # refresh persisted state
         else:
-            print(f"  Estado inesperado ({page.url}), intentando login...")
+            print(f"  Unexpected state ({page.url}), attempting login...")
             login(page, visible=args.visible)
             context.storage_state(path=str(AUTH_STATE_PATH))
-            print(f"  Sesión guardada en {AUTH_STATE_PATH}")
+            print(f"  Session saved to {AUTH_STATE_PATH}")
 
         # --retry-drafts: iterate over existing drafts on Vinted instead of new uploads
         if args.retry_drafts:
             try:
                 member_url = get_member_url(page)
-                print(f"Perfil: {member_url}")
+                print(f"Profile: {member_url}")
                 drafts = scrape_drafts(page, member_url)
-                print(f"Borradores encontrados en Vinted: {len(drafts)}")
+                print(f"Drafts found on Vinted: {len(drafts)}")
             except Exception as e:
-                print(f"ERROR al listar borradores: {e}")
+                print(f"ERROR listing drafts: {e}")
                 browser.close()
                 return
 
@@ -1411,11 +1411,11 @@ def main():
 
             if args.limit:
                 retry_targets = retry_targets[: args.limit]
-            print(f"Drafts matcheados contra items de Wallapop: {len(retry_targets)}")
+            print(f"Drafts matched against Wallapop items: {len(retry_targets)}")
             if ambiguous:
-                print(f"  ambiguos (saltados): {len(ambiguous)} — {ambiguous[:3]}")
+                print(f"  ambiguous (skipped): {len(ambiguous)} — {ambiguous[:3]}")
             if no_match:
-                print(f"  sin match (saltados): {len(no_match)} — {no_match[:3]}")
+                print(f"  no match (skipped): {len(no_match)} — {no_match[:3]}")
 
             for i, (item, edit_url, draft_item_id) in enumerate(retry_targets):
                 item_id = item.get("id", "")
@@ -1424,7 +1424,7 @@ def main():
                 try:
                     result = retry_draft_item(page, item, edit_url, draft_item_id, learn=not args.no_learn, visible=args.visible)
                 except Exception as e:
-                    print(f"  Error inesperado: {e}")
+                    print(f"  Unexpected error: {e}")
                     result = {"vinted_id": draft_item_id, "status": "failed", "missing_fields": [],
                               "error": str(e), "new_mappings": [], "unresolved": []}
 
@@ -1453,27 +1453,27 @@ def main():
 
             browser.close()
             print(
-                f"\nRetry completado: {published} publicados, {drafted} siguen en borrador, "
-                f"{failed} fallidos"
+                f"\nRetry complete: {published} published, {drafted} still draft, "
+                f"{failed} failed"
             )
             if drafts_summary:
-                print(f"\nBorradores pendientes:")
+                print(f"\nPending drafts:")
                 for cat, t, miss in drafts_summary:
-                    miss_str = ", ".join(miss) if miss else "(revisa el formulario)"
-                    print(f"  [{cat}] {t[:60]:60s}  falta: {miss_str}")
+                    miss_str = ", ".join(miss) if miss else "(review the form)"
+                    print(f"  [{cat}] {t[:60]:60s}  missing: {miss_str}")
             if all_new_mappings:
-                print(f"\nNuevos mapeos auto-aprendidos (guardados en category_mapping.json):")
+                print(f"\nNewly auto-learned mappings (saved to category_mapping.json):")
                 for cat, m in all_new_mappings:
                     print(f"  [{cat}] {m}")
             if all_unresolved:
-                print(f"\nMapeos sin resolver (from:null en category_mapping.json):")
+                print(f"\nUnresolved mappings (from:null in category_mapping.json):")
                 seen: set[tuple[str, str]] = set()
                 for cat, label, opts in all_unresolved:
                     k = (cat, label)
                     if k in seen:
                         continue
                     seen.add(k)
-                    print(f"  [{cat}] {label!r}  opciones: {opts or '(ninguna)'}")
+                    print(f"  [{cat}] {label!r}  options: {opts or '(none)'}")
             return
 
         for i, item in enumerate(items):
@@ -1483,21 +1483,21 @@ def main():
 
             prev = migration.get(item_id, {}) if item_id else {}
             if prev.get("vinted_id") and migration_status(prev) in ("published", "draft"):
-                print("  Ya subido, saltando.")
+                print("  Already uploaded, skipping.")
                 continue
 
             # Skip items whose category has no Vinted path yet (vinted=null in category_mapping.json)
             nav = get_nav(item)
             if nav is None:
                 cat_id = item.get("category_id", "?")
-                print(f"  Sin mapeo Vinted para category_id={cat_id} — saltando.")
+                print(f"  No Vinted mapping for category_id={cat_id} — skipping.")
                 unmapped.append((item_id, title, cat_id))
                 continue
 
             try:
                 result = upload_item(page, item, learn=not args.no_learn, visible=args.visible)
             except Exception as e:
-                print(f"  Error inesperado: {e}")
+                print(f"  Unexpected error: {e}")
                 result = {"vinted_id": "", "status": "failed", "missing_fields": [],
                           "error": str(e), "new_mappings": [], "unresolved": []}
 
@@ -1527,29 +1527,29 @@ def main():
         browser.close()
 
     print(
-        f"\nSubida completada: {published} publicados, {drafted} borradores, "
-        f"{failed} fallidos, {len(unmapped)} sin mapeo"
+        f"\nUpload complete: {published} published, {drafted} drafts, "
+        f"{failed} failed, {len(unmapped)} unmapped"
     )
     if drafts_summary:
-        print(f"\nBorradores que necesitan completarse en Vinted:")
+        print(f"\nDrafts that need to be finished on Vinted:")
         for cat, t, miss in drafts_summary:
-            miss_str = ", ".join(miss) if miss else "(revisa el formulario)"
-            print(f"  [{cat}] {t[:60]:60s}  falta: {miss_str}")
+            miss_str = ", ".join(miss) if miss else "(review the form)"
+            print(f"  [{cat}] {t[:60]:60s}  missing: {miss_str}")
     if all_new_mappings:
-        print(f"\nNuevos mapeos auto-aprendidos (guardados en category_mapping.json):")
+        print(f"\nNewly auto-learned mappings (saved to category_mapping.json):")
         for cat, m in all_new_mappings:
             print(f"  [{cat}] {m}")
     if all_unresolved:
-        print(f"\nMapeos sin resolver (from:null en category_mapping.json, revísalos):")
+        print(f"\nUnresolved mappings (from:null in category_mapping.json, please review):")
         seen: set[tuple[str, str]] = set()
         for cat, label, opts in all_unresolved:
             k = (cat, label)
             if k in seen:
                 continue
             seen.add(k)
-            print(f"  [{cat}] {label!r}  opciones: {opts or '(ninguna)'}")
+            print(f"  [{cat}] {label!r}  options: {opts or '(none)'}")
     if unmapped:
-        print(f"\nCategorías sin ruta Vinted ({len(unmapped)}) — añade la ruta en data/category_mapping.json:")
+        print(f"\nCategories without a Vinted path ({len(unmapped)}) — add the path in data/category_mapping.json:")
         for uid, utitle, ucat in unmapped:
             print(f"  category_id={ucat}  →  {utitle[:60]}")
 

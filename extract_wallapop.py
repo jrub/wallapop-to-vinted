@@ -72,7 +72,7 @@ def resolve_internal_id(slug: str) -> str:
     resp.raise_for_status()
     match = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', resp.text, re.DOTALL)
     if not match:
-        raise ValueError("No se encontró __NEXT_DATA__ en la página del perfil")
+        raise ValueError("__NEXT_DATA__ not found in profile page")
     data = json.loads(match.group(1))
     user_id = data["props"]["pageProps"]["user"]["id"]
     return user_id
@@ -110,24 +110,24 @@ def fetch_items(user_id: str, max_items: int = None, stop_when_all_known: set = 
         # Log response shape on the first page to catch API changes early
         if page == 0:
             top_keys = list(data.keys())
-            print(f"  [API] claves de respuesta: {top_keys}")
+            print(f"  [API] response keys: {top_keys}")
             batch_raw = data.get("data", data.get("search_objects", data.get("items", [])))
             if batch_raw and isinstance(batch_raw, list):
                 sample = batch_raw[0]
-                print(f"  [API] claves de un item: {list(sample.keys())[:12]}")
+                print(f"  [API] item keys: {list(sample.keys())[:12]}")
                 status_field = sample.get("status") or sample.get("state") or "?"
                 owner_id = sample.get("seller_id") or sample.get("user_id") or "?"
-                print(f"  [API] ejemplo — status: {status_field!r}  owner_id: {owner_id!r}  esperado: {user_id!r}")
+                print(f"  [API] sample — status: {status_field!r}  owner_id: {owner_id!r}  expected: {user_id!r}")
 
         batch = data.get("data", [])
         if not batch:
-            print("  Batch vacío, fin de paginación.")
+            print("  Empty batch, end of pagination.")
             break
 
         batch_ids = {it.get("id") for it in batch if it.get("id")}
 
         if batch_ids & seen_ids:
-            print(f"  Paginación circular detectada en página {page + 1}, parando.")
+            print(f"  Circular pagination detected on page {page + 1}, stopping.")
             break
         seen_ids |= batch_ids
 
@@ -139,12 +139,12 @@ def fetch_items(user_id: str, max_items: int = None, stop_when_all_known: set = 
             break
 
         if stop_when_all_known and batch_ids.issubset(stop_when_all_known):
-            print(f"  Batch completo ya conocido (página {page}), parando paginación.")
+            print(f"  Whole batch already known (page {page}), stopping pagination.")
             break
 
         if page >= MAX_PAGES:
-            print(f"  AVISO: alcanzado límite de {MAX_PAGES} páginas ({len(items)} artículos). "
-                  f"Aumenta MAX_PAGES si tu perfil tiene más de {MAX_PAGES * page_size}.")
+            print(f"  WARNING: hit the {MAX_PAGES}-page limit ({len(items)} items). "
+                  f"Raise MAX_PAGES if your profile has more than {MAX_PAGES * page_size}.")
             break
 
         cursor = data.get("meta", {}).get("next")
@@ -174,7 +174,7 @@ def fetch_leaf_category_id(item_id: str) -> str:
             if taxonomy:
                 return str(taxonomy[-1]["id"])
     except Exception as e:
-        print(f"    AVISO: no se pudo obtener taxonomía para {item_id}: {e}")
+        print(f"    WARNING: could not fetch taxonomy for {item_id}: {e}")
     return ""
 
 
@@ -186,7 +186,7 @@ def download_image(url: str, dest: Path) -> bool:
             dest.write_bytes(resp.content)
             return True
     except Exception as e:
-        print(f"    Error descargando {url}: {e}")
+        print(f"    Error downloading {url}: {e}")
     return False
 
 
@@ -207,7 +207,7 @@ def ensure_category_mapped(category_id: str) -> None:
 
     cats[category_id] = {"name": name, "vinted": None}
     CATEGORIES_PATH.write_text(json.dumps(cats, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"    AVISO: categoría {category_id} ({name!r}) añadida a category_mapping.json sin mapeo Vinted.")
+    print(f"    NOTE: category {category_id} ({name!r}) added to category_mapping.json without a Vinted mapping.")
 
 
 def process_item(item: dict) -> dict | None:
@@ -218,7 +218,7 @@ def process_item(item: dict) -> dict | None:
     """
     item_id = item.get("id", "")
     if not item_id:
-        print("    AVISO: artículo sin ID, saltando.")
+        print("    WARNING: item without ID, skipping.")
         return None
     item_dir = IMAGES_DIR / item_id
     item_dir.mkdir(parents=True, exist_ok=True)
@@ -235,7 +235,7 @@ def process_item(item: dict) -> dict | None:
             local_paths.append(str(dest))
         elif download_image(img_url, dest):
             local_paths.append(str(dest))
-            print(f"    Imagen {i+1}/{len(image_urls)} descargada")
+            print(f"    Image {i+1}/{len(image_urls)} downloaded")
 
     price_info = item.get("price", {})
     shipping = item.get("shipping", {})
@@ -270,11 +270,11 @@ def process_item(item: dict) -> dict | None:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--limit", type=int, default=None, help="Procesar solo los primeros N artículos nuevos")
+    parser.add_argument("--limit", type=int, default=None, help="Process only the first N new items")
     args = parser.parse_args()
 
     if not USER_SLUG:
-        print("ERROR: Define WALLAPOP_USER_ID en tu archivo .env")
+        print("ERROR: set WALLAPOP_USER_ID in your .env file")
         sys.exit(1)
 
     DATA_DIR.mkdir(exist_ok=True)
@@ -286,35 +286,35 @@ def main():
     stale_ids = {k for k, v in existing_items.items() if "attributes" not in v}
     fresh_ids = set(existing_items.keys()) - stale_ids
     if existing_items:
-        print(f"Artículos ya descargados: {len(fresh_ids)} ok, {len(stale_ids)} a actualizar")
+        print(f"Items already downloaded: {len(fresh_ids)} ok, {len(stale_ids)} to refresh")
 
-    print(f"Resolviendo ID interno para '{USER_SLUG}'...")
+    print(f"Resolving internal ID for '{USER_SLUG}'...")
     try:
         user_id = resolve_internal_id(USER_SLUG)
     except Exception as e:
-        print(f"ERROR al resolver el usuario: {e}")
+        print(f"ERROR resolving user: {e}")
         sys.exit(1)
-    print(f"  ID interno: {user_id}")
+    print(f"  Internal ID: {user_id}")
 
-    print(f"Extrayendo artículos de Wallapop...")
+    print(f"Extracting items from Wallapop...")
     # Only use fresh_ids for early-stop: stale items need to be reprocessed
     all_items = fetch_items(user_id, stop_when_all_known=fresh_ids or None)
-    print(f"Total artículos obtenidos: {len(all_items)}")
+    print(f"Total items fetched: {len(all_items)}")
 
     new_items = [it for it in all_items if it.get("id") not in fresh_ids]
-    print(f"Artículos nuevos o a actualizar: {len(new_items)}")
+    print(f"New or stale items to process: {len(new_items)}")
 
     if args.limit:
         new_items = new_items[: args.limit]
 
     if not new_items:
-        print("Nada nuevo que descargar.")
+        print("Nothing new to download.")
         sys.exit(0)
 
     added = 0
     for i, item in enumerate(new_items):
         item_id = item.get("id", "?")
-        title = item.get("title", "sin título")
+        title = item.get("title", "untitled")
         print(f"\n[{i+1}/{len(new_items)}] {title}  (id: {item_id})")
         row = process_item(item)
         if row:
@@ -322,12 +322,12 @@ def main():
             save_items(existing_items)  # write after each item so a crash doesn't lose progress
             added += 1
         else:
-            print(f"  AVISO: artículo {item_id!r} saltado (sin ID o error).")
+            print(f"  WARNING: item {item_id!r} skipped (no ID or error).")
 
-    print(f"\nExtracción completada.")
-    print(f"  Items:    {ITEMS_PATH} ({len(existing_items)} artículos totales)")
-    print(f"  Nuevos:   {added}")
-    print(f"  Imágenes: {IMAGES_DIR}")
+    print(f"\nExtraction complete.")
+    print(f"  Items:  {ITEMS_PATH} ({len(existing_items)} total)")
+    print(f"  New:    {added}")
+    print(f"  Images: {IMAGES_DIR}")
 
 
 if __name__ == "__main__":
