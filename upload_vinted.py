@@ -643,7 +643,7 @@ def publish_or_draft(
         return "", "failed", errors
 
 
-def login(page):
+def login(page, visible: bool = True):
     """Log in to Vinted. Waits up to 2 minutes for manual captcha resolution if needed."""
     print("Haciendo login en Vinted...")
     page.goto(f"{BASE_URL}/member/signup/select_type")
@@ -685,16 +685,48 @@ def login(page):
     human_delay(0.3, 0.6)
     submit.click()
 
-    print("  Esperando... resuelve el slider si aparece en el navegador.")
+    if visible:
+        print("  Waiting... solve the slider in the browser if it appears.")
     _AUTH_PATHS = ("/member/signup", "/member/login", "/member/verify", "/oauth", "/auth/")
+    # In visible mode allow 2min for manual captcha; in headless redirect is instant or never
     try:
         page.wait_for_url(
             lambda url: "vinted.es" in url and not any(p in url for p in _AUTH_PATHS),
-            timeout=120000
+            timeout=120000 if visible else 20000,
         )
     except PlaywrightTimeout:
-        raise RuntimeError(f"Login no completado en 2 minutos: {page.url}")
+        _abort_if_captcha(page, visible)
+        raise RuntimeError(f"Login did not complete: {page.url}")
+    _abort_if_captcha(page, visible)
     print(f"  Login OK — {page.url}")
+
+
+def _datadome_present(page) -> bool:
+    """Return True if a DataDome challenge (captcha slider, interstitial) is visible."""
+    try:
+        if "captcha-delivery.com" in page.url:
+            return True
+        if page.locator("iframe[src*='captcha-delivery.com']").count() > 0:
+            return True
+    except Exception:
+        pass
+    return False
+
+
+def _abort_if_captcha(page, visible: bool) -> None:
+    """In headless mode, abort with actionable instructions if DataDome is blocking us.
+
+    In visible mode the user can solve the slider manually, so we just return.
+    """
+    if visible or not _datadome_present(page):
+        return
+    print()
+    print("ERROR: Vinted has shown a DataDome challenge (captcha).")
+    print("       It can't be solved automatically in headless mode.")
+    print("       Re-run with --visible to solve it once:")
+    print("           python upload_vinted.py --visible")
+    print(f"       The session will be saved to {AUTH_STATE_PATH}; subsequent runs can go back to headless.")
+    sys.exit(2)
 
 
 def _save_categories():
@@ -1075,7 +1107,7 @@ def fill_dynamic_attributes(
     return missing, new_mappings, unresolved
 
 
-def upload_item(page, item: dict, learn: bool = True) -> dict:
+def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> dict:
     """Upload one item to Vinted. Tries to publish; falls back to draft on validation failure.
 
     Returns {vinted_id, status, missing_fields, error, new_mappings, unresolved}.
@@ -1097,6 +1129,11 @@ def upload_item(page, item: dict, learn: bool = True) -> dict:
     except PlaywrightTimeout:
         print(f"    Error: no se llegó a /items/new (URL: {page.url})")
         return {**empty, "error": "no /items/new"}
+
+    # DataDome can interstitialise any request (not just login) when it flags the
+    # session as suspicious. Catch it here so we abort cleanly instead of marking
+    # every remaining item as failed when the form won't render.
+    _abort_if_captcha(page, visible)
 
     try:
         page.wait_for_selector(
@@ -1181,7 +1218,7 @@ def upload_item(page, item: dict, learn: bool = True) -> dict:
     }
 
 
-def retry_draft_item(page, item: dict, draft_edit_url: str, draft_item_id: str, learn: bool) -> dict:
+def retry_draft_item(page, item: dict, draft_edit_url: str, draft_item_id: str, learn: bool, visible: bool = True) -> dict:
     """Open an existing Vinted draft and re-attempt publish with updated attributes.
 
     Differs from upload_item: we navigate to /items/<id>/edit instead of /items/new,
@@ -1195,6 +1232,8 @@ def retry_draft_item(page, item: dict, draft_edit_url: str, draft_item_id: str, 
     title = item.get("title", "")
     print(f"  Reintentando draft {draft_item_id}: {title}")
     page.goto(draft_edit_url)
+    # Same reason as in upload_item: abort early if DataDome is interstitialising the page
+    _abort_if_captcha(page, visible)
     try:
         page.wait_for_selector(
             "input[data-testid='title--input']", state="visible", timeout=30000
@@ -1241,6 +1280,12 @@ def main():
         action="store_true",
         help="En vez de subir items nuevos, abre cada borrador existente en Vinted e intenta publicarlo.",
     )
+    parser.add_argument(
+        "--visible",
+        action="store_true",
+        help="Launch the browser in visible mode (to solve a DataDome captcha manually). "
+             "Runs headless by default.",
+    )
     args = parser.parse_args()
 
     if not EMAIL or not PASSWORD:
@@ -1275,11 +1320,12 @@ def main():
     all_unresolved: list[tuple[str, str, str]] = []  # (cat_id, label, options_preview)
 
     with sync_playwright() as p:
-        # headless=False is intentional: allows manual intervention for DataDome captchas
+        # Default to headless; --visible is for the first login (solve DataDome slider) or
+        # if the saved session in data/auth_state.json expires and a new captcha appears.
         # Patchright is used instead of stock Playwright for bot-detection evasion
-        # (patches Runtime.enable CDP signal, navigator.webdriver, and --enable-automation)
+        # (patches Runtime.enable CDP signal, navigator.webdriver, and --enable-automation).
         browser = p.chromium.launch(
-            headless=False,
+            headless=not args.visible,
             args=["--disable-blink-features=AutomationControlled"],
         )
 
@@ -1313,16 +1359,19 @@ def main():
         _ITEMS_NEW = f"{BASE_URL}/items/new"
         _AUTH_PATHS = ("/member/signup", "/member/login", "/member/verify", "/oauth", "/auth/")
         page.goto(_ITEMS_NEW)
+        # In visible mode allow 2min for manual captcha; in headless the redirect is instant
         try:
             page.wait_for_url(
                 lambda url: _ITEMS_NEW in url or any(p in url for p in _AUTH_PATHS),
-                timeout=120000  # allow time to solve DataDome manually if it appears
+                timeout=120000 if args.visible else 20000,
             )
         except PlaywrightTimeout:
             pass
 
+        _abort_if_captcha(page, args.visible)
+
         if any(p in page.url for p in _AUTH_PATHS):
-            login(page)
+            login(page, visible=args.visible)
             context.storage_state(path=str(AUTH_STATE_PATH))
             print(f"  Sesión guardada en {AUTH_STATE_PATH}")
         elif _ITEMS_NEW in page.url:
@@ -1330,7 +1379,7 @@ def main():
             context.storage_state(path=str(AUTH_STATE_PATH))  # refresh persisted state
         else:
             print(f"  Estado inesperado ({page.url}), intentando login...")
-            login(page)
+            login(page, visible=args.visible)
             context.storage_state(path=str(AUTH_STATE_PATH))
             print(f"  Sesión guardada en {AUTH_STATE_PATH}")
 
@@ -1373,7 +1422,7 @@ def main():
                 title = item.get("title", "")
                 print(f"\n[{i+1}/{len(retry_targets)}] {title}")
                 try:
-                    result = retry_draft_item(page, item, edit_url, draft_item_id, learn=not args.no_learn)
+                    result = retry_draft_item(page, item, edit_url, draft_item_id, learn=not args.no_learn, visible=args.visible)
                 except Exception as e:
                     print(f"  Error inesperado: {e}")
                     result = {"vinted_id": draft_item_id, "status": "failed", "missing_fields": [],
@@ -1446,7 +1495,7 @@ def main():
                 continue
 
             try:
-                result = upload_item(page, item, learn=not args.no_learn)
+                result = upload_item(page, item, learn=not args.no_learn, visible=args.visible)
             except Exception as e:
                 print(f"  Error inesperado: {e}")
                 result = {"vinted_id": "", "status": "failed", "missing_fields": [],

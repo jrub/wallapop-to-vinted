@@ -59,13 +59,16 @@ Produces `data/downloaded_items.json` and downloads images to `data/images/`. Re
 **2. Upload to Vinted:**
 
 ```bash
-python upload_vinted.py                   # full run
+python upload_vinted.py                   # full run (headless)
+python upload_vinted.py --visible         # visible browser — needed to solve a DataDome captcha manually
 python upload_vinted.py --limit 1         # test one listing first
 python upload_vinted.py --retry-drafts    # re-open existing drafts and try to publish them
 python upload_vinted.py --no-learn        # freeze category_mapping.json (no auto-learning)
 ```
 
-The browser opens visible on purpose: if a bot-detection DataDome captcha appears, solve it manually — the script waits and continues. Failed items are logged; the run doesn't abort.
+The browser runs headless by default. Vinted uses DataDome for bot protection, which can challenge any request — login, navigation, uploads — when it flags the behaviour as suspicious (suspicious IP, JS disabled, interactions deemed too fast, etc.). When the script detects the challenge page it aborts with a clear message: re-run with `--visible`, solve the slider once, and the refreshed session in `data/auth_state.json` lets subsequent runs go back to headless.
+
+Failed items are logged; the run doesn't abort.
 
 At the end of the run, the script prints a summary: drafts and their missing fields, newly auto-learned mappings, unresolved labels with the Vinted options seen, and categories still without a navigation path.
 
@@ -85,7 +88,7 @@ The result: `data/category_mapping.json` grows with every run until it covers yo
 ## Known limitations
 
 - **Not every category works out of the box.** Vinted's form varies dramatically across categories (books need ISBN, phones need storage + SIM lock, etc.). When Wallapop doesn't provide the required value, the item stays as a draft for you to complete manually.
-- **DataDome captchas.** The browser is visible for a reason — you may need to solve a slider challenge at login. The script waits up to 2 minutes.
+- **DataDome captchas.** Vinted's bot-protection can challenge *any* request — login, navigation, or upload — when it flags the behaviour as suspicious. The script detects the challenge page, aborts in headless mode, and tells you to re-run with `--visible` so you can solve the slider manually.
 - **Manual publishing for some drafts.** Items saved as drafts need you to finish them in Vinted's UI (add the missing fields and click publish).
 - **Unofficial APIs break.** Wallapop's endpoints and Vinted's DOM change without notice. When they do, things stop working until the code is updated.
 - **Active listings only.** Sold, reserved, or Wallapop-draft items are ignored.

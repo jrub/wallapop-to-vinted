@@ -48,7 +48,7 @@ data/
 1. Fill in `.env` from `.env.example`
 2. Run `python extract_wallapop.py` — review `data/downloaded_items.json` before proceeding
 3. If any items have `category_id` not yet mapped in `data/category_mapping.json`, add the Vinted nav path manually
-4. Run `python upload_vinted.py` — browser runs visible; intervene manually if captcha appears
+4. Run `python upload_vinted.py` — runs headless by default. If DataDome challenges the session (it can happen at any time, not only on login), the script aborts and tells you to re-run with `--visible` so you can solve the slider manually; the refreshed `data/auth_state.json` lets subsequent runs go back to headless
 5. Items with no Vinted category mapping are skipped and listed at the end of the run
 6. If an item fails, it is logged and skipped; the run continues
 
@@ -61,7 +61,8 @@ patchright install chromium
 # Run
 python extract_wallapop.py
 python upload_vinted.py
-python upload_vinted.py --limit 1   # test with a single item first
+python upload_vinted.py --visible         # visible browser — solve a DataDome captcha manually
+python upload_vinted.py --limit 1         # test with a single item first
 python upload_vinted.py --retry-drafts    # re-open existing drafts and try to publish them
 python upload_vinted.py --no-learn        # freeze category_mapping.json (no auto-learning)
 ```
@@ -94,6 +95,7 @@ Maps Wallapop `category_id` → Vinted category tree navigation path plus per-ca
 - **Wallapop has no public API.** The script uses the internal REST API (`api.wallapop.com/api/v3/`) reverse-engineered from browser traffic, and parses `__NEXT_DATA__` from the profile page HTML to resolve the numeric user ID.
 - **List endpoint returns root category only.** `/users/{id}/items` returns only the top-level `category_id`. The detail endpoint `/items/{item_id}` exposes a `taxonomy` array; `taxonomy[-1]["id"]` is the leaf subcategory.
 - **Vinted upload is via browser automation.** No write API exists for non-business accounts. Patchright patches bot-detection signals (Runtime.enable CDP, navigator.webdriver, --enable-automation).
+- **Headless by default, `--visible` for captcha.** The browser launches headless. DataDome (Vinted's bot-protection service) can challenge *any* request — not just login — when it flags the behaviour as suspicious (fast interactions, blocked JS, shared-IP reputation). When the challenge iframe is detected (`iframe[src*='captcha-delivery.com']` or a URL under `captcha-delivery.com`) the script aborts with instructions to re-run with `--visible`, let the user solve the slider once, and re-persist `data/auth_state.json`. The detection runs at every page the flow hits: the initial session probe at `/items/new`, right after the login submit, and on every per-item `goto(/items/new)` and per-draft `goto(/items/<id>/edit)` inside the main loop — so a mid-run challenge aborts immediately instead of causing every remaining item to fail.
 - **Publish first, fallback to draft.** Each item is filled with every attribute we can map from Wallapop, then Vinted's "Subir" button is clicked. If Vinted rejects the submission (missing required field, unknown dropdown value), the error messages are captured and the item is saved as a draft instead. If brand is missing, "Publicar sin marca" is selected automatically so the item can still publish.
 - **End-of-run summary.** After the loop, the script prints (a) drafts and what fields were missing, (b) newly auto-learned mappings, (c) unresolved fields with their observed Vinted options, and (d) categories without a Vinted nav path — feed this summary into a follow-up session to tighten `category_mapping.json`.
 - **`migration.json` provides idempotency.** Each entry holds `vinted_id`, `status` (`published` | `draft` | `failed`), `missing_fields`, `last_error`, and `uploaded_at`. Items whose `status` is `published` or `draft` are skipped on re-runs (failed items are retried automatically). Legacy entries written with the old `vinted_status` key are still honoured.
@@ -113,4 +115,3 @@ Maps Wallapop `category_id` → Vinted category tree navigation path plus per-ca
    - **Domain layer** (`domain/*.py`) — `categories.py`, `migration.py`, `mapping.py`: pure logic on JSON state, no browser imports.
    - **Session/transport** (`vinted/session.py`, `vinted/errors.py`) — Patchright bootstrap, JWT cookie extraction, error taxonomy.
    - **Wallapop side** (`wallapop/items.py`, `wallapop/matching.py`) — extraction and fuzzy label matching, decoupled from the uploader.
-3. **Default to headless; add a `--visible` flag.** Today Patchright launches with `headless=False` unconditionally so the user can solve a DataDome slider on login. Once the saved session in `data/auth_state.json` is healthy the slider almost never reappears, so visible mode is wasteful for routine runs. Switch the default to headless and expose `--visible` (or `--headful`) for the first login / captcha recovery. The flag must also auto-detect the DataDome challenge page and, when running headless, abort the run with a clear message instructing the user to re-launch with `--visible` to solve it once and re-persist the session.
