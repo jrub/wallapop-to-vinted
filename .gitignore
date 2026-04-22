@@ -13,3 +13,4 @@ data/images/
 data/logs/
 
 .DS_Store
+.claude/
