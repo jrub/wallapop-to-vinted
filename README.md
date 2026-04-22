@@ -61,7 +61,7 @@ Produces `data/downloaded_items.json` and downloads images to `data/images/`. Re
 ```bash
 python upload_vinted.py                   # full run (headless)
 python upload_vinted.py --visible         # visible browser — needed to solve a DataDome captcha manually
-python upload_vinted.py --limit 1         # test one listing first
+python upload_vinted.py --limit 1         # one real upload attempt (skips already-done & unmapped first)
 python upload_vinted.py --retry-drafts    # re-open existing drafts and try to publish them
 python upload_vinted.py --no-learn        # freeze category_mapping.json (no auto-learning)
 ```
@@ -82,6 +82,8 @@ The first time a listing from a new Wallapop category is uploaded:
 2. For each label, it tries to guess the matching key in the Wallapop item attributes — by direct name match, a small alias table (`Sistema operativo` → `operating_system`, `Talla` → `size`, …), or a fuzzy fallback.
 3. Resolved mappings are written to `data/category_mapping.json` under the category's `attributes` block, so subsequent uploads reuse them directly.
 4. Labels that couldn't be resolved are persisted with `from: null` and the list of options Vinted offered (`observed_options`), so you can finish the mapping by hand — either by setting `from` to the right Wallapop attribute or by adding a `value_map` for vocabulary mismatches.
+
+**Nav paths resolve per item.** If you leave a Wallapop category mapped to a partial Vinted path (one level short of a leaf), the uploader detects it when Vinted refuses to close the picker and tries to pick the right leaf **using the item's own title + description**. For each sub-option it stems the main word (crude `es`/`s` plural strip) and checks whether it appears in the item text; if exactly one sub-option matches, it clicks that leaf and continues. This matters because a single Wallapop category often maps to several Vinted leaves (e.g. "Dispositivos de red" → Routers / Repetidores / Módems) — the right leaf depends on the individual item, not on the category. When zero or multiple sub-options match, the sub-options Vinted offered are persisted to the category entry as `observed_leaf_options` and the item falls back to draft so you can finish it in Vinted's UI.
 
 The result: `data/category_mapping.json` grows with every run until it covers your inventory. Pass `--no-learn` to freeze it.
 

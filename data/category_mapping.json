@@ -77,13 +77,26 @@
       "Abrigos y chaquetas",
       "Chaquetas"
     ],
-    "attributes": {}
+    "attributes": {},
+    "observed_leaf_options": [
+      "Cazadoras biker",
+      "Chaquetas bomber",
+      "Cazadoras vaqueras",
+      "Chaquetas militares y utilitarias",
+      "Forros polares",
+      "Chaquetas Harrington",
+      "Chaquetas de plumas",
+      "Chaquetas acolchadas",
+      "Sobrecamisas",
+      "Chaquetas de esquí y snow"
+    ]
   },
   "10073": {
     "name": "Artículos de escritorio",
     "vinted": [
-      "Hobbies y coleccionismo",
-      "Memorabilia"
+      "Hogar",
+      "Materiales de oficina",
+      "Accesorios de escritorio"
     ],
     "attributes": {}
   },
@@ -212,7 +225,8 @@
     "name": "CDs Música",
     "vinted": [
       "Entretenimiento",
-      "Música"
+      "Música",
+      "CD"
     ],
     "attributes": {}
   },
@@ -229,16 +243,14 @@
     "name": "Colchones",
     "vinted": [
       "Hogar",
-      "Muebles"
+      "Textiles",
+      "Ropa de cama"
     ],
     "attributes": {}
   },
   "10289": {
     "name": "Armarios",
-    "vinted": [
-      "Hogar",
-      "Muebles"
-    ],
+    "vinted": null,
     "attributes": {}
   },
   "10304": {
@@ -248,7 +260,94 @@
       "Ordenadores y accesorios",
       "Piezas y componentes de ordenadores"
     ],
-    "attributes": {}
+    "attributes": {
+      "brand_select_dropdown_input": {
+        "label": "Marca",
+        "from": "brand",
+        "kind": "combobox",
+        "fallback": "no_brand",
+        "observed_options": [
+          "Sistema",
+          "Corsair",
+          "NZXT",
+          "Case",
+          "MSI",
+          "Asus",
+          "Apple",
+          "DELL",
+          "Acer",
+          "HP",
+          "Lenovo",
+          "D-Link",
+          "Intel",
+          "Marc Jacobs",
+          "Logic",
+          "Shein",
+          "NOX",
+          "Amazon",
+          "Trust",
+          "Samsung",
+          "Master",
+          "Genesis",
+          "AMD",
+          "No Label",
+          "NVIDIA",
+          "RASPBERRY",
+          "H&M",
+          "P&C",
+          "Noir",
+          "Gigabyte"
+        ]
+      },
+      "color_select_dropdown_input": {
+        "label": "Color",
+        "from": "color",
+        "kind": "combobox",
+        "observed_options": [
+          "Azul marino",
+          "Dorado",
+          "Negro",
+          "Gris",
+          "Blanco",
+          "Crema",
+          "Beige",
+          "Naranja pastel",
+          "Naranja",
+          "Coral",
+          "Rojo",
+          "Burdeos",
+          "Fucsia",
+          "Rosa",
+          "Morado",
+          "Lila",
+          "Azul claro",
+          "Azul",
+          "Turquesa",
+          "Menta",
+          "Verde",
+          "Verde oscuro",
+          "Caqui",
+          "Marrón",
+          "Mostaza",
+          "Amarillo",
+          "Plateado",
+          "Varios",
+          "Transparente"
+        ]
+      }
+    },
+    "observed_leaf_options": [
+      "Cajas de ordenador",
+      "CPU y procesadores",
+      "Placas base",
+      "Combos de placa base y CPU",
+      "Tarjetas gráficas",
+      "Memorias RAM",
+      "Refrigeración y ventiladores para ordenador",
+      "Tarjetas de sonido internas",
+      "Capturadoras de vídeo y tarjetas sintonizadoras de TV",
+      "Dispositivos de almacenamiento interno"
+    ]
   },
   "10307": {
     "name": "Impresoras",
@@ -390,11 +489,7 @@
   },
   "24202": {
     "name": "Informática: ordenadores y tablets",
-    "vinted": [
-      "Electrónica",
-      "Ordenadores y accesorios",
-      "Dispositivos de red"
-    ],
+    "vinted": null,
     "attributes": {}
   }
 }
