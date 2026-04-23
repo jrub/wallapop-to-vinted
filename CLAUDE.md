@@ -48,7 +48,7 @@ data/
 ## Workflow
 
 1. Fill in `.env` from `.env.example`
-2. Run `python extract_wallapop.py` — review `data/downloaded_items.json` before proceeding
+2. Run `python extract_wallapop.py` — review `data/downloaded_items.json` before proceeding. If you have items marked "Sólo venta en persona" on Wallapop, the script lists them and skips them: Vinted has no in-person sale option, so re-run with `--include-in-person` to upload them anyway as shipping items.
 3. If any items have `category_id` not yet mapped in `data/category_mapping.json`, add the Vinted nav path manually
 4. Run `python upload_vinted.py` — runs headless by default. If DataDome challenges the session (it can happen at any time, not only on login), the script aborts and tells you to re-run with `--visible` so you can solve the slider manually; the refreshed `data/auth_state.json` lets subsequent runs go back to headless
 5. Items with no Vinted category mapping are skipped and listed at the end of the run
@@ -63,6 +63,7 @@ patchright install chromium
 # Run
 python extract_vinted_categories.py  # refresh Vinted category tree (run once, re-run if Vinted restructures)
 python extract_wallapop.py
+python extract_wallapop.py --include-in-person  # also upload "Sólo venta en persona" items as shipping
 python upload_vinted.py
 python upload_vinted.py --visible         # visible browser — solve a DataDome captcha manually
 python upload_vinted.py --limit 1         # one real upload attempt — pre-filters already-done and unmapped items first
@@ -100,9 +101,13 @@ Maps Wallapop `category_id` → Vinted category tree navigation path plus per-ca
 - **Vinted category tree is extracted without auth.** `extract_vinted_categories.py` does a plain HTTP GET to `vinted.es/catalog` and parses the `catalogTree` embedded in the Next.js App Router streaming payload (`self.__next_f.push`). No browser, no login. The full tree (2899 nodes, depth ≤ 5) is saved to `data/vinted_categories.json` and loaded by `upload_vinted.py` at startup for local leaf resolution.
 - **Wallapop has no public API.** The script uses the internal REST API (`api.wallapop.com/api/v3/`) reverse-engineered from browser traffic, and parses `__NEXT_DATA__` from the profile page HTML to resolve the numeric user ID.
 - **List endpoint returns root category only.** `/users/{id}/items` returns only the top-level `category_id`. The detail endpoint `/items/{item_id}` exposes a `taxonomy` array; `taxonomy[-1]["id"]` is the leaf subcategory.
+- **Wallapop categories aren't always leaves.** Wallapop lets the seller stop at *any* node in its tree — e.g. "Coleccionismo" instead of "Filatelia y sellos". So `taxonomy[-1]["id"]` may itself be an intermediate node, not a leaf. This means a single Wallapop `category_id` can legitimately cover items that Vinted would split across many leaves. The mapping format in `data/category_mapping.json` (one Vinted nav path per Wallapop id) cannot express this — the local leaf resolver + per-item override planned in Next Steps #3 is the long-term fix.
 - **Vinted upload is via browser automation.** No write API exists for non-business accounts. Patchright patches bot-detection signals (Runtime.enable CDP, navigator.webdriver, --enable-automation).
 - **Headless by default, `--visible` for captcha.** The browser launches headless. DataDome (Vinted's bot-protection service) can challenge *any* request — not just login — when it flags the behaviour as suspicious (fast interactions, blocked JS, shared-IP reputation). When the challenge iframe is detected (`iframe[src*='captcha-delivery.com']` or a URL under `captcha-delivery.com`) the script aborts with instructions to re-run with `--visible`, let the user solve the slider once, and re-persist `data/auth_state.json`. The detection runs at every page the flow hits: the initial session probe at `/items/new`, right after the login submit, and on every per-item `goto(/items/new)` and per-draft `goto(/items/<id>/edit)` inside the main loop — so a mid-run challenge aborts immediately instead of causing every remaining item to fail.
 - **Publish first, fallback to draft.** Each item is filled with every attribute we can map from Wallapop, then Vinted's "Subir" button is clicked. If Vinted rejects the submission (missing required field, unknown dropdown value), the error messages are captured and the item is saved as a draft instead. If brand is missing, "Publicar sin marca" is selected automatically so the item can still publish.
+- **Title softening for Vinted's all-caps validator.** Vinted refuses titles with more than ~30% uppercase letters ("El título contiene demasiadas mayúsculas"). `_soften_title_caps` lowercases the title and capitalises the first letter when the ratio is exceeded — e.g. "Diskete MS-DOS" → "Diskete ms-dos". Pragmatic tradeoff: brand acronyms get flattened, but the listing publishes; the user can hand-edit the title in the draft if needed.
+- **In-person sales filter.** Wallapop's "Sólo venta en persona" badge surfaces in the API as `shipping.user_allows_shipping=false`. Vinted has no in-person option, so `extract_wallapop.py` lists those items and skips them by default. Pass `--include-in-person` to extract them anyway; the uploader treats every item as a shipping listing regardless of its origin flag.
+- **Package size: always "Mediano".** Wallapop's `up_to_kg` doesn't map cleanly to Vinted's named package tiers (Pequeño / Mediano / Grande / XGrande, described by what fits in a shoebox / moving box / etc., not by weight). `select_package_size()` always picks the cell with `data-testid='2-package-size--cell'` (Mediano) — the safe default for the bulk of the catalogue. Edit the draft on Vinted if a specific item needs a different tier.
 - **End-of-run summary.** After the loop, the script prints (a) drafts and what fields were missing, (b) newly auto-learned mappings, (c) unresolved fields with their observed Vinted options, and (d) categories without a Vinted nav path — feed this summary into a follow-up session to tighten `category_mapping.json`.
 - **`migration.json` provides idempotency.** Each entry holds `vinted_id`, `status` (`published` | `draft` | `failed`), `missing_fields`, `last_error`, and `uploaded_at`. Items whose `status` is `published` or `draft` are skipped on re-runs (failed items are retried automatically). Legacy entries written with the old `vinted_status` key are still honoured. `--limit N` is applied *after* this filter (and after dropping items without a Vinted mapping), so `--limit 1` always means "one real upload attempt" regardless of how many entries already exist in `migration.json`.
 
@@ -121,3 +126,17 @@ Maps Wallapop `category_id` → Vinted category tree navigation path plus per-ca
    - **Domain layer** (`domain/*.py`) — `categories.py`, `migration.py`, `mapping.py`: pure logic on JSON state, no browser imports.
    - **Session/transport** (`vinted/session.py`, `vinted/errors.py`) — Patchright bootstrap, JWT cookie extraction, error taxonomy.
    - **Wallapop side** (`wallapop/items.py`, `wallapop/matching.py`) — extraction and fuzzy label matching, decoupled from the uploader.
+3. **Interactive leaf resolution in the orchestrator.** Some Wallapop categories are genuinely ambiguous: a single `category_id` covers items that belong to different Vinted leaves (e.g. `10304 "Componentes y piezas de ordenador"` can be RAM, a GPU, or a floppy disk — three different Vinted leaves under the same parent). The current `_resolve_nav_to_leaf` stemmer can handle unambiguous cases (RAM description contains "memoria") but fails when the item text gives no hint (a floppy disk described only as "diskete MS-DOS" doesn't contain the word "almacenamiento").
+
+   **Problem taxonomy:**
+   - *Unambiguous*: resolver picks the leaf confidently → no user input needed.
+   - *Resolvable at runtime*: the browser picker encounters sub-options and picks via observed text — works but produces a draft instead of a publish.
+   - *Genuinely ambiguous*: neither the local tree nor the browser can resolve it without human judgement.
+
+   **Proposed solution — interactive pre-flight in the orchestrator.** After extracting Wallapop items and before opening the browser, the orchestrator runs a mapping audit:
+   - For each item, check if its nav path resolves unambiguously to a leaf (local tree + resolver).
+   - For items where it doesn't, display the item title + description and the candidate Vinted leaves (children of the mapped node), and ask the user to pick one interactively in the CLI.
+   - Store the per-item resolution in `downloaded_items.json` (or a sidecar) as `vinted_nav_override`, so re-runs don't re-ask.
+   - The upload flow consults `vinted_nav_override` first; falls back to the mapping + resolver chain if absent.
+
+   This keeps `category_mapping.json` as a category-level default (partial path is fine) and delegates item-level disambiguation to a one-time interactive step, rather than silently producing drafts or misclassifying items.

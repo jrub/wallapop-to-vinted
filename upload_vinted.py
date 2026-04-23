@@ -52,6 +52,8 @@ ERROR_SELECTOR = (
 # the auto-learn loop extends this implicitly by writing resolved mappings to
 # category_mapping.json, so this table only needs the first-time guess.
 LABEL_ALIASES = {
+    # These three are always present on Vinted — hard-wire them so they never need
+    # auto-learning from a specific item (the item may lack the attribute).
     "marca": ["brand"],
     "talla": ["size"],
     "color": ["color", "colour"],
@@ -111,6 +113,23 @@ def _normalize_label(s: str) -> str:
     return re.sub(r"\s+", " ", s).strip()
 
 
+def _soften_title_caps(title: str, threshold: float = 0.3) -> str:
+    """Lowercase titles that exceed an uppercase ratio Vinted's validator rejects.
+
+    Vinted refuses titles with too many uppercase letters ("El título contiene demasiadas
+    mayúsculas"). The exact threshold is undocumented; 30% is conservative enough to catch
+    "Diskete MS-DOS" while leaving normal title-case alone. Capitalises the first letter
+    so the result still reads naturally instead of being fully lowercase.
+    """
+    letters = [c for c in title if c.isalpha()]
+    if not letters:
+        return title
+    upper = sum(1 for c in letters if c.isupper())
+    if upper / len(letters) <= threshold:
+        return title
+    return title.lower().capitalize()
+
+
 def _guess_wallapop_key(label: str, attributes: dict) -> str | None:
     """Best-effort mapping Vinted label → key in item.attributes. Returns None if no match."""
     norm = _normalize_label(label)
@@ -129,11 +148,43 @@ def _guess_wallapop_key(label: str, attributes: dict) -> str | None:
             return k
     return None
 
+
+def _label_to_wallapop_key(label: str) -> str | None:
+    """Resolve a Vinted field label to its canonical Wallapop key using only the alias table.
+
+    Unlike _guess_wallapop_key, this doesn't need a concrete item — it resolves
+    well-known label→key pairs (e.g. "Color"→"color") regardless of whether the
+    current item has that attribute. Used to fix category_mapping entries that were
+    saved with from:null because the first item that triggered them lacked the attribute.
+    """
+    norm = _normalize_label(label)
+    # Direct alias lookup (covers color, brand, size, etc.)
+    aliases = LABEL_ALIASES.get(norm)
+    if aliases:
+        return aliases[0]
+    # Normalized label itself matches a known Wallapop key name
+    if norm in {_normalize_label(k) for keys in LABEL_ALIASES.values() for k in keys}:
+        return norm
+    return None
+
 if not CATEGORIES_PATH.exists():
     print(f"ERROR: {CATEGORIES_PATH} not found. Run extract_wallapop.py first.")
     sys.exit(1)
 with open(CATEGORIES_PATH, encoding="utf-8") as _f:
     _CATEGORIES = json.load(_f)  # wallapop category_id → {name, vinted: [...nav path]}
+
+VINTED_CATEGORIES_PATH = Path("data/vinted_categories.json")
+_VINTED_NODES: list[dict] = []
+_VINTED_BY_PATH: dict[tuple, dict] = {}
+if VINTED_CATEGORIES_PATH.exists():
+    with open(VINTED_CATEGORIES_PATH, encoding="utf-8") as _f:
+        _VINTED_NODES = json.load(_f)
+    _VINTED_BY_PATH = {tuple(n["path"]): n for n in _VINTED_NODES}
+else:
+    print(
+        f"WARNING: {VINTED_CATEGORIES_PATH} not found. "
+        "Run extract_vinted_categories.py to enable local leaf resolution."
+    )
 
 
 def get_nav(item: dict) -> list | None:
@@ -195,14 +246,24 @@ def human_type(locator, text: str):
             time.sleep(random.uniform(0.15, 0.45))
 
 
-def select_category(page, nav: list) -> bool:
+def select_category(page, nav: list) -> tuple[bool, list[str]]:
     """Navigate Vinted's category picker by clicking through each tree level.
 
     The picker renders one level at a time as div[role="button"] elements.
     :text-is() matches the exact label without substring false positives.
+
+    Expects `nav` to already be a fully-resolved leaf path (see
+    _resolve_nav_to_leaf).  If Vinted still shows sub-options after clicking all
+    steps (the nav is one step short of a leaf), those options are returned so
+    the caller can persist them to category_mapping.json for manual review.
+
+    Returns (leaf_reached, sub_options).
+      - leaf_reached=True when the picker auto-closes after the last click.
+      - leaf_reached=False when sub-options remain after clicking all nav steps,
+        or on exception.  sub_options is non-empty only in the first case.
     """
     if not nav:
-        return False
+        return False, []
     try:
         page.click("input[data-testid='catalog-select-dropdown-input']")
         human_delay(0.5, 1.0)
@@ -213,15 +274,40 @@ def select_category(page, nav: list) -> bool:
             btn.wait_for(state="visible", timeout=5000)
             btn.click()
             human_delay(0.4, 0.8)
+
+        # Detect "not a leaf": visible cells with ids like `catalog-<n>` remain
+        # when Vinted is still offering deeper sub-categories.
+        human_delay(0.6, 1.0)
+        sub_options = page.evaluate(
+            """() => Array.from(document.querySelectorAll('[id^="catalog-"]'))
+                     .filter(el => el.offsetParent !== null)
+                     .map(el => (el.innerText || '').trim().split('\\n')[0])
+                     .filter(t => t.length > 0 && t.length < 80)
+                     .slice(0, 10)"""
+        ) or []
+        if sub_options:
+            # Nav path is not a leaf — persist observed options for manual review
+            # and fall back to draft.
+            print(
+                f"    WARNING: nav path {' > '.join(nav)!r} is not a leaf "
+                f"(sub-options: {sub_options}) — falling back to draft."
+            )
+            try:
+                page.keyboard.press("Escape")
+                human_delay(0.3, 0.6)
+            except Exception:
+                pass
+            return False, sub_options
+
         print(f"    Category: {' > '.join(nav)}")
-        return True
+        return True, []
     except Exception as e:
         print(f"    WARNING: could not select category {nav}: {e}")
         try:
             page.keyboard.press("Escape")
         except Exception:
             pass
-        return False
+        return False, []
 
 
 def set_condition(page) -> bool:
@@ -295,17 +381,101 @@ def scan_dynamic_fields(page) -> list[dict]:
         return []
 
 
+# Vinted marks open dropdown panels with data-testid ending in "-dropdown-content"
+# (e.g. "color-select-dropdown-content", "brand-select-dropdown-content"). Scoping
+# queries to this element avoids matching buttons elsewhere on the page and sidesteps
+# visibility checks that break inside position:fixed / overflow:auto containers.
+_PANEL_SELECTOR = '[data-testid$="-dropdown-content"]'
+
+
 def _collect_visible_options(page) -> list[str]:
-    """After opening a dropdown, read all option labels visible in the panel."""
+    """Read all option labels from the currently open Vinted dropdown panel.
+
+    Scopes to the panel element (data-testid ending in "-dropdown-content") so we
+    never match buttons outside the panel. Within the panel, prefers --title child
+    elements (used by color/brand cells) over raw innerText so the color circle
+    and checkbox markup don't contaminate the label. No visibility filter needed:
+    within a scoped panel all rendered items are valid options regardless of scroll
+    position or position:fixed/overflow:auto ancestors.
+    """
     try:
-        return page.evaluate("""
-        () => Array.from(document.querySelectorAll('div[role="button"]'))
-          .filter(n => n.offsetParent !== null)
-          .map(n => (n.innerText || '').trim())
-          .filter(t => t.length > 0 && t.length < 80)
+        return page.evaluate(f"""
+        () => {{
+            const panel = document.querySelector('{_PANEL_SELECTOR}');
+            const root = panel || document;
+            const seen = new Set();
+            const out = [];
+            // --title children (color/brand cells): cleanest label source
+            root.querySelectorAll('[data-testid$="--title"]').forEach(el => {{
+                const text = (el.innerText || '').trim();
+                if (text.length > 0 && text.length < 80 && !seen.has(text)) {{
+                    seen.add(text); out.push(text);
+                }}
+            }});
+            if (out.length) return out;
+            // Fallback: plain div[role="button"] text (standard single-list dropdowns)
+            root.querySelectorAll('div[role="button"]').forEach(el => {{
+                const text = (el.innerText || '').trim().split('\\n')[0].trim();
+                if (text.length > 0 && text.length < 80 && !seen.has(text)) {{
+                    seen.add(text); out.push(text);
+                }}
+            }});
+            return out;
+        }}
         """) or []
     except Exception:
         return []
+
+
+def _find_option_match(options: list[str], value: str, strict: bool = False) -> str | None:
+    """Find the best matching option from a dropdown option list.
+
+    Exact normalized match wins; substring match is the fallback (unless strict=True).
+    Pass strict=True for typed autocomplete inputs (e.g. Brand) where Vinted filters
+    results based on what was typed — a non-exact result means the value isn't in the
+    catalogue, so substring matches would be false positives.
+    """
+    norm_value = _normalize_label(value)
+    if not norm_value:
+        return None
+    for opt in options:
+        if _normalize_label(opt) == norm_value:
+            return opt
+    if strict:
+        return None
+    for opt in options:
+        no = _normalize_label(opt)
+        if no and (no in norm_value or norm_value in no):
+            return opt
+    return None
+
+
+def _js_click_option(page, label: str) -> None:
+    """Click an option in the open dropdown panel by its label text using JavaScript.
+
+    Scopes the search to the open panel (data-testid ending in "-dropdown-content")
+    and matches via --title children first (color/brand cells), then falls back to
+    plain div[role="button"] innerText. The JS click never scrolls the page, avoiding
+    the erratic viewport movement that triggers DataDome bot detection.
+    """
+    page.evaluate(
+        f"""(label) => {{
+            const panel = document.querySelector('{_PANEL_SELECTOR}');
+            const root = panel || document;
+            // Try --title pattern: find title el → click its role=button parent
+            const titleEl = Array.from(root.querySelectorAll('[data-testid$="--title"]'))
+                .find(el => (el.innerText || '').trim() === label);
+            if (titleEl) {{
+                const btn = titleEl.closest('div[role="button"]');
+                if (btn) {{ btn.click(); return; }}
+            }}
+            // Fallback: direct div[role="button"] text match
+            const btn = Array.from(root.querySelectorAll('div[role="button"]'))
+                .find(el => (el.innerText || '').trim().split('\\n')[0].trim() === label);
+            if (btn) btn.click();
+        }}""",
+        label,
+    )
 
 
 def fill_dropdown(page, testid: str, value: str) -> tuple[bool, list[str]]:
@@ -313,6 +483,7 @@ def fill_dropdown(page, testid: str, value: str) -> tuple[bool, list[str]]:
 
     Returns (selected, options_seen). options_seen is populated on both hit and miss
     so the caller can persist them in category_mapping.json for the user to review.
+    Uses JS click to avoid Playwright's auto-scroll which can trigger DataDome.
     """
     options: list[str] = []
     try:
@@ -322,22 +493,9 @@ def fill_dropdown(page, testid: str, value: str) -> tuple[bool, list[str]]:
         human_delay(0.3, 0.6)
         options = _collect_visible_options(page)
 
-        norm_value = _normalize_label(value)
-        matched = None
-        for opt in options:
-            if _normalize_label(opt) == norm_value:
-                matched = opt
-                break
-        if matched is None and norm_value:
-            for opt in options:
-                no = _normalize_label(opt)
-                if no and (no in norm_value or norm_value in no):
-                    matched = opt
-                    break
+        matched = _find_option_match(options, value)
         if matched is not None:
-            page.locator('div[role="button"]').filter(
-                has=page.locator(f':text-is("{matched}")')
-            ).first.click()
+            _js_click_option(page, matched)
             human_delay(0.3, 0.6)
             return True, options
         # No match — close the panel so the next field can open
@@ -359,7 +517,15 @@ def fill_dropdown(page, testid: str, value: str) -> tuple[bool, list[str]]:
 def fill_combobox(page, testid: str, value: str) -> tuple[bool, list[str]]:
     """For Vinted's brand/color pickers (input + dropdown suggestions).
 
-    Clicks the input, types the value, and selects the first matching suggestion.
+    Two-phase approach:
+    1. Click to open and check for an immediate match in visible options.
+       Readonly inputs (e.g. Color) show all choices upfront — if there's no
+       immediate match we return False right away without typing.
+    2. For non-readonly inputs (e.g. Brand autocomplete): type the value and
+       re-check. Uses faster typing since timing-based bot detection is not
+       the concern here (DataDome reacts to scroll, not keystroke cadence).
+
+    Uses JS click to avoid Playwright's auto-scroll which can trigger DataDome.
     Returns (selected, options_seen).
     """
     options: list[str] = []
@@ -367,39 +533,48 @@ def fill_combobox(page, testid: str, value: str) -> tuple[bool, list[str]]:
         inp = page.locator(f"[data-testid='{testid}']")
         inp.wait_for(state="visible", timeout=3000)
         inp.click()
-        human_delay(0.3, 0.6)
-        # Type progressively so React fires keyboard events
+        human_delay(0.4, 0.7)
+
+        # Phase 1: immediate match (Color picker shows all options on open)
+        options = _collect_visible_options(page)
+        matched = _find_option_match(options, value)
+        if matched is not None:
+            _js_click_option(page, matched)
+            human_delay(0.3, 0.5)
+            return True, options
+
+        # Readonly inputs (Color) have shown all available options — no match means
+        # the value simply isn't offered. Don't try to type into a readonly field.
+        is_readonly = inp.get_attribute("readonly") is not None
+        if is_readonly:
+            try:
+                page.keyboard.press("Escape")
+            except Exception:
+                pass
+            human_delay(0.2, 0.3)
+            return False, options
+
+        # Phase 2: type to filter (Brand autocomplete and similar text inputs)
+        # Use strict=True: Vinted filters suggestions based on what was typed, so any
+        # non-exact result is a false positive (e.g. typing "MS-DOS" surfaces "Do").
         for ch in value:
             inp.press_sequentially(ch)
-            time.sleep(random.uniform(0.04, 0.12))
-        human_delay(0.6, 1.2)
+            time.sleep(random.uniform(0.02, 0.06))
+        human_delay(0.4, 0.7)
         options = _collect_visible_options(page)
-
-        norm_value = _normalize_label(value)
-        matched = None
-        for opt in options:
-            if _normalize_label(opt) == norm_value:
-                matched = opt
-                break
-        if matched is None and norm_value:
-            for opt in options:
-                no = _normalize_label(opt)
-                if no and (no in norm_value or norm_value in no):
-                    matched = opt
-                    break
+        matched = _find_option_match(options, value, strict=True)
         if matched is not None:
-            page.locator('div[role="button"]').filter(
-                has=page.locator(f':text-is("{matched}")')
-            ).first.click()
-            human_delay(0.3, 0.6)
+            _js_click_option(page, matched)
+            human_delay(0.3, 0.5)
             return True, options
+
         # No match — clear the input so typed value doesn't remain as free text
         try:
             inp.fill("")
             page.keyboard.press("Escape")
         except Exception:
             pass
-        human_delay(0.2, 0.4)
+        human_delay(0.2, 0.3)
         return False, options
     except Exception as e:
         print(f"    WARNING: fill_combobox({testid}, {value!r}) failed: {e}")
@@ -410,42 +585,53 @@ def fill_combobox(page, testid: str, value: str) -> tuple[bool, list[str]]:
         return False, options
 
 
-def select_package_size(page, up_to_kg: str | float | None) -> bool:
-    """Pick the shipping package size cell matching the given weight in kg.
+def fill_first_option(page, testid: str) -> tuple[bool, list[str]]:
+    """Open the dropdown, read its options, click the first one, close. Single open cycle.
 
-    Vinted renders rows with testids like '<internal_id>-package-size--cell' whose
-    text reads '5 kg', '10 kg', '20 kg', '30 kg'. We pick the smallest row whose
-    weight is greater than or equal to up_to_kg; otherwise the heaviest.
+    Used as a last-resort fill for Color when Wallapop has no colour value: Vinted
+    puts its "Sugerencias" (category-aware colour guesses) at the top of the picker,
+    so the first option is the best automatic guess. Single open/close keeps viewport
+    activity minimal, which matters for DataDome.
     """
-    if up_to_kg is None:
-        return False
     try:
-        weight = float(str(up_to_kg).replace(",", "."))
-    except (TypeError, ValueError):
-        return False
-    try:
-        cells = page.evaluate("""
-        () => Array.from(document.querySelectorAll("[data-testid$='-package-size--cell']"))
-          .filter(el => el.offsetParent !== null)
-          .map(el => ({
-            testid: el.getAttribute('data-testid'),
-            text: (el.innerText || '').trim()
-          }))
-        """) or []
-        parsed: list[tuple[float, str]] = []
-        for c in cells:
-            m = re.search(r"(\d+(?:[.,]\d+)?)\s*kg", c.get("text", ""))
-            if not m:
-                continue
-            parsed.append((float(m.group(1).replace(",", ".")), c["testid"]))
-        if not parsed:
-            return False
-        parsed.sort()
-        chosen = next((t for kg, t in parsed if kg >= weight), parsed[-1][1])
-        page.locator(f"[data-testid='{chosen}']").click()
+        inp = page.locator(f"[data-testid='{testid}']")
+        inp.wait_for(state="visible", timeout=3000)
+        inp.click()
         human_delay(0.3, 0.6)
-        chosen_kg = next(kg for kg, t in parsed if t == chosen)
-        print(f"    Shipping package: {chosen_kg:g} kg (for {weight:g} kg)")
+        options = _collect_visible_options(page)
+        if not options:
+            try:
+                page.keyboard.press("Escape")
+            except Exception:
+                pass
+            return False, []
+        _js_click_option(page, options[0])
+        human_delay(0.3, 0.5)
+        return True, options
+    except Exception as e:
+        print(f"    WARNING: fill_first_option({testid}) failed: {e}")
+        try:
+            page.keyboard.press("Escape")
+        except Exception:
+            pass
+        return False, []
+
+
+def select_package_size(page) -> bool:
+    """Pick the 'Mediano' (id=2) Vinted package size unconditionally.
+
+    Wallapop doesn't expose the package size — it's chosen at listing time and not
+    surfaced in the API. Vinted's package picker isn't a weight scale either; it's a
+    set of named tiers (Pequeño / Mediano / Grande / XGrande) described as "what fits
+    in a shoebox", "what fits in a moving box", etc. 'Mediano' is the safe default
+    for the bulk of items in this catalogue. The cell testid is '2-package-size--cell'.
+    """
+    try:
+        cell = page.locator("[data-testid='2-package-size--cell']")
+        cell.wait_for(state="visible", timeout=5000)
+        cell.click()
+        human_delay(0.3, 0.6)
+        print("    Shipping package: Mediano (default)")
         return True
     except Exception as e:
         print(f"    WARNING: could not pick package size: {e}")
@@ -453,18 +639,30 @@ def select_package_size(page, up_to_kg: str | float | None) -> bool:
 
 
 def select_no_brand(page, testid: str) -> bool:
-    """Click the 'Publicar sin marca' option inside the brand dropdown."""
+    """Click the 'Publicar sin marca' option inside the brand dropdown.
+
+    Opens the dropdown (in case it's closed) then uses JS click to pick the
+    option without triggering Playwright's auto-scroll.
+    """
     try:
         inp = page.locator(f"[data-testid='{testid}']")
         inp.click()
         human_delay(0.3, 0.6)
-        opt = page.locator('div[role="button"]').filter(
-            has=page.locator(':text-is("Publicar sin marca")')
-        ).first
-        opt.wait_for(state="visible", timeout=3000)
-        opt.click()
-        human_delay(0.3, 0.6)
-        return True
+        clicked = page.evaluate(
+            f"""() => {{
+                const panel = document.querySelector('{_PANEL_SELECTOR}');
+                const root = panel || document;
+                const btn = Array.from(root.querySelectorAll('div[role="button"]'))
+                    .find(el => (el.innerText || '').trim() === 'Publicar sin marca');
+                if (btn) {{ btn.click(); return true; }}
+                return false;
+            }}"""
+        )
+        if clicked:
+            human_delay(0.3, 0.6)
+            return True
+        page.keyboard.press("Escape")
+        return False
     except Exception:
         try:
             page.keyboard.press("Escape")
@@ -577,6 +775,51 @@ def _is_form_url(url: str) -> bool:
     return bool(_FORM_URL_RE.search(url))
 
 
+def _dismiss_critical_error_dialog(page) -> bool:
+    """Dismiss Vinted's critical-error modal if present, using JS click (no scroll).
+
+    Returns True if a dialog was found and dismissed.
+    The modal (data-testid="item-upload-critical-error-dialog--overlay") appears after a
+    failed publish when Vinted decides the form has unrecoverable errors. It blocks all
+    further interaction — including the Save-draft button — until dismissed.
+    """
+    try:
+        dismissed = page.evaluate("""
+        () => {
+            const overlay = document.querySelector(
+                '[data-testid="item-upload-critical-error-dialog--overlay"]'
+            );
+            if (!overlay) return false;
+            // Try the close/OK button inside the dialog
+            const btn = overlay.querySelector('button');
+            if (btn) { btn.click(); return true; }
+            // Fallback: click outside the dialog card to close it
+            overlay.click();
+            return true;
+        }
+        """)
+        if dismissed:
+            human_delay(0.4, 0.7)
+        return bool(dismissed)
+    except Exception:
+        return False
+
+
+def _js_click_button(page, locator) -> None:
+    """Click a button via JavaScript to avoid Playwright's scroll-into-view behaviour.
+
+    Playwright's locator.click() scrolls the element into view before clicking,
+    causing the viewport to jump — which DataDome interprets as bot-like behaviour.
+    A JS click fires the event without moving the scroll position.
+    """
+    try:
+        el = locator.element_handle(timeout=3000)
+        if el:
+            page.evaluate("el => el.click()", el)
+    except Exception:
+        locator.click(timeout=10000)  # graceful fallback
+
+
 def publish_or_draft(
     page, fallback_id_seed: str = "", save_as_draft_on_fail: bool = True
 ) -> tuple[str, str, list[str]]:
@@ -598,9 +841,7 @@ def publish_or_draft(
         print(f"    WARNING: publish button not visible. Form buttons: {buttons}")
     else:
         try:
-            pub.hover()
-            human_delay(0.3, 0.6)
-            pub.click(timeout=10000)
+            _js_click_button(page, pub)
             try:
                 page.wait_for_url(lambda url: not _is_form_url(url), timeout=15000)
             except PlaywrightTimeout:
@@ -619,14 +860,14 @@ def publish_or_draft(
             print(f"    WARNING: publish failed: {e}")
 
     if not save_as_draft_on_fail:
-        # Retry mode: the draft already exists; leave it as-is and report errors.
         return "", "draft", errors
+
+    # A critical-error dialog may be blocking the Save-draft button — dismiss it first.
+    _dismiss_critical_error_dialog(page)
 
     try:
         draft_btn = page.locator(f"button[data-testid='{DRAFT_BUTTON_TESTID}']")
-        draft_btn.hover()
-        human_delay(0.3, 0.6)
-        draft_btn.click(timeout=10000)
+        _js_click_button(page, draft_btn)
         try:
             page.wait_for_url(lambda url: not _is_form_url(url), timeout=15000)
         except PlaywrightTimeout:
@@ -653,25 +894,20 @@ def login(page, visible: bool = True):
     # Accept cookie banner (OneTrust) if present
     try:
         btn = page.locator("#onetrust-accept-btn-handler")
-        btn.hover(timeout=5000)
-        human_delay(0.2, 0.5)
-        btn.click(timeout=5000)
+        btn.wait_for(state="visible", timeout=5000)
+        _js_click_button(page, btn)
         human_delay(0.5, 1)
     except Exception:
         pass
 
     # The page opens on the register view by default; switch to the login view
     sw = page.get_by_test_id("auth-select-type--register-switch")
-    sw.hover()
-    human_delay(0.3, 0.6)
-    sw.click()
+    _js_click_button(page, sw)
     page.wait_for_selector("[data-testid='auth-select-type--login-email']")
     human_delay(0.8, 1.5)
 
     email_btn = page.get_by_test_id("auth-select-type--login-email")
-    email_btn.hover()
-    human_delay(0.3, 0.6)
-    email_btn.click()
+    _js_click_button(page, email_btn)
     page.wait_for_selector("input[type='password']")
     human_delay(0.8, 1.5)
 
@@ -681,9 +917,7 @@ def login(page, visible: bool = True):
     human_delay(0.8, 1.5)
 
     submit = page.locator("button[type='submit']")
-    submit.hover()
-    human_delay(0.3, 0.6)
-    submit.click()
+    _js_click_button(page, submit)
 
     if visible:
         print("  Waiting... solve the slider in the browser if it appears.")
@@ -727,6 +961,91 @@ def _abort_if_captcha(page, visible: bool) -> None:
     print("           python upload_vinted.py --visible")
     print(f"       The session will be saved to {AUTH_STATE_PATH}; subsequent runs can go back to headless.")
     sys.exit(2)
+
+
+def _stem(word: str) -> str:
+    """Crude Spanish/English plural stemmer: 'routers'→'router', 'módems'→'modem'.
+
+    Good enough for matching Vinted leaf labels against item titles. Not a full
+    stemmer — just chops a trailing 's' or 'es' if the remainder is long enough
+    to avoid butchering short words.
+    """
+    w = _normalize_label(word)
+    for suffix in ("es", "s"):
+        if w.endswith(suffix) and len(w) - len(suffix) >= 3:
+            return w[: -len(suffix)]
+    return w
+
+
+def _pick_leaf_from_hints(sub_options: list[str], hints: str) -> str | None:
+    """Choose a Vinted sub-option whose main keyword appears in the item text.
+
+    For each sub-option we take the longest alphabetic word (the "main" word,
+    typically the category name — 'Repetidores de red' → 'repetidores') and
+    stem it. If exactly one sub-option's stem shows up as a whole word (or
+    stemmed word) in the normalized item hints, we return it. Otherwise None.
+
+    Deliberately strict: we won't auto-pick on an ambiguous match. Anything
+    that's not unambiguous ends up as a draft for the human to finish.
+    """
+    norm_hints = _normalize_label(hints)
+    if not norm_hints:
+        return None
+    hint_words = set(norm_hints.split())
+    hint_stems = {_stem(w) for w in hint_words}
+
+    matches: list[str] = []
+    for opt in sub_options:
+        words = [w for w in _normalize_label(opt).split() if w.isalpha()]
+        if not words:
+            continue
+        main = max(words, key=len)
+        main_stem = _stem(main)
+        if main_stem in hint_stems or main_stem in hint_words:
+            matches.append(opt)
+
+    return matches[0] if len(matches) == 1 else None
+
+
+def _resolve_nav_to_leaf(nav: list[str], hints: str) -> list[str]:
+    """Extend a nav path to a Vinted leaf using the local category tree.
+
+    Uses _VINTED_BY_PATH (built from data/vinted_categories.json).  If the file
+    isn't loaded, or the path isn't found, returns nav unchanged.
+
+    If the path lands on an intermediate node (has children), attempts to pick
+    the right child via _pick_leaf_from_hints.  Recurses up to one extra level
+    so it can resolve paths that are two steps short of a leaf (rare but possible).
+
+    Returns the original nav if resolution is ambiguous or the tree is absent.
+    """
+    if not _VINTED_BY_PATH:
+        return nav
+
+    path_key = tuple(nav)
+    node = _VINTED_BY_PATH.get(path_key)
+    if node is None:
+        return nav  # path not found in tree — let select_category fail gracefully
+    if node["is_leaf"]:
+        return nav  # already a leaf, nothing to extend
+
+    # Collect direct children of this node
+    depth = len(nav)
+    children = [
+        n["title"]
+        for n in _VINTED_NODES
+        if len(n["path"]) == depth + 1 and tuple(n["path"][:depth]) == path_key
+    ]
+    if not children:
+        return nav
+
+    picked = _pick_leaf_from_hints(children, hints)
+    if picked is None:
+        return nav
+
+    extended = nav + [picked]
+    # One more level if the picked child is also not a leaf
+    return _resolve_nav_to_leaf(extended, hints)
 
 
 def _save_categories():
@@ -1043,7 +1362,17 @@ def fill_dynamic_attributes(
 
         # First encounter: try to resolve against Wallapop attrs and record in config
         if cfg is None:
-            guessed = _guess_wallapop_key(label, wl_attrs) or _guess_wallapop_key(key, wl_attrs)
+            # Try item-aware guess first (returns a key only if this item has it).
+            # Fall back to label-only alias resolution so well-known fields like
+            # "Color"→"color" or "Marca"→"brand" are always wired up regardless of
+            # whether the first item that triggers the category happens to have that
+            # attribute.
+            guessed = (
+                _guess_wallapop_key(label, wl_attrs)
+                or _guess_wallapop_key(key, wl_attrs)
+                or _label_to_wallapop_key(label)
+                or _label_to_wallapop_key(key)
+            )
             cfg = {"label": label, "from": guessed, "kind": kind}
             if _normalize_label(label) == "marca":
                 cfg["fallback"] = "no_brand"
@@ -1053,12 +1382,29 @@ def fill_dynamic_attributes(
                 new_mappings.append(f"{label!r} ← {guessed}")
 
         from_key = cfg.get("from")
+        # If from:null was saved when the first item lacked the attribute, try to
+        # resolve from the label alias table alone (e.g. "Color"→"color"). Update
+        # the mapping so subsequent items don't hit this fallback path again.
+        if from_key is None:
+            resolved = _label_to_wallapop_key(label) or _label_to_wallapop_key(key)
+            if resolved and resolved in wl_attrs:
+                from_key = resolved
+                cfg["from"] = from_key
+                dirty = True
+                new_mappings.append(f"{label!r} ← {from_key} (re-resolved from label)")
         value = wl_attrs.get(from_key) if from_key else None
         if isinstance(value, (int, float)):
             value = str(value)
-        # If Wallapop had no value (or the field is unmapped), use the category default
-        # when one is configured. Useful for fields whose value is stable per category
-        # (SIM lock: "Desbloqueada"; game rating: "PEGI 12").
+        # Color: Wallapop sends EN keys ('black', 'blue'…) → translate to ES for Vinted.
+        if from_key == "color" and value and value in COLOR_EN_TO_ES:
+            value = COLOR_EN_TO_ES[value]
+
+        # Resolution priority for the final value to fill:
+        # 1. Value from Wallapop (already set above)
+        # 2. Per-category default from category_mapping.json (e.g. PEGI 12, Desbloqueada)
+        # 3. For Color only: the first option in the UI picker (Vinted's category-aware
+        #    "Sugerencia"). Any other missing field falls through to draft so we don't
+        #    silently assign a wrong value (e.g. XS for every item missing a size).
         if not value and cfg.get("default"):
             value = cfg["default"]
 
@@ -1066,36 +1412,47 @@ def fill_dynamic_attributes(
             return fill_combobox(page, t, v) if kind == "combobox" else fill_dropdown(page, t, v)
 
         if value:
-            # Color values come from Wallapop as canonical English keys (orange, black…).
-            # Translate to Spanish first; per-attribute value_map still wins if set.
-            if from_key == "color" and value in COLOR_EN_TO_ES:
-                value = COLOR_EN_TO_ES[value]
             value_mapped = (cfg.get("value_map") or {}).get(value, value)
             ok, options = _fill(testid, value_mapped)
+            if options and "observed_options" not in cfg:
+                cfg["observed_options"] = options[:30]
+                dirty = True
             if ok:
                 print(f"    {label}: {value_mapped}")
             else:
-                print(f"    WARNING: option {value_mapped!r} not found in {label!r}")
-                # Brand combobox: fall back to "Publicar sin marca" if we can find it
+                print(f"    WARNING: option {value_mapped!r} not found in '{label}'")
                 if cfg.get("fallback") == "no_brand" and select_no_brand(page, testid):
                     print(f"    {label}: Publicar sin marca (fallback)")
-                missing.append(label)
-                if options and "observed_options" not in cfg:
-                    cfg["observed_options"] = options[:30]
-                    dirty = True
+                else:
+                    missing.append(label)
         else:
             if cfg.get("fallback") == "no_brand":
                 if select_no_brand(page, testid):
                     print(f"    {label}: Publicar sin marca (fallback)")
+                else:
+                    missing.append(label)
+            elif from_key == "color":
+                # Wallapop lacks a colour value. Pick Vinted's first suggestion in a
+                # single open cycle — it's the category-aware top choice, better than
+                # hardcoding "Negro" and better than leaving the item as a draft.
+                ok, options = fill_first_option(page, testid)
+                if options and "observed_options" not in cfg:
+                    cfg["observed_options"] = options[:30]
+                    dirty = True
+                if ok:
+                    print(f"    WARNING: '{label}' not in Wallapop — using first suggestion: {options[0]!r}")
                 missing.append(label)
             else:
+                # No value, no default, not colour: leave empty and let publish-or-draft
+                # handle it. Collect options only the first time a field is seen as
+                # unresolved so future runs can pick the mapping from the JSON file.
+                if cfg.get("from") is None and "observed_options" not in cfg:
+                    _, options = _fill(testid, "__never_match__")
+                    if options:
+                        cfg["observed_options"] = options[:30]
+                        dirty = True
                 missing.append(label)
                 if cfg.get("from") is None:
-                    if "observed_options" not in cfg:
-                        _, options = _fill(testid, "__never_match__")
-                        if options:
-                            cfg["observed_options"] = options[:30]
-                            dirty = True
                     unresolved.append((label, ", ".join(cfg.get("observed_options", [])[:8])))
 
     if learn and dirty:
@@ -1157,7 +1514,10 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
         return {**empty, "error": f"images: {e}"}
 
     try:
-        human_type(page.locator("input[data-testid='title--input']"), title)
+        title_for_vinted = _soften_title_caps(title)
+        if title_for_vinted != title:
+            print(f"    Title softened (too many caps): {title_for_vinted!r}")
+        human_type(page.locator("input[data-testid='title--input']"), title_for_vinted)
         human_delay(0.5, 1)
     except Exception as e:
         print(f"    Error filling title: {e}")
@@ -1176,22 +1536,56 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
 
     cat_id = str(item.get("category_id") or "")
     nav = get_nav(item)
+    cat_ok = False
+    sub_options: list[str] = []
     if nav:
-        select_category(page, nav)
+        # Resolve the nav path to a leaf locally using the Vinted category tree
+        # before touching the browser picker.  This avoids extra browser round-trips
+        # (and DataDome exposure) for items whose Wallapop category maps to an
+        # intermediate Vinted node (e.g. "Dispositivos de red" → Routers/Repetidores/Módems).
+        hints = f"{item.get('title', '')} {item.get('description', '')}".strip()
+        nav = _resolve_nav_to_leaf(nav, hints)
+        cat_ok, sub_options = select_category(page, nav)
         human_delay(0.5, 1.0)
-        set_condition(page)
-        human_delay(0.5, 1.0)
+        if cat_ok:
+            set_condition(page)
+            human_delay(0.5, 1.0)
     else:
         print(f"    WARNING: no category mapping for category_id={cat_id}")
 
-    missing, new_mappings, unresolved = [], [], []
-    if cat_id and nav:
-        missing, new_mappings, unresolved = fill_dynamic_attributes(page, item, cat_id, learn)
+    missing: list[str] = []
+    new_mappings: list[str] = []
+    unresolved: list[tuple[str, str]] = []
 
-    # Shipping package size: Wallapop provides 'up_to_kg' for every item, Vinted requires
-    # selecting one of the weight tiers (5/10/20/30 kg) before publishing.
-    wl_attrs = item.get("attributes") or {}
-    select_package_size(page, wl_attrs.get("up_to_kg"))
+    # Persist sub-options when the nav stopped short of a leaf AND no per-item
+    # match resolved it. Surfaces the options inside category_mapping.json so a
+    # human can pick one by hand, or refine the mapping with a value_map.
+    if sub_options and learn and cat_id:
+        cat_entry = _CATEGORIES.setdefault(cat_id, {})
+        if cat_entry.get("observed_leaf_options") != sub_options:
+            cat_entry["observed_leaf_options"] = sub_options
+            try:
+                _save_categories()
+            except Exception as e:
+                print(f"    WARNING: could not save category_mapping.json: {e}")
+
+    if nav and not cat_ok:
+        # Category picker didn't reach a leaf (partial nav path or click failed).
+        # The picker was dismissed with Escape, so Vinted may have accepted the
+        # partial selection — the form is still accessible.  Record the gap and
+        # fall through to fill whatever attributes are visible.
+        missing.append(f"Category (incomplete nav path: {' > '.join(nav)})")
+
+    if cat_id:
+        m, nm, u = fill_dynamic_attributes(page, item, cat_id, learn)
+        missing.extend(m)
+        new_mappings.extend(nm)
+        unresolved.extend(u)
+
+    # Shipping package size: always pick "Mediano" — see select_package_size() docstring.
+    # Only meaningful once the category is set — otherwise the package cells aren't rendered.
+    if cat_ok:
+        select_package_size(page)
 
     try:
         price_val = float(item.get("price", 0) or 0)
@@ -1248,8 +1642,7 @@ def retry_draft_item(page, item: dict, draft_edit_url: str, draft_item_id: str, 
     if cat_id:
         missing, new_mappings, unresolved = fill_dynamic_attributes(page, item, cat_id, learn)
 
-    wl_attrs = item.get("attributes") or {}
-    select_package_size(page, wl_attrs.get("up_to_kg"))
+    select_package_size(page)
 
     vinted_id, status, errors = publish_or_draft(
         page, fallback_id_seed=str(item.get("id", "")), save_as_draft_on_fail=False
@@ -1269,7 +1662,14 @@ def retry_draft_item(page, item: dict, draft_edit_url: str, draft_item_id: str, 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--limit", type=int, default=None, help="Max number of items to process")
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="Max number of real upload attempts. Items already uploaded or without a "
+             "Vinted mapping are filtered out before this limit applies, so --limit 1 "
+             "runs one actual upload (useful for a smoke test).",
+    )
     parser.add_argument(
         "--no-learn",
         action="store_true",
@@ -1300,21 +1700,42 @@ def main():
     # Inject the dict key (Wallapop item ID) into each item dict for uniform access
     items = [{"id": k, **v} for k, v in items_data.items()]
 
-    # In retry mode, --limit applies to matched drafts, not to the full Wallapop list
-    if args.limit and not args.retry_drafts:
-        items = items[: args.limit]
-
-    # migration.json provides idempotency: items with a vinted_id are skipped on re-runs
+    # migration.json provides idempotency: items already published or saved as draft are
+    # skipped on re-runs. Failed items have no vinted_id and are retried automatically.
     migration = load_migration()
-    already_done = sum(1 for v in migration.values() if v.get("vinted_id"))
-    if already_done:
-        print(f"Items already uploaded (will be skipped): {already_done}")
-    print(f"Items to process: {len(items)}")
 
     published = 0
     drafted = 0
     failed = 0
     unmapped: list[tuple[str, str, str]] = []  # (item_id, title, category_id) — no Vinted path
+
+    # --retry-drafts has its own filtering (match drafts to Wallapop items), so skip the
+    # pre-filter below. For the normal upload path, drop items that are already uploaded
+    # or have no Vinted category path *before* applying --limit, so --limit N means "N
+    # real upload attempts" rather than "the first N entries in downloaded_items.json"
+    # (which is useless once migration.json has entries).
+    if not args.retry_drafts:
+        already_done = 0
+        pending: list[dict] = []
+        for item in items:
+            item_id = item.get("id", "")
+            prev = migration.get(item_id, {}) if item_id else {}
+            if prev.get("vinted_id") and migration_status(prev) in ("published", "draft"):
+                already_done += 1
+                continue
+            if get_nav(item) is None:
+                unmapped.append((item_id, item.get("title", ""), item.get("category_id", "?")))
+                continue
+            pending.append(item)
+        if already_done:
+            print(f"Items already uploaded (will be skipped): {already_done}")
+        if unmapped:
+            print(f"Items without Vinted mapping (will be skipped): {len(unmapped)}")
+        if args.limit:
+            pending = pending[: args.limit]
+        items = pending
+        print(f"Items to process: {len(items)}")
+
     drafts_summary: list[tuple[str, str, list[str]]] = []  # (cat_id, title, missing)
     all_new_mappings: list[tuple[str, str]] = []  # (cat_id, "Label ← key")
     all_unresolved: list[tuple[str, str, str]] = []  # (cat_id, label, options_preview)
@@ -1476,23 +1897,12 @@ def main():
                     print(f"  [{cat}] {label!r}  options: {opts or '(none)'}")
             return
 
+        # Already-uploaded and unmapped items are filtered out above, so every entry
+        # in `items` here is a real upload attempt.
         for i, item in enumerate(items):
             item_id = item.get("id", "")
             title = item.get("title", item_id or f"item-{i+1}")
             print(f"\n[{i+1}/{len(items)}] {title}")
-
-            prev = migration.get(item_id, {}) if item_id else {}
-            if prev.get("vinted_id") and migration_status(prev) in ("published", "draft"):
-                print("  Already uploaded, skipping.")
-                continue
-
-            # Skip items whose category has no Vinted path yet (vinted=null in category_mapping.json)
-            nav = get_nav(item)
-            if nav is None:
-                cat_id = item.get("category_id", "?")
-                print(f"  No Vinted mapping for category_id={cat_id} — skipping.")
-                unmapped.append((item_id, title, cat_id))
-                continue
 
             try:
                 result = upload_item(page, item, learn=not args.no_learn, visible=args.visible)
