@@ -113,19 +113,16 @@ def _normalize_label(s: str) -> str:
     return re.sub(r"\s+", " ", s).strip()
 
 
-def _soften_title_caps(title: str, threshold: float = 0.3) -> str:
-    """Lowercase titles that exceed an uppercase ratio Vinted's validator rejects.
+def _soften_title_caps(title: str) -> str:
+    """Always lowercase titles (with first letter capitalised) for Vinted's validator.
 
-    Vinted refuses titles with too many uppercase letters ("El título contiene demasiadas
-    mayúsculas"). The exact threshold is undocumented; 30% is conservative enough to catch
-    "Diskete MS-DOS" while leaving normal title-case alone. Capitalises the first letter
-    so the result still reads naturally instead of being fully lowercase.
+    Vinted rejects titles with "too many uppercase letters" ("El título contiene demasiadas
+    mayúsculas") and the threshold is conservative enough that even mixed-case titles like
+    "Libros SUSE LINUX oficial certificación" trip it. Rather than guess the exact ratio,
+    we just lowercase every title — Vinted's UI capitalises display anyway. The user can
+    re-edit the title in the draft if the casing matters for a specific listing.
     """
-    letters = [c for c in title if c.isalpha()]
-    if not letters:
-        return title
-    upper = sum(1 for c in letters if c.isupper())
-    if upper / len(letters) <= threshold:
+    if not title:
         return title
     return title.lower().capitalize()
 
