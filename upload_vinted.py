@@ -1358,7 +1358,19 @@ def fill_dynamic_attributes(
         if not testid or "condition" in testid:
             continue  # condition already handled by set_condition()
         key = _testid_to_key(testid)
-        cfg = attrs_cfg.get(key)
+        # Common attributes (Marca, Talla, Color) appear in every category Vinted exposes
+        # them in. Resolve them on the fly via LABEL_ALIASES without persisting per-category —
+        # otherwise category_mapping.json gets polluted with redundant 'Marca ← brand' entries
+        # for every new category we touch.
+        norm_label = _normalize_label(label)
+        is_common = norm_label in {"marca", "talla", "color"}
+        if is_common:
+            from_key = _label_to_wallapop_key(label) or _label_to_wallapop_key(key)
+            cfg = {"label": label, "from": from_key, "kind": kind}
+            if norm_label == "marca":
+                cfg["fallback"] = "no_brand"
+        else:
+            cfg = attrs_cfg.get(key)
 
         # First encounter: try to resolve against Wallapop attrs and record in config
         if cfg is None:
@@ -1547,11 +1559,14 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
         nav = _resolve_nav_to_leaf(nav, hints)
         cat_ok, sub_options = select_category(page, nav)
         human_delay(0.5, 1.0)
-        if cat_ok:
-            set_condition(page)
-            human_delay(0.5, 1.0)
     else:
         print(f"    WARNING: no category mapping for category_id={cat_id}")
+
+    # Estado is a common Vinted attribute — try regardless of cat_ok. Vinted exposes it
+    # as soon as a category (even an intermediate one) is selected. set_condition() is
+    # a silent no-op if the field isn't visible, so it's safe to call unconditionally.
+    set_condition(page)
+    human_delay(0.5, 1.0)
 
     missing: list[str] = []
     new_mappings: list[str] = []
@@ -1583,9 +1598,8 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
         unresolved.extend(u)
 
     # Shipping package size: always pick "Mediano" — see select_package_size() docstring.
-    # Only meaningful once the category is set — otherwise the package cells aren't rendered.
-    if cat_ok:
-        select_package_size(page)
+    # Common Vinted requirement; called unconditionally (silent no-op if cells aren't rendered).
+    select_package_size(page)
 
     try:
         price_val = float(item.get("price", 0) or 0)

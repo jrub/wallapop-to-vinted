@@ -258,7 +258,8 @@
     "vinted": [
       "Electrónica",
       "Ordenadores y accesorios",
-      "Piezas y componentes de ordenadores"
+      "Piezas y componentes de ordenadores",
+      "Dispositivos de almacenamiento interno"
     ],
     "attributes": {
       "brand_select_dropdown_input": {
@@ -397,7 +398,15 @@
       "Hobbies y coleccionismo",
       "Cartas coleccionables"
     ],
-    "attributes": {}
+    "attributes": {},
+    "observed_leaf_options": [
+      "Cartas coleccionables individuales",
+      "Sobres de cartas",
+      "Cajas de cartas",
+      "Barajas de cartas",
+      "Lotes de cartas coleccionables",
+      "Láminas de cartas sin cortar"
+    ]
   },
   "24076": {
     "name": "Libros informática y tecnología",
