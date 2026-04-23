@@ -271,6 +271,12 @@ def process_item(item: dict) -> dict | None:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=None, help="Process only the first N new items")
+    parser.add_argument(
+        "--include-in-person",
+        action="store_true",
+        help="Include items marked 'Sólo venta en persona' on Wallapop. They will be uploaded "
+             "to Vinted as shipping items (Vinted has no in-person sale option).",
+    )
     args = parser.parse_args()
 
     if not USER_SLUG:
@@ -303,6 +309,30 @@ def main():
 
     new_items = [it for it in all_items if it.get("id") not in fresh_ids]
     print(f"New or stale items to process: {len(new_items)}")
+
+    # Vinted has no in-person sale option — every listing is shipped. Wallapop's
+    # "Sólo venta en persona" badge surfaces in the API as shipping.user_allows_shipping=false.
+    # Detect those before downloading any images so the user can decide whether to skip them
+    # or include them as shipping items via --include-in-person.
+    in_person = [
+        it for it in new_items
+        if not (it.get("shipping") or {}).get("user_allows_shipping", True)
+    ]
+    if in_person and not args.include_in_person:
+        print("\nWARNING: the following items are marked 'Sólo venta en persona' on Wallapop:")
+        for it in in_person:
+            print(f"  - {it.get('title', '?')}  ({it.get('id', '?')})")
+        print(
+            "\nVinted only supports shipped sales. Re-run with --include-in-person to upload "
+            "them anyway (they will be listed as shipping items on Vinted)."
+        )
+        # Drop them from the queue so the rest can still be processed.
+        in_person_ids = {it.get("id") for it in in_person}
+        new_items = [it for it in new_items if it.get("id") not in in_person_ids]
+        if not new_items:
+            sys.exit(0)
+    elif in_person:
+        print(f"\nIncluding {len(in_person)} 'Sólo venta en persona' item(s) as shipping items.")
 
     if args.limit:
         new_items = new_items[: args.limit]
