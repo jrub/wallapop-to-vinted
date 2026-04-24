@@ -31,6 +31,7 @@ python -m venv .venv
 source .venv/bin/activate
 
 pip install -r requirements.txt
+pip install -r requirements-dev.txt  # optional, only to run the test suite
 patchright install chromium
 
 cp .env.example .env
