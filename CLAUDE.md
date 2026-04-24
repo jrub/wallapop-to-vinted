@@ -122,12 +122,39 @@ Maps Wallapop `category_id` → Vinted category tree navigation path plus per-ca
 ## Next Steps
 
 1. **Contribution recipe for category/attribute mappings.** Document the workflow for users who want to extend `data/category_mapping.json`: how to find a Wallapop `category_id`, how to navigate the Vinted picker and record the nav path, how to resolve `from: null` entries using the persisted `observed_options`, and the convention for `value_map` when vocabularies diverge. Land this as a `CONTRIBUTING.md` or a dedicated section in the README.
-2. **Refactor: Page Object + domain modules.** `upload_vinted.py` is over 1500 lines and mixes DOM selectors with domain logic. Split along two axes:
-   - **Entry point** (`wallapop-to-vinted.py` in the repo root) — parses CLI args, loads `.env`, and acts as the orchestrator: drives the extract/upload flow directly by calling into the page objects and domain modules. No separate `runner.py` layer.
-   - **Page Object layer** (`vinted/pages/*.py`) — one module per page: `login.py`, `new_item.py`, `edit_draft.py`, `profile.py`. Each exposes domain methods (`fill_title`, `select_condition`, `publish`) and hides the selectors.
-   - **Domain layer** (`domain/*.py`) — `categories.py`, `migration.py`, `mapping.py`: pure logic on JSON state, no browser imports.
+2. **Refactor: Page Object + domain modules — TDD-driven, in 5 ordered phases.** `upload_vinted.py` is over 1500 lines and mixes DOM selectors with domain logic. Without tests this isn't a refactor, it's a rewrite — the upload flow is too tangled to move safely in one shot. Plan: write tests first for each layer, then move code, layer by layer.
+
+   **Target architecture:**
+   - **Entry point** (`wallapop-to-vinted.py` at the repo root) — parses CLI args, loads `.env`, drives the extract/upload flow directly by calling into the page objects and domain modules. No separate `runner.py`.
+   - **Page Object layer** (`vinted/pages/*.py`) — one module per page: `login.py`, `new_item.py`, `edit_draft.py`, `profile.py`. Domain methods (`fill_title`, `select_condition`, `publish`) hide the selectors.
+   - **Domain layer** (`domain/*.py`) — `categories.py`, `migration.py`, `mapping.py`, `text.py`: pure logic on JSON/strings, no browser imports.
    - **Session/transport** (`vinted/session.py`, `vinted/errors.py`) — Patchright bootstrap, JWT cookie extraction, error taxonomy.
    - **Wallapop side** (`wallapop/items.py`, `wallapop/matching.py`) — extraction and fuzzy label matching, decoupled from the uploader.
+
+   **Tooling:** add `pytest` + `pytest-mock` (and either `responses` or `respx` for HTTP mocking) to `requirements-dev.txt`. Tests under `tests/`, mirroring the module layout.
+
+   **Phase 1 — Domain layer tests + extraction.** Move pure functions out of `upload_vinted.py` into `domain/`. Cover *before* moving:
+   - `domain/text.py`: `_normalize_label`, `_stem`, `_soften_title_caps`, `_find_option_match` (incl. strict mode).
+   - `domain/categories.py`: `_resolve_nav_to_leaf`, `_pick_leaf_from_hints`, `_VINTED_BY_PATH` builder.
+   - `domain/mapping.py`: `_guess_wallapop_key`, `_label_to_wallapop_key`, `LABEL_ALIASES`, `COLOR_EN_TO_ES`, the always-fill rule for Marca/Talla/Color.
+   - `domain/migration.py`: load/save logic, the published/draft skip rule, `--limit` semantics.
+
+   Tests use small in-memory dicts. No browser, no network. This is the cheapest layer to cover and the one that justifies the whole refactor.
+
+   **Phase 2 — Wallapop side tests + extraction.** Move `extract_wallapop.py` logic into `wallapop/items.py`. Mock HTTP with `responses`; reuse the current `data/downloaded_items.json` shape as fixture base. Cover:
+   - `process_item` — output shape, image deduplication, `shipping_allowed` propagation.
+   - `fetch_items` — pagination cursor, early-stop on known IDs, circular detection, `MAX_PAGES` cap.
+   - In-person filter (`shipping.user_allows_shipping=false`) and `--include-in-person`.
+
+   **Phase 3 — Vinted session + error taxonomy.** Extract `vinted/session.py` (Patchright bootstrap, JWT cookie extraction, captcha detection) and `vinted/errors.py` (error classes raised on captcha, login failure, publish rejection). Tests are minimal here — mostly isolating side effects and asserting that the captcha detector trips on a fixture URL/iframe.
+
+   **Phase 4 — Page object layer with HTML snapshots.** Capture real-but-anonymized Vinted HTML for the critical surfaces (`new_item` form, draft edit form, publish error toast) into `tests/fixtures/vinted_html/`. Page objects (`vinted/pages/new_item.py`, `edit_draft.py`, `login.py`, `profile.py`) take a `page` (Playwright `Page` or a stand-in) and expose verbs: `fill_title`, `select_category`, `select_condition`, `select_package_size`, `set_brand`, `publish`, `save_as_draft`. Tests:
+   - **Selector tests** load each fixture HTML into a real Playwright page (via `page.set_content`) and assert that each verb finds the right element. Detects DOM changes immediately without a live Vinted session.
+   - The current behaviours we *know* break (package-size radio not propagating, `scan_dynamic_fields` missing book inputs) get a failing test first, then the fix.
+
+   **Phase 5 — Orchestrator + e2e dry-run.** Build `wallapop-to-vinted.py` as the entry point. Wire the modules with dependency injection (page objects accept the page, domain modules accept dicts, the orchestrator owns the flow). Final test: an end-to-end "dry-run" that uses the real domain layer + a fake Wallapop client returning fixture data + a fake Vinted page object — asserts that the orchestrator routes items correctly through `published` / `draft` / `unmapped` / `in-person-skipped` buckets.
+
+   **Risk control:** every phase ships as one commit, with tests passing before and after. If a phase breaks the live upload flow, revert the single commit. Don't move on to the next phase until the current one is green.
 3. **Pre-flight: required Vinted fields missing on Wallapop.** Some Vinted categories require fields that Wallapop treats as optional or doesn't expose at all — most prominently **ISBN for any item under "Libros"**, but the same pattern will appear for other category-specific musts as we hit them. Plan: before the upload loop, the orchestrator scans every queued item against a per-category required-field manifest (e.g. books → `isbn`), and prompts the user in the CLI for the missing values, persisting them back into `downloaded_items.json` so re-runs don't re-ask. Items the user skips are left in the queue with a `skip_reason` and excluded from the upload run. Same UX channel as the interactive leaf resolution in the next item.
 4. **Interactive leaf resolution in the orchestrator.** Some Wallapop categories are genuinely ambiguous: a single `category_id` covers items that belong to different Vinted leaves (e.g. `10304 "Componentes y piezas de ordenador"` can be RAM, a GPU, or a floppy disk — three different Vinted leaves under the same parent). The current `_resolve_nav_to_leaf` stemmer can handle unambiguous cases (RAM description contains "memoria") but fails when the item text gives no hint (a floppy disk described only as "diskete MS-DOS" doesn't contain the word "almacenamiento").
 
