@@ -18,6 +18,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from patchright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
 
+from domain.categories import build_path_index, resolve_nav_to_leaf
 from domain.text import find_option_match, normalize_label, soften_title_caps, stem
 
 load_dotenv()
@@ -158,7 +159,7 @@ _VINTED_BY_PATH: dict[tuple, dict] = {}
 if VINTED_CATEGORIES_PATH.exists():
     with open(VINTED_CATEGORIES_PATH, encoding="utf-8") as _f:
         _VINTED_NODES = json.load(_f)
-    _VINTED_BY_PATH = {tuple(n["path"]): n for n in _VINTED_NODES}
+    _VINTED_BY_PATH = build_path_index(_VINTED_NODES)
 else:
     print(
         f"WARNING: {VINTED_CATEGORIES_PATH} not found. "
@@ -232,7 +233,7 @@ def select_category(page, nav: list) -> tuple[bool, list[str]]:
     :text-is() matches the exact label without substring false positives.
 
     Expects `nav` to already be a fully-resolved leaf path (see
-    _resolve_nav_to_leaf).  If Vinted still shows sub-options after clicking all
+    resolve_nav_to_leaf).  If Vinted still shows sub-options after clicking all
     steps (the nav is one step short of a leaf), those options are returned so
     the caller can persist them to category_mapping.json for manual review.
 
@@ -919,77 +920,6 @@ def _abort_if_captcha(page, visible: bool) -> None:
     sys.exit(2)
 
 
-def _pick_leaf_from_hints(sub_options: list[str], hints: str) -> str | None:
-    """Choose a Vinted sub-option whose main keyword appears in the item text.
-
-    For each sub-option we take the longest alphabetic word (the "main" word,
-    typically the category name — 'Repetidores de red' → 'repetidores') and
-    stem it. If exactly one sub-option's stem shows up as a whole word (or
-    stemmed word) in the normalized item hints, we return it. Otherwise None.
-
-    Deliberately strict: we won't auto-pick on an ambiguous match. Anything
-    that's not unambiguous ends up as a draft for the human to finish.
-    """
-    norm_hints = normalize_label(hints)
-    if not norm_hints:
-        return None
-    hint_words = set(norm_hints.split())
-    hint_stems = {stem(w) for w in hint_words}
-
-    matches: list[str] = []
-    for opt in sub_options:
-        words = [w for w in normalize_label(opt).split() if w.isalpha()]
-        if not words:
-            continue
-        main = max(words, key=len)
-        main_stem = stem(main)
-        if main_stem in hint_stems or main_stem in hint_words:
-            matches.append(opt)
-
-    return matches[0] if len(matches) == 1 else None
-
-
-def _resolve_nav_to_leaf(nav: list[str], hints: str) -> list[str]:
-    """Extend a nav path to a Vinted leaf using the local category tree.
-
-    Uses _VINTED_BY_PATH (built from data/vinted_categories.json).  If the file
-    isn't loaded, or the path isn't found, returns nav unchanged.
-
-    If the path lands on an intermediate node (has children), attempts to pick
-    the right child via _pick_leaf_from_hints.  Recurses up to one extra level
-    so it can resolve paths that are two steps short of a leaf (rare but possible).
-
-    Returns the original nav if resolution is ambiguous or the tree is absent.
-    """
-    if not _VINTED_BY_PATH:
-        return nav
-
-    path_key = tuple(nav)
-    node = _VINTED_BY_PATH.get(path_key)
-    if node is None:
-        return nav  # path not found in tree — let select_category fail gracefully
-    if node["is_leaf"]:
-        return nav  # already a leaf, nothing to extend
-
-    # Collect direct children of this node
-    depth = len(nav)
-    children = [
-        n["title"]
-        for n in _VINTED_NODES
-        if len(n["path"]) == depth + 1 and tuple(n["path"][:depth]) == path_key
-    ]
-    if not children:
-        return nav
-
-    picked = _pick_leaf_from_hints(children, hints)
-    if picked is None:
-        return nav
-
-    extended = nav + [picked]
-    # One more level if the picked child is also not a leaf
-    return _resolve_nav_to_leaf(extended, hints)
-
-
 def _save_categories():
     """Persist the in-memory _CATEGORIES dict back to category_mapping.json (atomic write)."""
     CATEGORIES_PATH.write_text(
@@ -1498,7 +1428,9 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
         # (and DataDome exposure) for items whose Wallapop category maps to an
         # intermediate Vinted node (e.g. "Dispositivos de red" → Routers/Repetidores/Módems).
         hints = f"{item.get('title', '')} {item.get('description', '')}".strip()
-        nav = _resolve_nav_to_leaf(nav, hints)
+        nav = resolve_nav_to_leaf(
+            nav, hints, nodes=_VINTED_NODES, path_index=_VINTED_BY_PATH
+        )
         cat_ok, sub_options = select_category(page, nav)
         human_delay(0.5, 1.0)
     else:
