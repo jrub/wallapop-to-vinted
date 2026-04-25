@@ -9,7 +9,6 @@ import sys
 import re
 import json
 import time
-import base64
 import random
 import argparse
 import unicodedata
@@ -31,6 +30,11 @@ from domain.migration import (
     migration_status,
 )
 from domain.text import find_option_match, normalize_label, soften_title_caps, stem
+from vinted.errors import CaptchaDetected
+from vinted.session import (
+    abort_if_captcha as _vinted_abort_if_captcha,
+    user_id_from_jwt_cookie,
+)
 
 load_dotenv()
 
@@ -794,32 +798,25 @@ def login(page, visible: bool = True):
     print(f"  Login OK — {page.url}")
 
 
-def _datadome_present(page) -> bool:
-    """Return True if a DataDome challenge (captcha slider, interstitial) is visible."""
-    try:
-        if "captcha-delivery.com" in page.url:
-            return True
-        if page.locator("iframe[src*='captcha-delivery.com']").count() > 0:
-            return True
-    except Exception:
-        pass
-    return False
-
-
 def _abort_if_captcha(page, visible: bool) -> None:
-    """In headless mode, abort with actionable instructions if DataDome is blocking us.
+    """Translate ``CaptchaDetected`` into the operator-facing exit code.
 
-    In visible mode the user can solve the slider manually, so we just return.
+    The detector and the headless guard live in ``vinted.session``; this
+    wrapper only owns the UI of the abort path (the message printed to the
+    user and the ``sys.exit(2)`` call). Future Page Objects can call
+    ``vinted.session.abort_if_captcha`` directly and decide for themselves
+    how to react to the exception.
     """
-    if visible or not _datadome_present(page):
-        return
-    print()
-    print("ERROR: Vinted has shown a DataDome challenge (captcha).")
-    print("       It can't be solved automatically in headless mode.")
-    print("       Re-run with --visible to solve it once:")
-    print("           python upload_vinted.py --visible")
-    print(f"       The session will be saved to {AUTH_STATE_PATH}; subsequent runs can go back to headless.")
-    sys.exit(2)
+    try:
+        _vinted_abort_if_captcha(page, visible)
+    except CaptchaDetected:
+        print()
+        print("ERROR: Vinted has shown a DataDome challenge (captcha).")
+        print("       It can't be solved automatically in headless mode.")
+        print("       Re-run with --visible to solve it once:")
+        print("           python upload_vinted.py --visible")
+        print(f"       The session will be saved to {AUTH_STATE_PATH}; subsequent runs can go back to headless.")
+        sys.exit(2)
 
 
 def _save_categories():
@@ -827,33 +824,6 @@ def _save_categories():
     CATEGORIES_PATH.write_text(
         json.dumps(_CATEGORIES, indent=2, ensure_ascii=False), encoding="utf-8"
     )
-
-
-def _user_id_from_jwt_cookie(page) -> str:
-    """Extract the Vinted user id from the session's JWT cookie.
-
-    Vinted stores JWTs in `access_token_web` / `refresh_token_web`; the payload's
-    `sub` claim is the numeric user id. This is the only DOM/API-free source and
-    survives DataDome blocking our XHR calls.
-    """
-    try:
-        cookies = page.context.cookies()
-    except Exception:
-        return ""
-    for name in ("access_token_web", "refresh_token_web"):
-        tok = next((c["value"] for c in cookies if c["name"] == name), "")
-        if not tok or tok.count(".") != 2:
-            continue
-        payload_b64 = tok.split(".")[1]
-        payload_b64 += "=" * (-len(payload_b64) % 4)
-        try:
-            payload = json.loads(base64.urlsafe_b64decode(payload_b64))
-        except Exception:
-            continue
-        sub = str(payload.get("sub") or "")
-        if sub.isdigit():
-            return sub
-    return ""
 
 
 def get_member_url(page) -> str:
@@ -865,7 +835,7 @@ def get_member_url(page) -> str:
     reliable source is the session JWT cookie (`access_token_web`), whose `sub`
     claim is the numeric user id. We use that first, falling back to the URL path.
     """
-    uid = _user_id_from_jwt_cookie(page)
+    uid = user_id_from_jwt_cookie(page)
     if uid:
         return f"{BASE_URL}/member/{uid}"
     m = re.search(r"/member/(\d+)", page.url)
