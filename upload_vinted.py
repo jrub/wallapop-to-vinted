@@ -13,7 +13,6 @@ import base64
 import random
 import argparse
 import unicodedata
-from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
 from patchright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
@@ -24,6 +23,12 @@ from domain.mapping import (
     LABEL_ALIASES,
     guess_wallapop_key,
     label_to_wallapop_key,
+)
+from domain.migration import (
+    filter_pending,
+    load_migration as _load_migration,
+    mark_migrated as _mark_migrated,
+    migration_status,
 )
 from domain.text import find_option_match, normalize_label, soften_title_caps, stem
 
@@ -84,9 +89,8 @@ def get_nav(item: dict) -> list | None:
 
 
 def load_migration() -> dict:
-    if not MIGRATION_PATH.exists():
-        return {}
-    return json.loads(MIGRATION_PATH.read_text(encoding="utf-8"))
+    """Thin wrapper that binds the canonical MIGRATION_PATH to domain.migration.load_migration."""
+    return _load_migration(MIGRATION_PATH)
 
 
 def mark_migrated(
@@ -97,22 +101,10 @@ def mark_migrated(
     missing_fields: list[str] | None = None,
     error: str = "",
 ):
-    """Record a successful upload in migration.json. Written after every item for crash safety."""
-    migration.setdefault(item_id, {}).update({
-        "vinted_id": vinted_id,
-        "status": status,
-        "missing_fields": missing_fields or [],
-        "last_error": error,
-        "uploaded_at": datetime.utcnow().isoformat(),
-    })
-    MIGRATION_PATH.write_text(
-        json.dumps(migration, indent=2, ensure_ascii=False), encoding="utf-8"
+    """Thin wrapper that binds the canonical MIGRATION_PATH to domain.migration.mark_migrated."""
+    _mark_migrated(
+        migration, MIGRATION_PATH, item_id, vinted_id, status, missing_fields, error
     )
-
-
-def migration_status(entry: dict) -> str:
-    """Read status from a migration.json entry, falling back to the old 'vinted_status' key."""
-    return entry.get("status") or entry.get("vinted_status") or ""
 
 
 def human_delay(min_s=0.5, max_s=1.5):
@@ -1505,32 +1497,24 @@ def main():
     published = 0
     drafted = 0
     failed = 0
-    unmapped: list[tuple[str, str, str]] = []  # (item_id, title, category_id) — no Vinted path
 
-    # --retry-drafts has its own filtering (match drafts to Wallapop items), so skip the
-    # pre-filter below. For the normal upload path, drop items that are already uploaded
-    # or have no Vinted category path *before* applying --limit, so --limit N means "N
-    # real upload attempts" rather than "the first N entries in downloaded_items.json"
-    # (which is useless once migration.json has entries).
+    # --retry-drafts has its own filtering (match drafts to Wallapop items) — filter_pending
+    # honours the flag and returns items unchanged in that case. For the normal upload path,
+    # drop items that are already uploaded or have no Vinted category path *before* applying
+    # --limit, so --limit N means "N real upload attempts" rather than "the first N entries
+    # in downloaded_items.json" (which is useless once migration.json has entries).
+    pending, already_done, unmapped = filter_pending(
+        items,
+        migration,
+        get_nav,
+        retry_drafts=args.retry_drafts,
+        limit=args.limit or 0,
+    )
     if not args.retry_drafts:
-        already_done = 0
-        pending: list[dict] = []
-        for item in items:
-            item_id = item.get("id", "")
-            prev = migration.get(item_id, {}) if item_id else {}
-            if prev.get("vinted_id") and migration_status(prev) in ("published", "draft"):
-                already_done += 1
-                continue
-            if get_nav(item) is None:
-                unmapped.append((item_id, item.get("title", ""), item.get("category_id", "?")))
-                continue
-            pending.append(item)
         if already_done:
             print(f"Items already uploaded (will be skipped): {already_done}")
         if unmapped:
             print(f"Items without Vinted mapping (will be skipped): {len(unmapped)}")
-        if args.limit:
-            pending = pending[: args.limit]
         items = pending
         print(f"Items to process: {len(items)}")
 
