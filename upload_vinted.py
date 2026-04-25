@@ -33,6 +33,7 @@ from domain.text import find_option_match, normalize_label, soften_title_caps, s
 from vinted.errors import CaptchaDetected
 from vinted.session import (
     abort_if_captcha as _vinted_abort_if_captcha,
+    build_session,
     user_id_from_jwt_cookie,
 )
 
@@ -1493,40 +1494,13 @@ def main():
     all_unresolved: list[tuple[str, str, str]] = []  # (cat_id, label, options_preview)
 
     with sync_playwright() as p:
-        # Default to headless; --visible is for the first login (solve DataDome slider) or
-        # if the saved session in data/auth_state.json expires and a new captcha appears.
-        # Patchright is used instead of stock Playwright for bot-detection evasion
-        # (patches Runtime.enable CDP signal, navigator.webdriver, and --enable-automation).
-        browser = p.chromium.launch(
-            headless=not args.visible,
-            args=["--disable-blink-features=AutomationControlled"],
-        )
-
-        ctx_kwargs = dict(
-            viewport={"width": 1440, "height": 900},
-            locale="es-ES",
-            timezone_id="Europe/Madrid",
-        )
+        # --visible is for the first login (solve DataDome slider) or if the saved session
+        # in data/auth_state.json expires and a new captcha appears; default is headless.
         if AUTH_STATE_PATH.exists():
-            ctx_kwargs["storage_state"] = str(AUTH_STATE_PATH)
             print("Saved session found.")
-
-        context = browser.new_context(**ctx_kwargs)
-
-        # Patch remaining JS fingerprinting signals not covered by Patchright
-        context.add_init_script("""
-            Object.defineProperty(navigator, 'languages', { get: () => ['es-ES', 'es'] });
-            Object.defineProperty(navigator, 'plugins', {
-                get: () => { const p = [1,2,3,4,5]; p.item = () => null; return p; }
-            });
-            const origQuery = window.navigator.permissions.query;
-            window.navigator.permissions.query = (params) =>
-                params.name === 'notifications'
-                    ? Promise.resolve({ state: Notification.permission })
-                    : origQuery(params);
-        """)
-
-        page = context.new_page()
+        browser, context, page = build_session(
+            p, visible=args.visible, auth_state_path=AUTH_STATE_PATH
+        )
 
         # Navigate to /items/new to probe session state before the upload loop
         _ITEMS_NEW = f"{BASE_URL}/items/new"
