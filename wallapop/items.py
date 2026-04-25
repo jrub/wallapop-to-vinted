@@ -11,11 +11,145 @@ Split into three layers so each can be tested in isolation:
   Phase 2 plan moves it here).
 """
 
+import json
+import re
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Callable
 
 import requests
+
+
+# Safety cap on cursor-based pagination: 20 pages × 40 items = 800 items max
+MAX_PAGES = 20
+
+
+def parse_user_id_from_html(html: str) -> str:
+    """Extract the numeric Wallapop user id from a profile page's HTML.
+
+    Wallapop embeds full page state in a ``<script id="__NEXT_DATA__">``
+    tag. The numeric id is required for the items API endpoint but is not
+    visible in the URL (only the slug is). Pure helper so the
+    "missing script" case can be tested without an HTTP fixture.
+    """
+    match = re.search(
+        r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, re.DOTALL
+    )
+    if not match:
+        raise ValueError("__NEXT_DATA__ not found in profile page")
+    data = json.loads(match.group(1))
+    return data["props"]["pageProps"]["user"]["id"]
+
+
+def resolve_internal_id(slug: str, *, session: requests.Session) -> str:
+    """Resolve the numeric Wallapop user id from a profile URL slug."""
+    url = f"https://es.wallapop.com/user/{slug}"
+    print(f"  Slug: {slug}")
+    print(f"  URL:  {url}")
+    resp = session.get(
+        url,
+        headers={"Accept": "text/html,application/xhtml+xml"},
+        timeout=15,
+    )
+    resp.raise_for_status()
+    return parse_user_id_from_html(resp.text)
+
+
+def fetch_items(
+    user_id: str,
+    *,
+    session: requests.Session,
+    max_items: int | None = None,
+    stop_when_known: set | None = None,
+    max_pages: int = MAX_PAGES,
+) -> list[dict]:
+    """Fetch published listings for ``user_id`` via cursor-based pagination.
+
+    Stops on any of: empty batch, non-200 response (returns partial), full
+    batch already in ``stop_when_known`` (Wallapop returns items
+    newest-first so a fully-known batch means there's nothing new),
+    circular pagination (cursor looped back to seen ids), ``max_items``
+    reached, ``max_pages`` cap, or empty/missing next-cursor.
+    """
+    items: list[dict] = []
+    cursor = None
+    page_size = 40
+    seen_ids: set[str] = set()
+    page = 0
+
+    while True:
+        url = (
+            f"https://api.wallapop.com/api/v3/users/{user_id}/items"
+            f"?status=published&limit={page_size}"
+        )
+        if cursor:
+            url += f"&since_cursor={cursor}"
+
+        resp = session.get(url, timeout=15)
+        if resp.status_code != 200:
+            print(f"  Error {resp.status_code}: {resp.text[:200]}")
+            break
+
+        data = resp.json()
+
+        # Log response shape on the first page so an API change surfaces early
+        if page == 0:
+            top_keys = list(data.keys())
+            print(f"  [API] response keys: {top_keys}")
+            batch_raw = data.get(
+                "data", data.get("search_objects", data.get("items", []))
+            )
+            if batch_raw and isinstance(batch_raw, list):
+                sample = batch_raw[0]
+                print(f"  [API] item keys: {list(sample.keys())[:12]}")
+                status_field = sample.get("status") or sample.get("state") or "?"
+                owner_id = sample.get("seller_id") or sample.get("user_id") or "?"
+                print(
+                    f"  [API] sample — status: {status_field!r}  "
+                    f"owner_id: {owner_id!r}  expected: {user_id!r}"
+                )
+
+        batch = data.get("data", [])
+        if not batch:
+            print("  Empty batch, end of pagination.")
+            break
+
+        batch_ids = {it.get("id") for it in batch if it.get("id")}
+
+        if batch_ids & seen_ids:
+            print(f"  Circular pagination detected on page {page + 1}, stopping.")
+            break
+        seen_ids |= batch_ids
+
+        items.extend(batch)
+        page += 1
+
+        if max_items and len(items) >= max_items:
+            items = items[:max_items]
+            break
+
+        if stop_when_known and batch_ids.issubset(stop_when_known):
+            print(
+                f"  Whole batch already known (page {page}), stopping pagination."
+            )
+            break
+
+        if page >= max_pages:
+            print(
+                f"  WARNING: hit the {max_pages}-page limit ({len(items)} items). "
+                f"Raise max_pages if your profile has more than "
+                f"{max_pages * page_size}."
+            )
+            break
+
+        cursor = data.get("meta", {}).get("next")
+        if not cursor or len(batch) < page_size:
+            break
+
+        time.sleep(0.5)
+
+    return items
 
 
 def fetch_leaf_category_id(item_id: str, *, session: requests.Session) -> str:
