@@ -44,9 +44,14 @@ wallapop/                     # Wallapop-side extraction layer — see Next Step
   items.py                    # fetch_items, resolve_internal_id, parse_user_id_from_html,
                               # process_item, build_item_record, download_item_images,
                               # filter_in_person, ensure_category_mapped
+vinted/                       # Vinted session + error taxonomy — see Next Steps #2 phase 3
+  session.py                  # build_session, is_captcha_present, abort_if_captcha,
+                              # user_id_from_jwt_cookie
+  errors.py                   # VintedError, CaptchaDetected, LoginFailed, PublishRejected
 tests/                        # pytest suite (pip install -r requirements-dev.txt)
   domain/                     # mirrors domain/ — one test module per source module
   wallapop/                   # mirrors wallapop/ — items / pagination / filtering split by topic
+  vinted/                     # mirrors vinted/ — errors + session helpers
 docs/
   adr/                        # Architecture Decision Records (Nygard format) — versioned
   PLANS.md                    # local index of plans under ~/.claude/plans/ — gitignored, per-machine
@@ -161,7 +166,10 @@ Maps Wallapop `category_id` → Vinted category tree navigation path plus per-ca
    - Tests cover: cursor pagination (two-page concatenation, early-stop on known ids, circular detection, max_pages cap, max_items cap, empty cursor, partial results on non-200), `__NEXT_DATA__` parsing (extra attrs, multiline body, missing script raises), the in-person classifier (all four flag-vs-classification branches), the stub writer (idempotency + mtime preservation, fallback name, missing-file no-op).
    - **Tooling shipped alongside.** `Makefile` (`make install-dev / test / smoke`) plus matching whitelist in `.claude/settings.local.json`. `docs/adr/` for architecture decisions (Nygard format, ADR-0001 retrospective for phase 1, ADR-0002 for this phase). `docs/PLANS.md` (gitignored) indexes the hashed plans under `~/.claude/plans/`.
 
-   **Phase 3 — Vinted session + error taxonomy.** Extract `vinted/session.py` (Patchright bootstrap, JWT cookie extraction, captcha detection) and `vinted/errors.py` (error classes raised on captcha, login failure, publish rejection). Tests are minimal here — mostly isolating side effects and asserting that the captcha detector trips on a fixture URL/iframe.
+   **Phase 3 — Vinted session + error taxonomy. ✅ DONE (2026-04-25).** Patchright bootstrap, captcha detector, and JWT-cookie user-id helper moved to `vinted/session.py` with explicit DI; error taxonomy introduced in `vinted/errors.py` (27 new tests, 149 total). `upload_vinted.py` keeps a thin `_abort_if_captcha` wrapper that translates `CaptchaDetected` into the operator-facing `sys.exit(2)`.
+   - `vinted/session.py` exports: `build_session` (Patchright launch + context with patched fingerprint init script + restored `auth_state.json`), `is_captcha_present` (iframe-only — the dead `"captcha-delivery.com" in page.url` branch was removed), `abort_if_captcha` (raises `CaptchaDetected` in headless mode), `user_id_from_jwt_cookie` (JWT `sub` claim from `access_token_web` / `refresh_token_web`).
+   - `vinted/errors.py` exports: `VintedError` root + `CaptchaDetected(url=...)`, `LoginFailed(reason=..., url=...)`, `PublishRejected(errors=[...])`.
+   - Tests cover: detector behaviour (iframe present, absent, locator exception swallowed), `abort_if_captcha` (visible bypass, headless raise with URL), JWT helper (access vs refresh fallback, malformed token skip, non-numeric `sub`, cookies-call exception). `build_session` is verified by `make smoke` and a real `--limit 1 --visible` run — launching Chromium under pytest would couple the unit suite to a binary install for no extra coverage.
 
    **Phase 4 — Page object layer with HTML snapshots.** Capture real-but-anonymized Vinted HTML for the critical surfaces (`new_item` form, draft edit form, publish error toast) into `tests/fixtures/vinted_html/`. Page objects (`vinted/pages/new_item.py`, `edit_draft.py`, `login.py`, `profile.py`) take a `page` (Playwright `Page` or a stand-in) and expose verbs: `fill_title`, `select_category`, `select_condition`, `select_package_size`, `set_brand`, `publish`, `save_as_draft`. Tests:
    - **Selector tests** load each fixture HTML into a real Playwright page (via `page.set_content`) and assert that each verb finds the right element. Detects DOM changes immediately without a live Vinted session.

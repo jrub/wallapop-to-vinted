@@ -1,7 +1,7 @@
 # 3. Extract the Vinted session layer + introduce error taxonomy
 
 Date: 2026-04-25
-Status: Proposed
+Status: Accepted
 
 ## Context
 
