@@ -1,7 +1,7 @@
 # 2. Extract Wallapop side into `wallapop/items.py`
 
 Date: 2026-04-25
-Status: Proposed
+Status: Accepted
 
 ## Context
 
