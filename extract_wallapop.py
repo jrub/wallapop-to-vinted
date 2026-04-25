@@ -15,9 +15,10 @@ import json
 import time
 import argparse
 import requests
-from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
+
+from wallapop.items import process_item
 
 load_dotenv()
 
@@ -156,40 +157,6 @@ def fetch_items(user_id: str, max_items: int = None, stop_when_all_known: set = 
     return items
 
 
-def fetch_leaf_category_id(item_id: str) -> str:
-    """Fetch the leaf category ID from the item detail endpoint.
-
-    The list endpoint returns only the top-level category_id (e.g. 24200 for all electronics).
-    The detail endpoint exposes a 'taxonomy' array with the full hierarchy; the last entry
-    is the most specific subcategory (e.g. 10175 for 'Teléfonos vintage').
-    """
-    try:
-        resp = requests.get(
-            f"https://api.wallapop.com/api/v3/items/{item_id}",
-            headers=HEADERS,
-            timeout=15,
-        )
-        if resp.status_code == 200:
-            taxonomy = resp.json().get("taxonomy", [])
-            if taxonomy:
-                return str(taxonomy[-1]["id"])
-    except Exception as e:
-        print(f"    WARNING: could not fetch taxonomy for {item_id}: {e}")
-    return ""
-
-
-def download_image(url: str, dest: Path) -> bool:
-    """Download a single image to disk. Returns True on success."""
-    try:
-        resp = requests.get(url, headers=HEADERS, timeout=15)
-        if resp.status_code == 200:
-            dest.write_bytes(resp.content)
-            return True
-    except Exception as e:
-        print(f"    Error downloading {url}: {e}")
-    return False
-
-
 def ensure_category_mapped(category_id: str) -> None:
     """If category_id is not in category_mapping.json, add a stub entry with vinted=null.
 
@@ -210,64 +177,6 @@ def ensure_category_mapped(category_id: str) -> None:
     print(f"    NOTE: category {category_id} ({name!r}) added to category_mapping.json without a Vinted mapping.")
 
 
-def process_item(item: dict) -> dict | None:
-    """Extract relevant fields from a raw API item dict and download its images.
-
-    Returns None if the item has no ID and must be skipped.
-    Images are stored under data/images/<item_id>/ and referenced by local path.
-    """
-    item_id = item.get("id", "")
-    if not item_id:
-        print("    WARNING: item without ID, skipping.")
-        return None
-    item_dir = IMAGES_DIR / item_id
-    item_dir.mkdir(parents=True, exist_ok=True)
-
-    image_urls = [img.get("urls", {}).get("big", "") for img in item.get("images", [])]
-    local_paths = []
-
-    for i, img_url in enumerate(image_urls):
-        if not img_url:
-            continue
-        ext = img_url.split(".")[-1].split("?")[0] or "jpg"
-        dest = item_dir / f"{i}.{ext}"
-        if dest.exists():
-            local_paths.append(str(dest))
-        elif download_image(img_url, dest):
-            local_paths.append(str(dest))
-            print(f"    Image {i+1}/{len(image_urls)} downloaded")
-
-    price_info = item.get("price", {})
-    shipping = item.get("shipping", {})
-
-    # Flatten all type_attributes into {attr_name: value} — covers condition, size,
-    # color, author, publisher, language, format, and any other category-specific fields.
-    raw_attrs = item.get("type_attributes", {})
-    attributes = {
-        k: v.get("value", "")
-        for k, v in raw_attrs.items()
-        if isinstance(v, dict) and v.get("value") not in (None, "")
-    }
-
-    # The list endpoint returns only the root category_id. Fetch the detail endpoint
-    # to get the leaf subcategory from the taxonomy array.
-    category_id = fetch_leaf_category_id(item_id) or str(item.get("category_id") or "")
-    ensure_category_mapped(category_id)
-
-    return {
-        "title": item.get("title", ""),
-        "description": item.get("description", ""),
-        "price": price_info.get("amount", ""),
-        "currency": price_info.get("currency", "EUR"),
-        "category_id": category_id,
-        "attributes": attributes,  # all category-specific attributes from Wallapop
-        "shipping_allowed": shipping.get("user_allows_shipping", True),
-        "images": local_paths,
-        "url": f"https://es.wallapop.com/item/{item.get('slug', item_id)}",
-        "extracted_at": datetime.utcnow().isoformat(),
-    }
-
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=None, help="Process only the first N new items")
@@ -285,6 +194,12 @@ def main():
 
     DATA_DIR.mkdir(exist_ok=True)
     IMAGES_DIR.mkdir(exist_ok=True)
+
+    # Single Session reused for the per-item HTTP calls in wallapop.items
+    # (taxonomy + image downloads). fetch_items / resolve_internal_id still
+    # use module-level requests.get; they migrate to the session in Step 2.
+    session = requests.Session()
+    session.headers.update(HEADERS)
 
     existing_items = load_items()
     # Items missing the 'attributes' field were extracted before this field was added;
@@ -346,7 +261,12 @@ def main():
         item_id = item.get("id", "?")
         title = item.get("title", "untitled")
         print(f"\n[{i+1}/{len(new_items)}] {title}  (id: {item_id})")
-        row = process_item(item)
+        row = process_item(
+            item,
+            session=session,
+            images_dir=IMAGES_DIR,
+            ensure_mapped=ensure_category_mapped,
+        )
         if row:
             existing_items[item_id] = row
             save_items(existing_items)  # write after each item so a crash doesn't lose progress
