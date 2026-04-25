@@ -13,7 +13,7 @@ entries already exist in ``migration.json``.
 """
 
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
 
@@ -45,7 +45,9 @@ def mark_migrated(
             "status": status,
             "missing_fields": missing_fields or [],
             "last_error": error,
-            "uploaded_at": datetime.utcnow().isoformat(),
+            # ``utcnow()`` is deprecated in 3.12+; this preserves the same
+            # naive ISO string format already on disk in migration.json.
+            "uploaded_at": datetime.now(timezone.utc).replace(tzinfo=None).isoformat(),
         }
     )
     path.write_text(

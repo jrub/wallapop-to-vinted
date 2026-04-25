@@ -14,7 +14,7 @@ Split into three layers so each can be tested in isolation:
 import json
 import re
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
 
@@ -247,7 +247,9 @@ def build_item_record(
         "shipping_allowed": shipping.get("user_allows_shipping", True),
         "images": image_paths,
         "url": f"https://es.wallapop.com/item/{raw_item.get('slug', item_id)}",
-        "extracted_at": datetime.utcnow().isoformat(),
+        # ``utcnow()`` is deprecated in 3.12+; this preserves the same naive
+        # ISO string format ("YYYY-MM-DDTHH:MM:SS.ffffff", no tz suffix).
+        "extracted_at": datetime.now(timezone.utc).replace(tzinfo=None).isoformat(),
     }
 
 
