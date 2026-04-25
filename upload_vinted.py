@@ -19,6 +19,12 @@ from dotenv import load_dotenv
 from patchright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
 
 from domain.categories import build_path_index, resolve_nav_to_leaf
+from domain.mapping import (
+    COLOR_EN_TO_ES,
+    LABEL_ALIASES,
+    guess_wallapop_key,
+    label_to_wallapop_key,
+)
 from domain.text import find_option_match, normalize_label, soften_title_caps, stem
 
 load_dotenv()
@@ -50,102 +56,6 @@ ERROR_SELECTOR = (
     "div.web_ui__Validation__warning[role='alert'], "
     "[role='alert'], .c-input__title--error, .u-flexbox--error-message"
 )
-
-# Wallapop attribute keys keyed by normalized Vinted label. Seeded with common cases;
-# the auto-learn loop extends this implicitly by writing resolved mappings to
-# category_mapping.json, so this table only needs the first-time guess.
-LABEL_ALIASES = {
-    # These three are always present on Vinted — hard-wire them so they never need
-    # auto-learning from a specific item (the item may lack the attribute).
-    "marca": ["brand"],
-    "talla": ["size"],
-    "color": ["color", "colour"],
-    "estado": ["condition"],
-    "sistema operativo": ["operating_system", "os"],
-    "capacidad de almacenamiento": ["storage_capacity", "storage"],
-    "ram": ["ram", "memory"],
-    "procesador": ["processor", "cpu"],
-    "autor": ["author"],
-    "editorial": ["publisher"],
-    "idioma": ["language"],
-    "formato": ["format"],
-    "plataforma": ["platform"],
-    "género": ["genre"],
-    "material": ["material", "composition"],
-    "modelo": ["model"],
-}
-
-# Wallapop's API returns color values as English canonical keys ('orange', 'black', …)
-# even though its UI shows them in Spanish. Vinted's dropdown lists them in Spanish.
-COLOR_EN_TO_ES = {
-    "black": "Negro",
-    "white": "Blanco",
-    "gray": "Gris",
-    "grey": "Gris",
-    "silver": "Plateado",
-    "red": "Rojo",
-    "blue": "Azul",
-    "navy": "Azul marino",
-    "light_blue": "Azul claro",
-    "turquoise": "Turquesa",
-    "green": "Verde",
-    "dark_green": "Verde oscuro",
-    "mint": "Menta",
-    "yellow": "Amarillo",
-    "mustard": "Mostaza",
-    "orange": "Naranja",
-    "coral": "Coral",
-    "pink": "Rosa",
-    "fuchsia": "Fucsia",
-    "purple": "Morado",
-    "lilac": "Lila",
-    "brown": "Marrón",
-    "beige": "Beige",
-    "cream": "Crema",
-    "khaki": "Caqui",
-    "burgundy": "Burdeos",
-    "multicolor": "Multicolor",
-    "multicolour": "Multicolor",
-    "gold": "Dorado",
-}
-
-
-def _guess_wallapop_key(label: str, attributes: dict) -> str | None:
-    """Best-effort mapping Vinted label → key in item.attributes. Returns None if no match."""
-    norm = normalize_label(label)
-    # 1) Direct match against the label itself
-    for k in attributes:
-        if normalize_label(k) == norm:
-            return k
-    # 2) Alias table
-    for k in LABEL_ALIASES.get(norm, []):
-        if k in attributes:
-            return k
-    # 3) Substring fallback: Wallapop key is contained in (or contains) the normalized label
-    for k in attributes:
-        nk = normalize_label(k)
-        if nk and (nk in norm or norm in nk):
-            return k
-    return None
-
-
-def _label_to_wallapop_key(label: str) -> str | None:
-    """Resolve a Vinted field label to its canonical Wallapop key using only the alias table.
-
-    Unlike _guess_wallapop_key, this doesn't need a concrete item — it resolves
-    well-known label→key pairs (e.g. "Color"→"color") regardless of whether the
-    current item has that attribute. Used to fix category_mapping entries that were
-    saved with from:null because the first item that triggered them lacked the attribute.
-    """
-    norm = normalize_label(label)
-    # Direct alias lookup (covers color, brand, size, etc.)
-    aliases = LABEL_ALIASES.get(norm)
-    if aliases:
-        return aliases[0]
-    # Normalized label itself matches a known Wallapop key name
-    if norm in {normalize_label(k) for keys in LABEL_ALIASES.values() for k in keys}:
-        return norm
-    return None
 
 if not CATEGORIES_PATH.exists():
     print(f"ERROR: {CATEGORIES_PATH} not found. Run extract_wallapop.py first.")
@@ -1194,7 +1104,7 @@ def fill_dynamic_attributes(
 
     - Consults _CATEGORIES[cat_id]["attributes"] for existing mappings.
     - Auto-discovers new fields and resolves them against item["attributes"] using
-      _guess_wallapop_key; resolved mappings are persisted back to category_mapping.json
+      guess_wallapop_key; resolved mappings are persisted back to category_mapping.json
       (unless learn=False).
     - Returns (missing_fields, new_mappings, unresolved) for the end-of-run summary.
         missing_fields: labels for which we had a value but couldn't select it, or
@@ -1237,7 +1147,7 @@ def fill_dynamic_attributes(
         norm_label = normalize_label(label)
         is_common = norm_label in {"marca", "talla", "color"}
         if is_common:
-            from_key = _label_to_wallapop_key(label) or _label_to_wallapop_key(key)
+            from_key = label_to_wallapop_key(label) or label_to_wallapop_key(key)
             cfg = {"label": label, "from": from_key, "kind": kind}
             if norm_label == "marca":
                 cfg["fallback"] = "no_brand"
@@ -1252,10 +1162,10 @@ def fill_dynamic_attributes(
             # whether the first item that triggers the category happens to have that
             # attribute.
             guessed = (
-                _guess_wallapop_key(label, wl_attrs)
-                or _guess_wallapop_key(key, wl_attrs)
-                or _label_to_wallapop_key(label)
-                or _label_to_wallapop_key(key)
+                guess_wallapop_key(label, wl_attrs)
+                or guess_wallapop_key(key, wl_attrs)
+                or label_to_wallapop_key(label)
+                or label_to_wallapop_key(key)
             )
             cfg = {"label": label, "from": guessed, "kind": kind}
             if normalize_label(label) == "marca":
@@ -1270,7 +1180,7 @@ def fill_dynamic_attributes(
         # resolve from the label alias table alone (e.g. "Color"→"color"). Update
         # the mapping so subsequent items don't hit this fallback path again.
         if from_key is None:
-            resolved = _label_to_wallapop_key(label) or _label_to_wallapop_key(key)
+            resolved = label_to_wallapop_key(label) or label_to_wallapop_key(key)
             if resolved and resolved in wl_attrs:
                 from_key = resolved
                 cfg["from"] = from_key
