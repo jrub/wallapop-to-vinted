@@ -152,6 +152,67 @@ def fetch_items(
     return items
 
 
+def filter_in_person(
+    items: list[dict], include_in_person: bool
+) -> tuple[list[dict], list[dict]]:
+    """Classify ``items`` by Wallapop's ``shipping.user_allows_shipping`` flag.
+
+    Returns ``(kept, in_person)``:
+
+    - ``kept`` is what the caller should send to the upload pipeline. It
+      excludes in-person-only items when ``include_in_person`` is ``False``,
+      and is the full input list when ``True``.
+    - ``in_person`` is always the in-person-only classification regardless
+      of the flag — the caller needs it for the user-facing message in
+      both branches ("WARNING: skipping these..." vs. "Including these as
+      shipping...").
+
+    A missing or null ``shipping`` field is treated as shipping-allowed,
+    matching the API default.
+    """
+    in_person = [
+        it for it in items
+        if not (it.get("shipping") or {}).get("user_allows_shipping", True)
+    ]
+    if include_in_person:
+        return list(items), in_person
+    in_person_ids = {it.get("id") for it in in_person}
+    kept = [it for it in items if it.get("id") not in in_person_ids]
+    return kept, in_person
+
+
+def ensure_category_mapped(
+    category_id: str,
+    *,
+    categories_path: Path,
+    wallapop_cats: dict,
+) -> None:
+    """Add a stub ``{"name": ..., "vinted": null}`` for a new ``category_id``.
+
+    Idempotent: if the entry already exists, the file is not rewritten
+    (preserves mtime). The stub's ``name`` comes from ``wallapop_cats``
+    when available, falling back to ``category_id`` so a human reviewer
+    knows what to look up. ``categories_path`` not existing is a silent
+    no-op, matching the original guard (the file lives in ``data/`` and
+    may not be present on a fresh checkout).
+    """
+    if not category_id or not categories_path.exists():
+        return
+    cats = json.loads(categories_path.read_text(encoding="utf-8"))
+    if category_id in cats:
+        return
+
+    name = wallapop_cats.get(category_id, {}).get("name", category_id)
+    cats[category_id] = {"name": name, "vinted": None}
+    categories_path.write_text(
+        json.dumps(cats, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+    print(
+        f"    NOTE: category {category_id} ({name!r}) added to "
+        f"{categories_path.name} without a Vinted mapping."
+    )
+
+
 def fetch_leaf_category_id(item_id: str, *, session: requests.Session) -> str:
     """Return the leaf category id for ``item_id`` from the detail endpoint.
 

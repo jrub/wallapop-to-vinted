@@ -16,7 +16,13 @@ import requests
 from pathlib import Path
 from dotenv import load_dotenv
 
-from wallapop.items import fetch_items, process_item, resolve_internal_id
+from wallapop.items import (
+    ensure_category_mapped as _ensure_category_mapped,
+    fetch_items,
+    filter_in_person,
+    process_item,
+    resolve_internal_id,
+)
 
 load_dotenv()
 
@@ -55,23 +61,14 @@ def save_items(items: dict):
 
 
 def ensure_category_mapped(category_id: str) -> None:
-    """If category_id is not in category_mapping.json, add a stub entry with vinted=null.
-
-    The stub uses the Wallapop category name from wallapop_categories.json if available.
-    Entries with vinted=null are skipped during upload and reported to the user.
-    """
-    if not category_id or not CATEGORIES_PATH.exists():
-        return
-    cats = json.loads(CATEGORIES_PATH.read_text(encoding="utf-8"))
-    if category_id in cats:
-        return
-
-    # Look up the name in the full Wallapop category tree (loaded once at module level)
-    name = _WALLAPOP_CATS.get(category_id, {}).get("name", category_id)
-
-    cats[category_id] = {"name": name, "vinted": None}
-    CATEGORIES_PATH.write_text(json.dumps(cats, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"    NOTE: category {category_id} ({name!r}) added to category_mapping.json without a Vinted mapping.")
+    """Inject ``CATEGORIES_PATH`` and the loaded Wallapop tree into the
+    DI version in ``wallapop.items`` so ``process_item`` can call this
+    with just the category id."""
+    _ensure_category_mapped(
+        category_id,
+        categories_path=CATEGORIES_PATH,
+        wallapop_cats=_WALLAPOP_CATS,
+    )
 
 
 def main():
@@ -127,10 +124,7 @@ def main():
     # "Sólo venta en persona" badge surfaces in the API as shipping.user_allows_shipping=false.
     # Detect those before downloading any images so the user can decide whether to skip them
     # or include them as shipping items via --include-in-person.
-    in_person = [
-        it for it in new_items
-        if not (it.get("shipping") or {}).get("user_allows_shipping", True)
-    ]
+    new_items, in_person = filter_in_person(new_items, args.include_in_person)
     if in_person and not args.include_in_person:
         print("\nWARNING: the following items are marked 'Sólo venta en persona' on Wallapop:")
         for it in in_person:
@@ -139,9 +133,6 @@ def main():
             "\nVinted only supports shipped sales. Re-run with --include-in-person to upload "
             "them anyway (they will be listed as shipping items on Vinted)."
         )
-        # Drop them from the queue so the rest can still be processed.
-        in_person_ids = {it.get("id") for it in in_person}
-        new_items = [it for it in new_items if it.get("id") not in in_person_ids]
         if not new_items:
             sys.exit(0)
     elif in_person:
