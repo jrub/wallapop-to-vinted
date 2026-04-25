@@ -18,6 +18,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 from patchright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
 
+from domain.text import find_option_match, normalize_label, soften_title_caps, stem
+
 load_dotenv()
 
 EMAIL = os.getenv("VINTED_EMAIL")
@@ -107,32 +109,12 @@ COLOR_EN_TO_ES = {
 }
 
 
-def _normalize_label(s: str) -> str:
-    s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode("ascii")
-    s = s.lower().replace("_", " ").replace("-", " ")
-    return re.sub(r"\s+", " ", s).strip()
-
-
-def _soften_title_caps(title: str) -> str:
-    """Always lowercase titles (with first letter capitalised) for Vinted's validator.
-
-    Vinted rejects titles with "too many uppercase letters" ("El título contiene demasiadas
-    mayúsculas") and the threshold is conservative enough that even mixed-case titles like
-    "Libros SUSE LINUX oficial certificación" trip it. Rather than guess the exact ratio,
-    we just lowercase every title — Vinted's UI capitalises display anyway. The user can
-    re-edit the title in the draft if the casing matters for a specific listing.
-    """
-    if not title:
-        return title
-    return title.lower().capitalize()
-
-
 def _guess_wallapop_key(label: str, attributes: dict) -> str | None:
     """Best-effort mapping Vinted label → key in item.attributes. Returns None if no match."""
-    norm = _normalize_label(label)
+    norm = normalize_label(label)
     # 1) Direct match against the label itself
     for k in attributes:
-        if _normalize_label(k) == norm:
+        if normalize_label(k) == norm:
             return k
     # 2) Alias table
     for k in LABEL_ALIASES.get(norm, []):
@@ -140,7 +122,7 @@ def _guess_wallapop_key(label: str, attributes: dict) -> str | None:
             return k
     # 3) Substring fallback: Wallapop key is contained in (or contains) the normalized label
     for k in attributes:
-        nk = _normalize_label(k)
+        nk = normalize_label(k)
         if nk and (nk in norm or norm in nk):
             return k
     return None
@@ -154,13 +136,13 @@ def _label_to_wallapop_key(label: str) -> str | None:
     current item has that attribute. Used to fix category_mapping entries that were
     saved with from:null because the first item that triggered them lacked the attribute.
     """
-    norm = _normalize_label(label)
+    norm = normalize_label(label)
     # Direct alias lookup (covers color, brand, size, etc.)
     aliases = LABEL_ALIASES.get(norm)
     if aliases:
         return aliases[0]
     # Normalized label itself matches a known Wallapop key name
-    if norm in {_normalize_label(k) for keys in LABEL_ALIASES.values() for k in keys}:
+    if norm in {normalize_label(k) for keys in LABEL_ALIASES.values() for k in keys}:
         return norm
     return None
 
@@ -424,29 +406,6 @@ def _collect_visible_options(page) -> list[str]:
         return []
 
 
-def _find_option_match(options: list[str], value: str, strict: bool = False) -> str | None:
-    """Find the best matching option from a dropdown option list.
-
-    Exact normalized match wins; substring match is the fallback (unless strict=True).
-    Pass strict=True for typed autocomplete inputs (e.g. Brand) where Vinted filters
-    results based on what was typed — a non-exact result means the value isn't in the
-    catalogue, so substring matches would be false positives.
-    """
-    norm_value = _normalize_label(value)
-    if not norm_value:
-        return None
-    for opt in options:
-        if _normalize_label(opt) == norm_value:
-            return opt
-    if strict:
-        return None
-    for opt in options:
-        no = _normalize_label(opt)
-        if no and (no in norm_value or norm_value in no):
-            return opt
-    return None
-
-
 def _js_click_option(page, label: str) -> None:
     """Click an option in the open dropdown panel by its label text using JavaScript.
 
@@ -490,7 +449,7 @@ def fill_dropdown(page, testid: str, value: str) -> tuple[bool, list[str]]:
         human_delay(0.3, 0.6)
         options = _collect_visible_options(page)
 
-        matched = _find_option_match(options, value)
+        matched = find_option_match(options, value)
         if matched is not None:
             _js_click_option(page, matched)
             human_delay(0.3, 0.6)
@@ -534,7 +493,7 @@ def fill_combobox(page, testid: str, value: str) -> tuple[bool, list[str]]:
 
         # Phase 1: immediate match (Color picker shows all options on open)
         options = _collect_visible_options(page)
-        matched = _find_option_match(options, value)
+        matched = find_option_match(options, value)
         if matched is not None:
             _js_click_option(page, matched)
             human_delay(0.3, 0.5)
@@ -559,7 +518,7 @@ def fill_combobox(page, testid: str, value: str) -> tuple[bool, list[str]]:
             time.sleep(random.uniform(0.02, 0.06))
         human_delay(0.4, 0.7)
         options = _collect_visible_options(page)
-        matched = _find_option_match(options, value, strict=True)
+        matched = find_option_match(options, value, strict=True)
         if matched is not None:
             _js_click_option(page, matched)
             human_delay(0.3, 0.5)
@@ -960,20 +919,6 @@ def _abort_if_captcha(page, visible: bool) -> None:
     sys.exit(2)
 
 
-def _stem(word: str) -> str:
-    """Crude Spanish/English plural stemmer: 'routers'→'router', 'módems'→'modem'.
-
-    Good enough for matching Vinted leaf labels against item titles. Not a full
-    stemmer — just chops a trailing 's' or 'es' if the remainder is long enough
-    to avoid butchering short words.
-    """
-    w = _normalize_label(word)
-    for suffix in ("es", "s"):
-        if w.endswith(suffix) and len(w) - len(suffix) >= 3:
-            return w[: -len(suffix)]
-    return w
-
-
 def _pick_leaf_from_hints(sub_options: list[str], hints: str) -> str | None:
     """Choose a Vinted sub-option whose main keyword appears in the item text.
 
@@ -985,19 +930,19 @@ def _pick_leaf_from_hints(sub_options: list[str], hints: str) -> str | None:
     Deliberately strict: we won't auto-pick on an ambiguous match. Anything
     that's not unambiguous ends up as a draft for the human to finish.
     """
-    norm_hints = _normalize_label(hints)
+    norm_hints = normalize_label(hints)
     if not norm_hints:
         return None
     hint_words = set(norm_hints.split())
-    hint_stems = {_stem(w) for w in hint_words}
+    hint_stems = {stem(w) for w in hint_words}
 
     matches: list[str] = []
     for opt in sub_options:
-        words = [w for w in _normalize_label(opt).split() if w.isalpha()]
+        words = [w for w in normalize_label(opt).split() if w.isalpha()]
         if not words:
             continue
         main = max(words, key=len)
-        main_stem = _stem(main)
+        main_stem = stem(main)
         if main_stem in hint_stems or main_stem in hint_words:
             matches.append(opt)
 
@@ -1359,7 +1304,7 @@ def fill_dynamic_attributes(
         # them in. Resolve them on the fly via LABEL_ALIASES without persisting per-category —
         # otherwise category_mapping.json gets polluted with redundant 'Marca ← brand' entries
         # for every new category we touch.
-        norm_label = _normalize_label(label)
+        norm_label = normalize_label(label)
         is_common = norm_label in {"marca", "talla", "color"}
         if is_common:
             from_key = _label_to_wallapop_key(label) or _label_to_wallapop_key(key)
@@ -1383,7 +1328,7 @@ def fill_dynamic_attributes(
                 or _label_to_wallapop_key(key)
             )
             cfg = {"label": label, "from": guessed, "kind": kind}
-            if _normalize_label(label) == "marca":
+            if normalize_label(label) == "marca":
                 cfg["fallback"] = "no_brand"
             attrs_cfg[key] = cfg
             dirty = True
@@ -1523,7 +1468,7 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
         return {**empty, "error": f"images: {e}"}
 
     try:
-        title_for_vinted = _soften_title_caps(title)
+        title_for_vinted = soften_title_caps(title)
         if title_for_vinted != title:
             print(f"    Title softened (too many caps): {title_for_vinted!r}")
         human_type(page.locator("input[data-testid='title--input']"), title_for_vinted)
