@@ -4,13 +4,19 @@
 
 PYTHON := .venv/bin/python
 
-.PHONY: install-dev test smoke
+.PHONY: install-dev test test-fast test-browser smoke
 
 install-dev:
 	$(PYTHON) -m pip install -r requirements-dev.txt
 
 test:
 	$(PYTHON) -m pytest -v
+
+test-fast:
+	$(PYTHON) -m pytest -v -m "not playwright"
+
+test-browser:
+	$(PYTHON) -m pytest -v -m playwright
 
 smoke:
 	$(PYTHON) upload_vinted.py --help

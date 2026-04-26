@@ -1,4 +1,5 @@
 -r requirements.txt
 pytest>=8
 pytest-mock>=3
+pytest-playwright>=0.5
 responses>=0.24
