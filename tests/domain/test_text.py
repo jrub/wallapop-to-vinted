@@ -5,6 +5,7 @@ from domain.text import (
     normalize_label,
     soften_title_caps,
     stem,
+    testid_to_key,
 )
 
 
@@ -98,3 +99,18 @@ class TestStem:
 
     def test_empty_string(self):
         assert stem("") == ""
+
+
+class TestTestidToKey:
+    def test_strips_single_list_input_suffix(self):
+        assert testid_to_key("brand-single-list-input") == "brand"
+
+    def test_replaces_hyphens_with_underscores(self):
+        assert testid_to_key("operating-system-single-list-input") == "operating_system"
+
+    def test_preserves_unknown_suffix(self):
+        # Unknown suffix is not stripped — only converted hyphens-to-underscores.
+        assert testid_to_key("color-dropdown-input") == "color_dropdown_input"
+
+    def test_empty_string(self):
+        assert testid_to_key("") == ""

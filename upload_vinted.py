@@ -11,12 +11,12 @@ import json
 import time
 import random
 import argparse
-import unicodedata
 from pathlib import Path
 from dotenv import load_dotenv
 from patchright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
 
 from domain.categories import build_path_index, resolve_nav_to_leaf
+from domain.drafts import match_draft_to_item
 from domain.mapping import (
     COLOR_EN_TO_ES,
     LABEL_ALIASES,
@@ -29,7 +29,14 @@ from domain.migration import (
     mark_migrated as _mark_migrated,
     migration_status,
 )
-from domain.text import find_option_match, normalize_label, soften_title_caps, stem
+from domain.text import (
+    find_option_match,
+    normalize_label,
+    soften_title_caps,
+    stem,
+    testid_to_key,
+)
+from domain.urls import extract_item_id_from_url, is_form_url
 from vinted.errors import CaptchaDetected
 from vinted.session import (
     abort_if_captcha as _vinted_abort_if_captcha,
@@ -621,24 +628,6 @@ def _find_publish_button(page):
     return None
 
 
-def _extract_item_id_from_url(url: str) -> str:
-    """Pull the Vinted item ID out of any post-upload URL, or return '' if absent."""
-    match = re.search(r"/items/(\d+)", url)
-    return match.group(1) if match else ""
-
-
-_FORM_URL_RE = re.compile(r"/items/(new|\d+/edit)")
-
-
-def _is_form_url(url: str) -> bool:
-    """True while the URL still shows a Vinted item form (create or edit).
-
-    A successful publish or draft save navigates away from these paths (to
-    `/items/<id>` or `/member/<id>`), so leaving a form URL is our signal.
-    """
-    return bool(_FORM_URL_RE.search(url))
-
-
 def _dismiss_critical_error_dialog(page) -> bool:
     """Dismiss Vinted's critical-error modal if present, using JS click (no scroll).
 
@@ -707,12 +696,12 @@ def publish_or_draft(
         try:
             _js_click_button(page, pub)
             try:
-                page.wait_for_url(lambda url: not _is_form_url(url), timeout=15000)
+                page.wait_for_url(lambda url: not is_form_url(url), timeout=15000)
             except PlaywrightTimeout:
                 pass
             human_delay(1, 2)
-            if not _is_form_url(page.url):
-                vinted_id = _extract_item_id_from_url(page.url) or f"published-{fallback_id_seed}"
+            if not is_form_url(page.url):
+                vinted_id = extract_item_id_from_url(page.url) or f"published-{fallback_id_seed}"
                 print(f"    Published: {page.url}")
                 return vinted_id, "published", []
             errors = collect_form_errors(page)
@@ -733,14 +722,14 @@ def publish_or_draft(
         draft_btn = page.locator(f"button[data-testid='{DRAFT_BUTTON_TESTID}']")
         _js_click_button(page, draft_btn)
         try:
-            page.wait_for_url(lambda url: not _is_form_url(url), timeout=15000)
+            page.wait_for_url(lambda url: not is_form_url(url), timeout=15000)
         except PlaywrightTimeout:
             pass
         human_delay(1, 2)
-        if _is_form_url(page.url):
+        if is_form_url(page.url):
             print(f"    Error: draft not saved — URL: {page.url}")
             return "", "failed", errors
-        vinted_id = _extract_item_id_from_url(page.url) or f"draft-{fallback_id_seed}"
+        vinted_id = extract_item_id_from_url(page.url) or f"draft-{fallback_id_seed}"
         print(f"    Draft saved: {page.url} (recorded id: {vinted_id})")
         return vinted_id, "draft", errors
     except Exception as e:
@@ -1022,44 +1011,6 @@ def scrape_drafts(page, member_url: str) -> list[dict]:
     return drafts
 
 
-def _normalize_title(s: str) -> str:
-    s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode("ascii")
-    s = re.sub(r"[^a-z0-9]+", " ", s.lower())
-    return re.sub(r"\s+", " ", s).strip()
-
-
-def match_draft_to_item(draft_title: str, items: dict) -> tuple[str | None, bool]:
-    """Match a Vinted draft title to a Wallapop item id.
-
-    Returns (item_id, ambiguous). Exact-normalized match wins; otherwise a substring
-    match on the longer of (draft, wallapop) title is attempted. If two Wallapop
-    items tie, returns (None, True) so the caller can skip.
-    """
-    dn = _normalize_title(draft_title)
-    if not dn:
-        return None, False
-    exact = [iid for iid, it in items.items() if _normalize_title(it.get("title", "")) == dn]
-    if len(exact) == 1:
-        return exact[0], False
-    if len(exact) > 1:
-        return None, True
-    substr = [
-        iid for iid, it in items.items()
-        if (tn := _normalize_title(it.get("title", "")))
-        and (tn in dn or dn in tn)
-    ]
-    if len(substr) == 1:
-        return substr[0], False
-    if len(substr) > 1:
-        return None, True
-    return None, False
-
-
-def _testid_to_key(testid: str) -> str:
-    """Derive a stable JSON key from a dropdown testid. 'brand-single-list-input' → 'brand'."""
-    return testid.replace("-single-list-input", "").replace("-", "_")
-
-
 def fill_dynamic_attributes(
     page, item: dict, cat_id: str, learn: bool
 ) -> tuple[list[str], list[str], list[tuple[str, str]]]:
@@ -1102,7 +1053,7 @@ def fill_dynamic_attributes(
         kind = f.get("kind") or "other"
         if not testid or "condition" in testid:
             continue  # condition already handled by set_condition()
-        key = _testid_to_key(testid)
+        key = testid_to_key(testid)
         # Common attributes (Marca, Talla, Color) appear in every category Vinted exposes
         # them in. Resolve them on the fly via LABEL_ALIASES without persisting per-category —
         # otherwise category_mapping.json gets polluted with redundant 'Marca ← brand' entries

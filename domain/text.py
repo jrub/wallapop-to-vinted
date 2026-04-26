@@ -56,6 +56,20 @@ def find_option_match(options: list[str], value: str, strict: bool = False) -> s
     return None
 
 
+def testid_to_key(testid: str) -> str:
+    """Derive a stable JSON key from a Vinted dropdown testid.
+
+    ``brand-single-list-input`` → ``brand``;
+    ``operating-system-single-list-input`` → ``operating_system``.
+    The ``-single-list-input`` suffix is stripped if present, then the
+    remaining hyphens are converted to underscores so the result is a
+    valid Python identifier and a stable JSON key. Other suffixes are
+    left in place — the caller is expected to know whether the testid
+    needs further normalisation.
+    """
+    return testid.replace("-single-list-input", "").replace("-", "_")
+
+
 def stem(word: str) -> str:
     """Crude Spanish/English plural stemmer: 'routers'→'router', 'módems'→'modem'.
 
