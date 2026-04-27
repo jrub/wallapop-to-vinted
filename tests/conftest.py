@@ -38,7 +38,13 @@ def load_vinted_fixture(page):
                 f"Missing fixture {path.relative_to(Path(__file__).parent.parent)}. "
                 f"Capture it with: python scripts/capture_vinted_fixtures.py --scope {scope}"
             )
-        page.set_content(path.read_text(encoding="utf-8"))
+        # wait_until="domcontentloaded" — the default ("load") waits for every
+        # external resource (scripts, images, fonts) referenced in the HTML.
+        # The captured fixtures are full Vinted pages (~2MB) with dozens of
+        # CDN URLs that won't resolve from the test host, so the default makes
+        # ``set_content`` race with hanging requests and fail intermittently.
+        # We only need the DOM parsed to assert anchor presence.
+        page.set_content(path.read_text(encoding="utf-8"), wait_until="domcontentloaded")
         return page
 
     return _load

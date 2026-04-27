@@ -21,7 +21,7 @@ import pytest
 
 # Per-scope anchor selectors. Keep in sync with ``scripts/capture_vinted_fixtures.py``.
 ANCHORS = {
-    "new_item": "[data-testid='title-input']",
+    "new_item": "input[data-testid='title--input']",
 }
 
 

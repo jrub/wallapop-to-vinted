@@ -31,6 +31,7 @@ from patchright.sync_api import sync_playwright
 
 # Repo-relative imports — the script is expected to run from the repo root.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from upload_vinted import login as vinted_login  # noqa: E402
 from vinted.session import build_session  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -52,9 +53,36 @@ SCOPES = (
 )
 
 
+def _ensure_logged_in_and_at(page, target_url: str, anchor: str) -> None:
+    """Navigate to ``target_url`` and ensure ``anchor`` is visible.
+
+    If the session is expired Vinted redirects away from ``target_url``
+    and the anchor never appears — in that case we delegate to
+    ``upload_vinted.login`` (which knows the auth flow and waits up to
+    2 minutes for a manual DataDome slider in visible mode), then
+    re-navigate. This reuses the same login path the uploader uses, so
+    the capture script doesn't drift from production behaviour.
+    """
+    page.goto(target_url)
+    locator = page.locator(anchor)
+    try:
+        locator.wait_for(state="visible", timeout=5000)
+        return
+    except Exception:
+        pass
+    print()
+    print(f"Anchor not found at {page.url} — session likely expired. Logging in...")
+    vinted_login(page, visible=True)
+    page.goto(target_url)
+    locator.wait_for(state="visible", timeout=15000)
+
+
 def _capture_new_item(page) -> None:
-    page.goto(f"{BASE_URL}/items/new")
-    page.locator("[data-testid='title-input']").wait_for(state="visible", timeout=15000)
+    _ensure_logged_in_and_at(
+        page,
+        target_url=f"{BASE_URL}/items/new",
+        anchor="input[data-testid='title--input']",
+    )
 
 
 def _dump(page, scope: str) -> Path:
