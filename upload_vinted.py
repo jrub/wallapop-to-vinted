@@ -852,8 +852,7 @@ def get_member_url(page) -> str:
     # page.request.get() bypasses DataDome's XHR fingerprinting and gets 403'd; we need
     # to call /api/v2/users/current from the page context so the real browser fetch is used.
     try:
-        page.goto(BASE_URL)
-        page.wait_for_load_state("domcontentloaded")
+        page.goto(BASE_URL, wait_until="domcontentloaded")
         human_delay(1.5, 2.5)
     except Exception as e:
         print(f"    WARNING: could not navigate to home: {e}")
@@ -921,8 +920,7 @@ def get_member_url(page) -> str:
 
     # Last resort: navigate to a user-scoped settings page and read /member/<id> links.
     try:
-        page.goto(f"{BASE_URL}/settings/profile")
-        page.wait_for_load_state("domcontentloaded")
+        page.goto(f"{BASE_URL}/settings/profile", wait_until="domcontentloaded")
         human_delay(1.5, 2.5)
         href = page.evaluate(
             r"""() => {
@@ -1206,7 +1204,7 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
     print(f"  Uploading: {title}")
 
     _ITEMS_NEW = f"{BASE_URL}/items/new"
-    page.goto(_ITEMS_NEW)
+    page.goto(_ITEMS_NEW, wait_until="domcontentloaded")
     try:
         page.wait_for_url(lambda url: _ITEMS_NEW in url, timeout=120000)
     except PlaywrightTimeout:
@@ -1355,7 +1353,7 @@ def retry_draft_item(page, item: dict, draft_edit_url: str, draft_item_id: str, 
 
     title = item.get("title", "")
     print(f"  Retrying draft {draft_item_id}: {title}")
-    page.goto(draft_edit_url)
+    page.goto(draft_edit_url, wait_until="domcontentloaded")
     # Same reason as in upload_item: abort early if DataDome is interstitialising the page
     _abort_if_captcha(page, visible)
     try:
@@ -1471,30 +1469,30 @@ def main():
             p, visible=args.visible, auth_state_path=AUTH_STATE_PATH
         )
 
-        # Navigate to /items/new to probe session state before the upload loop
+        # Navigate to /items/new to probe session state before the upload loop.
+        # ``wait_until="domcontentloaded"`` is critical: Vinted's telemetry keeps
+        # XHRs alive past initial paint, so the default ``wait_until="load"``
+        # times out at 30s on every navigation. After dcl, ``page.url`` is the
+        # final post-redirect URL — Vinted does the auth-check redirect server-
+        # side, so we don't need ``wait_for_url`` to settle anything.
         _ITEMS_NEW = f"{BASE_URL}/items/new"
         _AUTH_PATHS = ("/member/signup", "/member/login", "/member/verify", "/oauth", "/auth/")
-        page.goto(_ITEMS_NEW)
-        # In visible mode allow 2min for manual captcha; in headless the redirect is instant
-        try:
-            page.wait_for_url(
-                lambda url: _ITEMS_NEW in url or any(p in url for p in _AUTH_PATHS),
-                timeout=120000 if args.visible else 20000,
-            )
-        except PlaywrightTimeout:
-            pass
+        page.goto(_ITEMS_NEW, wait_until="domcontentloaded")
 
         _abort_if_captcha(page, args.visible)
 
-        if any(p in page.url for p in _AUTH_PATHS):
-            login(page, visible=args.visible)
-            context.storage_state(path=str(AUTH_STATE_PATH))
-            print(f"  Session saved to {AUTH_STATE_PATH}")
-        elif _ITEMS_NEW in page.url:
+        if _ITEMS_NEW in page.url:
             print("  Session is active.")
             context.storage_state(path=str(AUTH_STATE_PATH))  # refresh persisted state
         else:
-            print(f"  Unexpected state ({page.url}), attempting login...")
+            # Either an auth path or the home page (Vinted redirects expired
+            # sessions to ``/``). Both mean: log in. No need to wait — the URL
+            # is already final after dcl, so going straight to login() avoids
+            # the 20-30s "stuck on home" pause the user reported.
+            if any(p in page.url for p in _AUTH_PATHS):
+                print(f"  Session expired (redirected to auth: {page.url}), logging in...")
+            else:
+                print(f"  Session expired (redirected to {page.url}), logging in...")
             login(page, visible=args.visible)
             context.storage_state(path=str(AUTH_STATE_PATH))
             print(f"  Session saved to {AUTH_STATE_PATH}")
