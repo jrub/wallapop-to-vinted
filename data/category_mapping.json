@@ -98,7 +98,36 @@
       "Materiales de oficina",
       "Accesorios de escritorio"
     ],
-    "attributes": {}
+    "attributes": {
+      "category_keyboard_layout": {
+        "label": "Disposición del teclado (recomendado)",
+        "from": null,
+        "kind": "dropdown",
+        "observed_options": [
+          "Título",
+          "Descripción",
+          "AZERTY",
+          "QWERTY",
+          "QWERTZ",
+          "Otra disposición del teclado",
+          "Precio",
+          "Pequeño",
+          "Mediano",
+          "Recomendado\nGrande"
+        ]
+      }
+    },
+    "observed_leaf_options": [
+      "Organizadores de escritorio",
+      "Portalápices",
+      "Pisapapeles",
+      "Portapapeles",
+      "Alfombrillas de escritorio",
+      "Organizadores de cables",
+      "Reposamuñecas",
+      "Escritorios portátiles",
+      "Lupas"
+    ]
   },
   "10093": {
     "name": "Videojuegos PC",
@@ -123,7 +152,101 @@
       "Ordenadores y accesorios",
       "Piezas y componentes de ordenadores"
     ],
-    "attributes": {}
+    "attributes": {
+      "category_computer_operating_system": {
+        "label": "Sistema operativo (recomendado)",
+        "from": null,
+        "kind": "dropdown",
+        "observed_options": [
+          "Título",
+          "Descripción",
+          "macOS",
+          "Windows",
+          "Chrome OS",
+          "Linux",
+          "DOS",
+          "Otro",
+          "Sin sistema operativo",
+          "Precio",
+          "Recomendado\n5 kg",
+          "10 kg",
+          "20 kg"
+        ]
+      },
+      "category_computer_storage_capacity": {
+        "label": "Capacidad de almacenamiento",
+        "from": "storage_capacity",
+        "kind": "dropdown"
+      },
+      "category_computer_ram": {
+        "label": "RAM",
+        "from": "ram",
+        "kind": "dropdown"
+      },
+      "category_laptop_display_size": {
+        "label": "Tamaño de la pantalla (recomendado)",
+        "from": null,
+        "kind": "dropdown",
+        "observed_options": [
+          "Título",
+          "Descripción",
+          "18\" (45 cm) o superior",
+          "16\"-17,9\" (40-44 cm)",
+          "14\"-15,9\" (35-39 cm)",
+          "12\"-13,9\" (30-34 cm)",
+          "10\"-11,9\" (25-29 cm)",
+          "9,9\" (24 cm) o inferior",
+          "Precio",
+          "Recomendado\n5 kg",
+          "10 kg",
+          "20 kg"
+        ]
+      },
+      "category_keyboard_layout": {
+        "label": "Disposición del teclado (recomendado)",
+        "from": null,
+        "kind": "dropdown",
+        "observed_options": [
+          "Título",
+          "Descripción",
+          "AZERTY",
+          "QWERTY",
+          "QWERTZ",
+          "Otra disposición del teclado",
+          "Precio",
+          "Recomendado\n5 kg",
+          "10 kg",
+          "20 kg"
+        ]
+      },
+      "category_laptop_charger_included": {
+        "label": "Cargador incluido",
+        "from": null,
+        "kind": "dropdown",
+        "observed_options": [
+          "Título",
+          "Descripción",
+          "Incluido",
+          "No incluido",
+          "Precio",
+          "Recomendado\n5 kg",
+          "10 kg",
+          "20 kg"
+        ]
+      }
+    },
+    "observed_leaf_options": [
+      "Cajas de ordenador",
+      "CPU y procesadores",
+      "Placas base",
+      "Combos de placa base y CPU",
+      "Tarjetas gráficas",
+      "Memorias RAM",
+      "Refrigeración y ventiladores para ordenador",
+      "Tarjetas de sonido internas",
+      "Capturadoras de vídeo y tarjetas sintonizadoras de TV",
+      "Dispositivos de almacenamiento interno"
+    ]
   },
   "10175": {
     "name": "Teléfonos vintage",
@@ -357,7 +480,19 @@
       "Ordenadores y accesorios",
       "Impresoras y accesorios"
     ],
-    "attributes": {}
+    "attributes": {},
+    "observed_leaf_options": [
+      "Impresoras de inyección de tinta",
+      "Impresoras láser",
+      "Impresoras fotográficas",
+      "Impresoras de etiquetas",
+      "Impresoras térmicas",
+      "Impresoras multifunción para oficina",
+      "Cartuchos de tinta para impresora",
+      "Tóner de impresora",
+      "Cintas de tinta",
+      "Recambios de impresora"
+    ]
   },
   "10309": {
     "name": "Ordenadores de sobremesa",
@@ -483,7 +618,32 @@
         "label": "Clasificación de contenidos",
         "from": null,
         "kind": "dropdown",
-        "default": "PEGI 12"
+        "default": "PEGI 12",
+        "observed_options": [
+          "Título",
+          "Descripción",
+          "AO – Solo adultos",
+          "E – Todos los públicos",
+          "E10+ – Mayores de 10 años",
+          "M – Mayores de 17 años",
+          "PEGI 12",
+          "PEGI 16",
+          "PEGI 18",
+          "PEGI 3",
+          "PEGI 7",
+          "RP – Pendiente de clasificación",
+          "Sin especificar",
+          "T – Mayores de 13 años",
+          "USK 0",
+          "USK 12",
+          "USK 16",
+          "USK 18",
+          "USK 6",
+          "Precio",
+          "Recomendado\nPequeño",
+          "Mediano",
+          "Grande"
+        ]
       }
     }
   },
