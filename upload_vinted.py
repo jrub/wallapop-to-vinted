@@ -738,7 +738,15 @@ def publish_or_draft(
 
 
 def login(page, visible: bool = True):
-    """Log in to Vinted. Waits up to 2 minutes for manual captcha resolution if needed."""
+    """Log in to Vinted. Waits up to 2 minutes for manual captcha resolution if needed.
+
+    Every click goes through ``_js_click_button`` rather than native
+    ``locator.click()``. Native clicks issue CDP ``Input.dispatchMouseEvent``
+    commands which DataDome inspects more aggressively than synthetic JS
+    events; combined with the bundled-Chromium build, native clicks are
+    enough to trip the slider on every login attempt. JS clicks fire the
+    DOM event without going through the CDP input pipeline.
+    """
     print("Logging in to Vinted...")
     # domcontentloaded — not networkidle. Vinted's tracking/telemetry keeps XHRs
     # alive long past initial paint, so networkidle reliably times out at 30s.
@@ -747,32 +755,23 @@ def login(page, visible: bool = True):
     page.goto(f"{BASE_URL}/member/signup/select_type", wait_until="domcontentloaded")
     human_delay(1, 2)
 
-    # The login flow uses real CDP-driven clicks (locator.click) instead of the
-    # JS click used elsewhere. The switch-to-login button is a React-controlled
-    # toggle: a programmatic el.click() fires the DOM event but Vinted's React
-    # tree doesn't reliably react when the click happens close to mount, so the
-    # view never transitions and wait_for_selector below times out. CDP clicks
-    # produce a real mouse event and Playwright auto-waits for the element to
-    # be actionable (visible, stable, hit-testable) — that handles the React
-    # mount race without explicit retries.
-    # The scroll-jump concern that motivated _js_click_button doesn't apply
-    # here: every login element fits in the viewport, so there's nothing to
-    # scroll into view in the first place.
-
     # Accept cookie banner (OneTrust) if present
     try:
         btn = page.locator("#onetrust-accept-btn-handler")
-        btn.click(timeout=5000)
+        btn.wait_for(state="visible", timeout=5000)
+        _js_click_button(page, btn)
         human_delay(0.5, 1)
     except Exception:
         pass
 
     # The page opens on the register view by default; switch to the login view
-    page.get_by_test_id("auth-select-type--register-switch").click(timeout=10000)
+    sw = page.get_by_test_id("auth-select-type--register-switch")
+    _js_click_button(page, sw)
     page.wait_for_selector("[data-testid='auth-select-type--login-email']")
     human_delay(0.8, 1.5)
 
-    page.get_by_test_id("auth-select-type--login-email").click(timeout=10000)
+    email_btn = page.get_by_test_id("auth-select-type--login-email")
+    _js_click_button(page, email_btn)
     page.wait_for_selector("input[type='password']")
     human_delay(0.8, 1.5)
 
@@ -783,11 +782,13 @@ def login(page, visible: bool = True):
 
     # Vinted's login form button is labelled "Continuar" and is not type=submit
     # (it has an onClick handler instead). The previous selector
-    # button[type='submit'] matched a still-mounted signup form button hidden by
-    # CSS — the click silently no-op'd and the URL never left /signup/select_type.
-    # Locate by accessible name. exact=True so we don't catch "Continuar con
-    # Apple/Google/Facebook" if any of those were rendered alongside.
-    page.get_by_role("button", name="Continuar", exact=True).click(timeout=10000)
+    # ``button[type='submit']`` matched a still-mounted signup-form button
+    # hidden by CSS — the click silently no-op'd and the URL never left
+    # ``/signup/select_type``. Locate by accessible name. ``exact=True`` so we
+    # don't catch "Continuar con Apple/Google/Facebook" if any of those are
+    # rendered alongside.
+    submit = page.get_by_role("button", name="Continuar", exact=True)
+    _js_click_button(page, submit)
 
     if visible:
         print("  Waiting... solve the slider in the browser if it appears.")

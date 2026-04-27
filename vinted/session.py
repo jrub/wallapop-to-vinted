@@ -93,14 +93,22 @@ def build_session(
 
     Patchright is used instead of stock Playwright so the launch already
     patches the obvious bot-detection signals (Runtime.enable CDP,
-    ``navigator.webdriver``, ``--enable-automation``). The init script
+    ``navigator.webdriver``, ``--enable-automation``,
+    ``--disable-blink-features=AutomationControlled``). The init script
     here covers the few fingerprints Patchright doesn't touch
     (``navigator.languages``, ``navigator.plugins``,
     ``navigator.permissions.query``).
+
+    ``channel="chrome"`` is required for Patchright's full stealth profile
+    — without it, Playwright launches the bundled "Chrome for Testing"
+    binary, which DataDome fingerprints differently and flags as a bot.
+    Install once with ``patchright install chrome``. We deliberately do
+    not pass extra ``args`` (Patchright's README explicitly warns that
+    custom flags can fight its patches).
     """
     browser = playwright.chromium.launch(
         headless=not visible,
-        args=["--disable-blink-features=AutomationControlled"],
+        channel="chrome",
     )
     ctx_kwargs = dict(
         viewport={"width": 1440, "height": 900},
