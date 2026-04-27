@@ -1204,12 +1204,17 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
     print(f"  Uploading: {title}")
 
     _ITEMS_NEW = f"{BASE_URL}/items/new"
-    page.goto(_ITEMS_NEW, wait_until="domcontentloaded")
-    try:
-        page.wait_for_url(lambda url: _ITEMS_NEW in url, timeout=120000)
-    except PlaywrightTimeout:
-        print(f"    Error: did not reach /items/new (URL: {page.url})")
-        return {**empty, "error": "did not reach /items/new"}
+    # Skip the goto when we're already on /items/new — typically true for the
+    # first item, since main()'s bootstrap probe already landed here. After
+    # publishing an item Vinted redirects to the profile, so item 2+ falls
+    # through to the goto. Saves one round-trip + dcl wait per run.
+    if _ITEMS_NEW not in page.url:
+        page.goto(_ITEMS_NEW, wait_until="domcontentloaded")
+        try:
+            page.wait_for_url(lambda url: _ITEMS_NEW in url, timeout=120000)
+        except PlaywrightTimeout:
+            print(f"    Error: did not reach /items/new (URL: {page.url})")
+            return {**empty, "error": "did not reach /items/new"}
 
     # DataDome can interstitialise any request (not just login) when it flags the
     # session as suspicious. Catch it here so we abort cleanly instead of marking
