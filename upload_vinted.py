@@ -857,7 +857,8 @@ def main():
         # final post-redirect URL — Vinted does the auth-check redirect server-
         # side, so we don't need ``wait_for_url`` to settle anything.
         _ITEMS_NEW = f"{BASE_URL}/items/new"
-        _AUTH_PATHS = ("/member/signup", "/member/login", "/member/verify", "/oauth", "/auth/")
+        _AUTH_PATHS = ("/member/signup", "/member/login", "/member/verify",
+                       "/oauth", "/auth/", "/session-refresh")
         page.goto(_ITEMS_NEW, wait_until="domcontentloaded")
 
         _abort_if_captcha(page, args.visible)
@@ -874,6 +875,13 @@ def main():
                 print(f"  Session expired (redirected to auth: {page.url}), logging in...")
             else:
                 print(f"  Session expired (redirected to {page.url}), logging in...")
+            # Stale refresh_token_web makes Vinted bounce the signup page to
+            # home — the server sees a valid refresh token and decides the user
+            # is already logged in. Clear auth cookies first so the server treats
+            # the browser as anonymous. datadome lives on .vinted.es (same root
+            # domain as access_token_web) so we filter by name, not domain.
+            for _tok in ("access_token_web", "refresh_token_web", "_vinted_fr_session"):
+                context.clear_cookies(name=_tok)
             login(page, visible=args.visible)
             context.storage_state(path=str(AUTH_STATE_PATH))
             print(f"  Session saved to {AUTH_STATE_PATH}")
