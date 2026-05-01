@@ -216,3 +216,8 @@ Maps Wallapop `category_id` → Vinted category tree navigation path plus per-ca
    - The upload flow consults `vinted_nav_override` first; falls back to the mapping + resolver chain if absent.
 
    This keeps `category_mapping.json` as a category-level default (partial path is fine) and delegates item-level disambiguation to a one-time interactive step, rather than silently producing drafts or misclassifying items.
+5. **`--item ID` and interactive item selection.** Right now you can scope a run via `--limit N` (process the first N pending items) or `--retry-drafts` (re-attempt every existing Vinted draft). Neither lets you target a specific Wallapop item, so iterating on a single problematic listing means waiting for it to come up in the natural order. Plan:
+   - `--item <wallapop_id>` runs the upload flow for exactly that item, bypassing the migration filter (the user is being explicit about wanting to retry, even on already-published or already-draft items).
+   - `--item` with no value (or a separate `--interactive`) prints a numbered list of pending items (title + Wallapop category) and prompts the user to pick one. The selection becomes the `--item ID` for the rest of the run.
+   - Fail loud on unknown ids: if the id isn't in `data/downloaded_items.json`, print the available ids (or a hint to re-run `extract_wallapop.py`) and exit non-zero. Don't silently fall back to the full queue.
+   - Tests cover the three pure pieces — id-lookup, list-selection by index, the `--item`/`--interactive` argparse contract — without touching the browser.
