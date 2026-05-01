@@ -41,7 +41,8 @@ from vinted.session import (
     build_session,
     user_id_from_jwt_cookie,
 )
-from vinted.pages._common import human_delay, human_type, js_click_button as _js_click_button
+from vinted.pages._common import human_delay, human_type
+from vinted.pages.login import LoginPage
 from vinted.pages.new_item import NewItemPage
 
 load_dotenv()
@@ -103,75 +104,6 @@ def mark_migrated(
     _mark_migrated(
         migration, MIGRATION_PATH, item_id, vinted_id, status, missing_fields, error
     )
-
-
-def login(page, visible: bool = True):
-    """Log in to Vinted. Waits up to 2 minutes for manual captcha resolution if needed.
-
-    Every click goes through ``_js_click_button`` rather than native
-    ``locator.click()``. Native clicks issue CDP ``Input.dispatchMouseEvent``
-    commands which DataDome inspects more aggressively than synthetic JS
-    events; combined with the bundled-Chromium build, native clicks are
-    enough to trip the slider on every login attempt. JS clicks fire the
-    DOM event without going through the CDP input pipeline.
-    """
-    print("Logging in to Vinted...")
-    # domcontentloaded — not networkidle. Vinted's tracking/telemetry keeps XHRs
-    # alive long past initial paint, so networkidle reliably times out at 30s.
-    # The switch button is in the parsed HTML; the per-step wait_for_selector
-    # calls below are what actually gate progression on element availability.
-    page.goto(f"{BASE_URL}/member/signup/select_type", wait_until="domcontentloaded")
-    human_delay(1, 2)
-
-    # Accept cookie banner (OneTrust) if present
-    try:
-        btn = page.locator("#onetrust-accept-btn-handler")
-        btn.wait_for(state="visible", timeout=5000)
-        _js_click_button(page, btn)
-        human_delay(0.5, 1)
-    except Exception:
-        pass
-
-    # The page opens on the register view by default; switch to the login view
-    sw = page.get_by_test_id("auth-select-type--register-switch")
-    _js_click_button(page, sw)
-    page.wait_for_selector("[data-testid='auth-select-type--login-email']")
-    human_delay(0.8, 1.5)
-
-    email_btn = page.get_by_test_id("auth-select-type--login-email")
-    _js_click_button(page, email_btn)
-    page.wait_for_selector("input[type='password']")
-    human_delay(0.8, 1.5)
-
-    human_type(page.get_by_placeholder("Nombre de usuario o e-mail"), EMAIL)
-    human_delay(0.5, 1)
-    human_type(page.locator("input[type='password']"), PASSWORD)
-    human_delay(0.8, 1.5)
-
-    # Vinted's login form button is labelled "Continuar" and is not type=submit
-    # (it has an onClick handler instead). The previous selector
-    # ``button[type='submit']`` matched a still-mounted signup-form button
-    # hidden by CSS — the click silently no-op'd and the URL never left
-    # ``/signup/select_type``. Locate by accessible name. ``exact=True`` so we
-    # don't catch "Continuar con Apple/Google/Facebook" if any of those are
-    # rendered alongside.
-    submit = page.get_by_role("button", name="Continuar", exact=True)
-    _js_click_button(page, submit)
-
-    if visible:
-        print("  Waiting... solve the slider in the browser if it appears.")
-    _AUTH_PATHS = ("/member/signup", "/member/login", "/member/verify", "/oauth", "/auth/")
-    # In visible mode allow 2min for manual captcha; in headless redirect is instant or never
-    try:
-        page.wait_for_url(
-            lambda url: "vinted.es" in url and not any(p in url for p in _AUTH_PATHS),
-            timeout=120000 if visible else 20000,
-        )
-    except PlaywrightTimeout:
-        _abort_if_captcha(page, visible)
-        raise RuntimeError(f"Login did not complete: {page.url}")
-    _abort_if_captcha(page, visible)
-    print(f"  Login OK — {page.url}")
 
 
 def _abort_if_captcha(page, visible: bool) -> None:
@@ -882,7 +814,9 @@ def main():
             # domain as access_token_web) so we filter by name, not domain.
             for _tok in ("access_token_web", "refresh_token_web", "_vinted_fr_session"):
                 context.clear_cookies(name=_tok)
-            login(page, visible=args.visible)
+            LoginPage(page, base_url=BASE_URL).login(
+                email=EMAIL, password=PASSWORD, visible=args.visible
+            )
             context.storage_state(path=str(AUTH_STATE_PATH))
             print(f"  Session saved to {AUTH_STATE_PATH}")
 
