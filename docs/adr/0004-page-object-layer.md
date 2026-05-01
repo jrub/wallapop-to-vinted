@@ -1,7 +1,25 @@
 # 4. Extract the Page Object layer + introduce HTML fixture testing
 
 Date: 2026-04-26
-Status: Proposed
+Status: Accepted (2026-04-27, in progress — steps 0-2 landed)
+
+## Research
+
+Reviewed 2026-04-25 (WebFetch + targeted reading) before drafting this ADR. Persisted here so future maintainers don't have to re-investigate.
+
+- **Fowler, "PageObject"** (https://martinfowler.com/bliki/PageObject.html): the canonical write-up describes the pattern's interface and benefits but **does not address unit-testing of Page Objects**. The implicit assumption is that POMs are consumed by tests, not tested as units.
+- **Playwright official guidance** (https://playwright.dev/docs/pom): POMs are injected into E2E specs via `test.extend` fixtures. `page.set_content(html)` exists in the API and is mentioned in the docs for component-style testing, but the POM pages explicitly recommend exercising the object through real navigations.
+- **Tutorial sources** (Sudolabs, NashTech, BrowserStack guides reviewed): all describe the same pattern — POMs consumed by real-navigation E2E. None propose testing POMs against captured HTML.
+
+**Orthodox conclusion**: test Page Objects only indirectly, through end-to-end runs.
+
+**Why we deviate** (deliberate, scoped):
+
+1. **Live E2E against Vinted is gated by DataDome.** Every navigation can trigger a captcha — non-deterministic, slow, unsuitable for an automated suite. Re-running the same test 50× in 5 seconds against a fixture is feasible; running 50× against Vinted is not.
+2. **The 2 known bugs are pure selector issues.** They reproduce deterministically against captured HTML, which makes fixture-driven TDD a strict win for *those specific cases*: write red test → fix selector → verify green → ship. Iterating without a fixture means iterating against `--limit 1 --visible`, paying DataDome risk and minutes per cycle.
+3. **ARIA snapshots** (Playwright `expect(...).to_match_aria_snapshot(...)`): a forward-looking technique surfaced during the research. Captures the accessibility tree as YAML — when Vinted reorganizes a form, the snapshot fails loudly. Cheaper than enumerating selectors per verb.
+
+**The deviation does not extend to every verb.** Trivial verbs (`fill_title`, `set_condition` simple) are still validated by `--limit 1 --visible`. The Coverage section below makes the cost/benefit explicit.
 
 ## Context
 
@@ -32,3 +50,30 @@ For testing, this phase **deliberately departs from the orthodox Page Object tes
 - **Positive.** The two known bugs (package-size click, books scanner) get reproducible failing tests before the fix lands, which is impossible today. The fixture HTML doubles as a structural regression detector via ARIA snapshots, so a Vinted DOM change announces itself in CI instead of silently breaking uploads. Page Objects become composable for the orchestrator extraction in Phase 5: a fake `page` plus a real `NewItemPage` is enough to dry-run the upload flow end-to-end. The `playwright` marker keeps the fast loop fast — most tests still run without Chromium.
 - **Negative.** Fixtures are point-in-time captures. Every meaningful Vinted DOM refresh requires the maintainer to re-run the capture script, review the diff, and re-commit the HTML. ARIA snapshots mitigate this by failing loudly rather than rotting silently, but the manual re-capture step is real ongoing cost. We accept it as cheaper than the alternative (live E2E, captcha-gated, slow). Adding `pytest-playwright` and Chromium to the dev dependency footprint is a non-trivial install cost; the marker split keeps it optional for contributors who only want to run the domain/wallapop/vinted-session tests.
 - **Open.** Whether `EditDraftPage` should compose `NewItemPage` (delegate to it for shared verbs like `fill_title` / `publish_or_draft`) or whether both should derive from a shared base mixin is left to the implementation step — the duplication will only become visible when the second module lands. The decision is not load-bearing; either approach removes the same lines from `upload_vinted.py`.
+
+## Progress
+
+**Step 0 — Tooling. ✅ 2026-04-26 (`4a710fa`).** `pytest-playwright>=0.5` added; `scripts/capture_vinted_fixtures.py` skeleton; `make test-fast` / `make test-browser` targets.
+
+**Step 1 — Pure helpers to `domain/`. ✅ 2026-04-26 (`86d8f1b`).** `_extract_item_id_from_url`, `_is_form_url` → `domain/urls.py`. `_normalize_title`, `match_draft_to_item` → `domain/drafts.py`. `_testid_to_key` → `domain/text.py`.
+
+**Step 2 — Fixture infrastructure + first capture. ✅ 2026-04-27 (`ff2960d`, `8b19be3`).** `tests/conftest.py` exposes `load_vinted_fixture(scope)` which loads HTML via `page.set_content(..., wait_until="domcontentloaded")` — the default `"load"` raced against the ~2 MB fixture's external CDN URLs and produced flaky failures. `tests/vinted/pages/test_fixtures.py` parametrised anchor regression test fails loudly when a captured fixture loses its anchor selector. First fixture: `tests/fixtures/vinted_html/new_item.html` (anchor: `input[data-testid='title--input']`).
+
+**Step 2.5 — Login/navigation unblocked (unplanned). ✅ 2026-04-27.** Capturing the fixture broke the live login flow and we burnt 4 commits triangulating DataDome's selectivity:
+
+- `4d35edd` rewrote login with native `locator.click()` + `domcontentloaded` — **broke stealth**. DataDome flagged the CDP-issued mouse events behind `locator.click()`.
+- `97e4587` reverted to `_js_click_button` (synthetic `el.click()` via `page.evaluate`) for the 4 login clicks and added `channel="chrome"` to `build_session` (Patchright's full stealth requires real Chrome — bundled "Chrome for Testing" is detectable). Locked the contract with `tests/test_upload_login.py` (2 tests asserting 4× `_js_click_button` and 0× native click in `login()`).
+- `6f90b36` propagated `wait_until="domcontentloaded"` to every `page.goto(...)` (the Playwright default `"load"` hung 30 s on Vinted's telemetry-heavy pages) and dropped the post-login `wait_for_url` (after `dcl` the URL is already final). `tests/test_upload_navigation.py` adds an AST check that no future `page.goto` lands without `wait_until=`.
+- `d43df90` skips the redundant `/items/new` goto for the first item (bootstrap leaves the browser there).
+
+Lessons that outlive the project:
+
+- Patchright requires `channel="chrome"` for full stealth. Bundled Chromium ("Chrome for Testing") is detectable.
+- DataDome distinguishes CDP-driven clicks (`locator.click()`) from synthetic JS clicks (`el.click()` via `page.evaluate`). The latter is stealthier for auth buttons.
+- On Vinted, `page.goto(..., wait_until="domcontentloaded")` is the safe default — the `"load"` default hangs on telemetry/analytics requests.
+
+Validated in production: `python upload_vinted.py --limit 1 --visible` publishes 1/1 without DataDome slider. 184 tests green.
+
+**Step 3 — NewItemPage + package-size fix. ✅ DONE (2026-05-01).** `vinted/pages/new_item.py` extracted from `upload_vinted.py`. Package-size bug fixed: now clicks `[data-testid='package_type_selector_2--input']` (radio input) instead of the cell div, with 2 s timeout (was 5 s) so non-leaf fallback returns immediately. Shared utilities (`human_delay`, `human_type`, `js_click_button`, `_PANEL_SELECTOR`) moved to `vinted/pages/_common.py`; `upload_vinted.py` imports them from there. Two new playwright tests (`test_select_package_size_checks_radio_input`, `test_select_package_size_returns_false_when_block_absent`) confirm the fix. Books scanner test (`test_scan_dynamic_fields_finds_isbn_field`) auto-skips until `new_item_books` fixture is captured; capture handler added to `scripts/capture_vinted_fixtures.py`. 186 tests, 1 skipped.
+
+**Step 4+ — remaining Page Objects (`login.py`, `edit_draft.py`, `profile.py`). ⏳ Pending.** `login()`, `get_member_url()`, `scrape_drafts()` remain in `upload_vinted.py` for now. Once `new_item_books` fixture is captured and the books scanner is fixed, then extract those pages.

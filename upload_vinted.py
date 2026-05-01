@@ -8,8 +8,6 @@ import os
 import sys
 import re
 import json
-import time
-import random
 import argparse
 from pathlib import Path
 from dotenv import load_dotenv
@@ -43,6 +41,8 @@ from vinted.session import (
     build_session,
     user_id_from_jwt_cookie,
 )
+from vinted.pages._common import human_delay, human_type, js_click_button as _js_click_button
+from vinted.pages.new_item import NewItemPage
 
 load_dotenv()
 
@@ -59,20 +59,6 @@ BASE_URL = "https://www.vinted.es"
 # All items are uploaded with this condition. Wallapop condition values don't map cleanly
 # to Vinted's options and the items being migrated are personal second-hand goods.
 VINTED_CONDITION = "Nuevo sin etiquetas"
-
-# Selectors for the Vinted upload form. Grouped here so DOM churn is easy to patch.
-PUBLISH_BUTTON_TESTID = "upload-form-post-button"
-DRAFT_BUTTON_TESTID = "upload-form-save-draft-button"
-# Every dynamic dropdown on /items/new exposes a testid ending in '-single-list-input'
-# (category-condition-single-list-input, size-single-list-input, etc.).
-DYNAMIC_DROPDOWN_SELECTOR = "[data-testid$='single-list-input']"
-# Inline validation messages appear beside each field when Vinted rejects submission.
-# The canonical marker is `div.web_ui__Validation__warning[role='alert']`; the rest are
-# legacy fallbacks for older markup paths.
-ERROR_SELECTOR = (
-    "div.web_ui__Validation__warning[role='alert'], "
-    "[role='alert'], .c-input__title--error, .u-flexbox--error-message"
-)
 
 if not CATEGORIES_PATH.exists():
     print(f"ERROR: {CATEGORIES_PATH} not found. Run extract_wallapop.py first.")
@@ -117,624 +103,6 @@ def mark_migrated(
     _mark_migrated(
         migration, MIGRATION_PATH, item_id, vinted_id, status, missing_fields, error
     )
-
-
-def human_delay(min_s=0.5, max_s=1.5):
-    """Random pause to mimic human interaction timing."""
-    time.sleep(random.uniform(min_s, max_s))
-
-
-def human_type(locator, text: str):
-    """Type character by character at ~60 wpm with occasional hesitation pauses.
-
-    Vinted's React form listens to keyboard events, not DOM value changes.
-    page.fill() sets the value directly without firing key events, leaving
-    the field visually empty. press_sequentially() fires the correct events.
-    """
-    locator.click()
-    human_delay(0.2, 0.5)
-    for char in text:
-        locator.press_sequentially(char)
-        time.sleep(random.uniform(0.06, 0.22))
-        if random.random() < 0.08:  # occasional longer pause, like thinking
-            time.sleep(random.uniform(0.15, 0.45))
-
-
-def select_category(page, nav: list) -> tuple[bool, list[str]]:
-    """Navigate Vinted's category picker by clicking through each tree level.
-
-    The picker renders one level at a time as div[role="button"] elements.
-    :text-is() matches the exact label without substring false positives.
-
-    Expects `nav` to already be a fully-resolved leaf path (see
-    resolve_nav_to_leaf).  If Vinted still shows sub-options after clicking all
-    steps (the nav is one step short of a leaf), those options are returned so
-    the caller can persist them to category_mapping.json for manual review.
-
-    Returns (leaf_reached, sub_options).
-      - leaf_reached=True when the picker auto-closes after the last click.
-      - leaf_reached=False when sub-options remain after clicking all nav steps,
-        or on exception.  sub_options is non-empty only in the first case.
-    """
-    if not nav:
-        return False, []
-    try:
-        page.click("input[data-testid='catalog-select-dropdown-input']")
-        human_delay(0.5, 1.0)
-        for step in nav:
-            btn = page.locator('div[role="button"]').filter(
-                has=page.locator(f':text-is("{step}")')
-            ).first
-            btn.wait_for(state="visible", timeout=5000)
-            btn.click()
-            human_delay(0.4, 0.8)
-
-        # Detect "not a leaf": visible cells with ids like `catalog-<n>` remain
-        # when Vinted is still offering deeper sub-categories.
-        human_delay(0.6, 1.0)
-        sub_options = page.evaluate(
-            """() => Array.from(document.querySelectorAll('[id^="catalog-"]'))
-                     .filter(el => el.offsetParent !== null)
-                     .map(el => (el.innerText || '').trim().split('\\n')[0])
-                     .filter(t => t.length > 0 && t.length < 80)
-                     .slice(0, 10)"""
-        ) or []
-        if sub_options:
-            # Nav path is not a leaf — persist observed options for manual review
-            # and fall back to draft.
-            print(
-                f"    WARNING: nav path {' > '.join(nav)!r} is not a leaf "
-                f"(sub-options: {sub_options}) — falling back to draft."
-            )
-            try:
-                page.keyboard.press("Escape")
-                human_delay(0.3, 0.6)
-            except Exception:
-                pass
-            return False, sub_options
-
-        print(f"    Category: {' > '.join(nav)}")
-        return True, []
-    except Exception as e:
-        print(f"    WARNING: could not select category {nav}: {e}")
-        try:
-            page.keyboard.press("Escape")
-        except Exception:
-            pass
-        return False, []
-
-
-def set_condition(page) -> bool:
-    """Select the item condition. Silently skips if the field isn't visible for this category."""
-    try:
-        cond = page.locator("[data-testid='category-condition-single-list-input']")
-        cond.wait_for(state="visible", timeout=3000)
-        cond.click()
-        human_delay(0.3, 0.6)
-        page.locator('div[role="button"]').filter(
-            has=page.locator(f':text-is("{VINTED_CONDITION}")')
-        ).first.click()
-        print(f"    Condition: {VINTED_CONDITION}")
-        return True
-    except Exception:
-        return False
-
-
-def scan_dynamic_fields(page) -> list[dict]:
-    """Enumerate visible attribute dropdowns currently rendered on the upload form.
-
-    Returns a list of {testid, label, kind} for every input-like element exposed by
-    Vinted for the selected category, skipping the category picker and title/price/
-    description (which have their own flow). 'kind' is 'dropdown' for single-list
-    pickers, 'combobox' for brand-style autocomplete inputs, and 'other' for the rest.
-    """
-    try:
-        return page.evaluate("""
-        () => {
-          const skipTestidPrefix = ['catalog-', 'title--', 'description--', 'price-input--',
-                                    'add-photos-', 'upload-form-', 'currency-',
-                                    'search-text--', 'package_type_selector_'];
-          const skipTestidSubstr = ['-package-size--cell', 'package-size-suggestion',
-                                    '-chevron-down'];
-          const out = [];
-          const seen = new Set();
-          const consider = document.querySelectorAll(
-            "[data-testid$='single-list-input'], " +
-            "[data-testid$='-dropdown-input']"
-          );
-          consider.forEach(el => {
-            const testid = el.getAttribute('data-testid') || '';
-            if (!testid || seen.has(testid)) return;
-            if (skipTestidPrefix.some(p => testid.startsWith(p))) return;
-            if (skipTestidSubstr.some(s => testid.includes(s))) return;
-            if (/condition/.test(testid)) return;
-            const rect = el.getBoundingClientRect();
-            if (rect.width === 0 || rect.height === 0) return;
-            seen.add(testid);
-            let kind = 'other';
-            if (testid.endsWith('single-list-input')) kind = 'dropdown';
-            else if (testid.endsWith('-dropdown-input')) kind = 'combobox';
-            let label = '';
-            let node = el;
-            for (let i = 0; i < 10 && node; i++) {
-              node = node.parentElement;
-              if (!node) break;
-              const lbl = node.querySelector('label, .c-input__title, .web_ui__Text__title, h2, h3');
-              if (lbl && lbl.innerText && lbl.innerText.trim()) {
-                label = lbl.innerText.trim();
-                break;
-              }
-            }
-            out.push({ testid, label, kind });
-          });
-          return out;
-        }
-        """) or []
-    except Exception as e:
-        print(f"    WARNING: could not scan dynamic fields: {e}")
-        return []
-
-
-# Vinted marks open dropdown panels with data-testid ending in "-dropdown-content"
-# (e.g. "color-select-dropdown-content", "brand-select-dropdown-content"). Scoping
-# queries to this element avoids matching buttons elsewhere on the page and sidesteps
-# visibility checks that break inside position:fixed / overflow:auto containers.
-_PANEL_SELECTOR = '[data-testid$="-dropdown-content"]'
-
-
-def _collect_visible_options(page) -> list[str]:
-    """Read all option labels from the currently open Vinted dropdown panel.
-
-    Scopes to the panel element (data-testid ending in "-dropdown-content") so we
-    never match buttons outside the panel. Within the panel, prefers --title child
-    elements (used by color/brand cells) over raw innerText so the color circle
-    and checkbox markup don't contaminate the label. No visibility filter needed:
-    within a scoped panel all rendered items are valid options regardless of scroll
-    position or position:fixed/overflow:auto ancestors.
-    """
-    try:
-        return page.evaluate(f"""
-        () => {{
-            const panel = document.querySelector('{_PANEL_SELECTOR}');
-            const root = panel || document;
-            const seen = new Set();
-            const out = [];
-            // --title children (color/brand cells): cleanest label source
-            root.querySelectorAll('[data-testid$="--title"]').forEach(el => {{
-                const text = (el.innerText || '').trim();
-                if (text.length > 0 && text.length < 80 && !seen.has(text)) {{
-                    seen.add(text); out.push(text);
-                }}
-            }});
-            if (out.length) return out;
-            // Fallback: plain div[role="button"] text (standard single-list dropdowns)
-            root.querySelectorAll('div[role="button"]').forEach(el => {{
-                const text = (el.innerText || '').trim().split('\\n')[0].trim();
-                if (text.length > 0 && text.length < 80 && !seen.has(text)) {{
-                    seen.add(text); out.push(text);
-                }}
-            }});
-            return out;
-        }}
-        """) or []
-    except Exception:
-        return []
-
-
-def _js_click_option(page, label: str) -> None:
-    """Click an option in the open dropdown panel by its label text using JavaScript.
-
-    Scopes the search to the open panel (data-testid ending in "-dropdown-content")
-    and matches via --title children first (color/brand cells), then falls back to
-    plain div[role="button"] innerText. The JS click never scrolls the page, avoiding
-    the erratic viewport movement that triggers DataDome bot detection.
-    """
-    page.evaluate(
-        f"""(label) => {{
-            const panel = document.querySelector('{_PANEL_SELECTOR}');
-            const root = panel || document;
-            // Try --title pattern: find title el → click its role=button parent
-            const titleEl = Array.from(root.querySelectorAll('[data-testid$="--title"]'))
-                .find(el => (el.innerText || '').trim() === label);
-            if (titleEl) {{
-                const btn = titleEl.closest('div[role="button"]');
-                if (btn) {{ btn.click(); return; }}
-            }}
-            // Fallback: direct div[role="button"] text match
-            const btn = Array.from(root.querySelectorAll('div[role="button"]'))
-                .find(el => (el.innerText || '').trim().split('\\n')[0].trim() === label);
-            if (btn) btn.click();
-        }}""",
-        label,
-    )
-
-
-def fill_dropdown(page, testid: str, value: str) -> tuple[bool, list[str]]:
-    """Open the dropdown identified by testid, try to select an option matching `value`.
-
-    Returns (selected, options_seen). options_seen is populated on both hit and miss
-    so the caller can persist them in category_mapping.json for the user to review.
-    Uses JS click to avoid Playwright's auto-scroll which can trigger DataDome.
-    """
-    options: list[str] = []
-    try:
-        inp = page.locator(f"[data-testid='{testid}']")
-        inp.wait_for(state="visible", timeout=3000)
-        inp.click()
-        human_delay(0.3, 0.6)
-        options = _collect_visible_options(page)
-
-        matched = find_option_match(options, value)
-        if matched is not None:
-            _js_click_option(page, matched)
-            human_delay(0.3, 0.6)
-            return True, options
-        # No match — close the panel so the next field can open
-        try:
-            page.keyboard.press("Escape")
-        except Exception:
-            pass
-        human_delay(0.2, 0.4)
-        return False, options
-    except Exception as e:
-        print(f"    WARNING: fill_dropdown({testid}, {value!r}) failed: {e}")
-        try:
-            page.keyboard.press("Escape")
-        except Exception:
-            pass
-        return False, options
-
-
-def fill_combobox(page, testid: str, value: str) -> tuple[bool, list[str]]:
-    """For Vinted's brand/color pickers (input + dropdown suggestions).
-
-    Two-phase approach:
-    1. Click to open and check for an immediate match in visible options.
-       Readonly inputs (e.g. Color) show all choices upfront — if there's no
-       immediate match we return False right away without typing.
-    2. For non-readonly inputs (e.g. Brand autocomplete): type the value and
-       re-check. Uses faster typing since timing-based bot detection is not
-       the concern here (DataDome reacts to scroll, not keystroke cadence).
-
-    Uses JS click to avoid Playwright's auto-scroll which can trigger DataDome.
-    Returns (selected, options_seen).
-    """
-    options: list[str] = []
-    try:
-        inp = page.locator(f"[data-testid='{testid}']")
-        inp.wait_for(state="visible", timeout=3000)
-        inp.click()
-        human_delay(0.4, 0.7)
-
-        # Phase 1: immediate match (Color picker shows all options on open)
-        options = _collect_visible_options(page)
-        matched = find_option_match(options, value)
-        if matched is not None:
-            _js_click_option(page, matched)
-            human_delay(0.3, 0.5)
-            return True, options
-
-        # Readonly inputs (Color) have shown all available options — no match means
-        # the value simply isn't offered. Don't try to type into a readonly field.
-        is_readonly = inp.get_attribute("readonly") is not None
-        if is_readonly:
-            try:
-                page.keyboard.press("Escape")
-            except Exception:
-                pass
-            human_delay(0.2, 0.3)
-            return False, options
-
-        # Phase 2: type to filter (Brand autocomplete and similar text inputs)
-        # Use strict=True: Vinted filters suggestions based on what was typed, so any
-        # non-exact result is a false positive (e.g. typing "MS-DOS" surfaces "Do").
-        for ch in value:
-            inp.press_sequentially(ch)
-            time.sleep(random.uniform(0.02, 0.06))
-        human_delay(0.4, 0.7)
-        options = _collect_visible_options(page)
-        matched = find_option_match(options, value, strict=True)
-        if matched is not None:
-            _js_click_option(page, matched)
-            human_delay(0.3, 0.5)
-            return True, options
-
-        # No match — clear the input so typed value doesn't remain as free text
-        try:
-            inp.fill("")
-            page.keyboard.press("Escape")
-        except Exception:
-            pass
-        human_delay(0.2, 0.3)
-        return False, options
-    except Exception as e:
-        print(f"    WARNING: fill_combobox({testid}, {value!r}) failed: {e}")
-        try:
-            page.keyboard.press("Escape")
-        except Exception:
-            pass
-        return False, options
-
-
-def fill_first_option(page, testid: str) -> tuple[bool, list[str]]:
-    """Open the dropdown, read its options, click the first one, close. Single open cycle.
-
-    Used as a last-resort fill for Color when Wallapop has no colour value: Vinted
-    puts its "Sugerencias" (category-aware colour guesses) at the top of the picker,
-    so the first option is the best automatic guess. Single open/close keeps viewport
-    activity minimal, which matters for DataDome.
-    """
-    try:
-        inp = page.locator(f"[data-testid='{testid}']")
-        inp.wait_for(state="visible", timeout=3000)
-        inp.click()
-        human_delay(0.3, 0.6)
-        options = _collect_visible_options(page)
-        if not options:
-            try:
-                page.keyboard.press("Escape")
-            except Exception:
-                pass
-            return False, []
-        _js_click_option(page, options[0])
-        human_delay(0.3, 0.5)
-        return True, options
-    except Exception as e:
-        print(f"    WARNING: fill_first_option({testid}) failed: {e}")
-        try:
-            page.keyboard.press("Escape")
-        except Exception:
-            pass
-        return False, []
-
-
-def select_package_size(page) -> bool:
-    """Pick the 'Mediano' (id=2) Vinted package size unconditionally.
-
-    Wallapop doesn't expose the package size — it's chosen at listing time and not
-    surfaced in the API. Vinted's package picker isn't a weight scale either; it's a
-    set of named tiers (Pequeño / Mediano / Grande / XGrande) described as "what fits
-    in a shoebox", "what fits in a moving box", etc. 'Mediano' is the safe default
-    for the bulk of items in this catalogue. The cell testid is '2-package-size--cell'.
-    """
-    try:
-        cell = page.locator("[data-testid='2-package-size--cell']")
-        cell.wait_for(state="visible", timeout=5000)
-        cell.click()
-        human_delay(0.3, 0.6)
-        print("    Shipping package: Mediano (default)")
-        return True
-    except Exception as e:
-        print(f"    WARNING: could not pick package size: {e}")
-        return False
-
-
-def select_no_brand(page, testid: str) -> bool:
-    """Click the 'Publicar sin marca' option inside the brand dropdown.
-
-    Opens the dropdown (in case it's closed) then uses JS click to pick the
-    option without triggering Playwright's auto-scroll.
-    """
-    try:
-        inp = page.locator(f"[data-testid='{testid}']")
-        inp.click()
-        human_delay(0.3, 0.6)
-        clicked = page.evaluate(
-            f"""() => {{
-                const panel = document.querySelector('{_PANEL_SELECTOR}');
-                const root = panel || document;
-                const btn = Array.from(root.querySelectorAll('div[role="button"]'))
-                    .find(el => (el.innerText || '').trim() === 'Publicar sin marca');
-                if (btn) {{ btn.click(); return true; }}
-                return false;
-            }}"""
-        )
-        if clicked:
-            human_delay(0.3, 0.6)
-            return True
-        page.keyboard.press("Escape")
-        return False
-    except Exception:
-        try:
-            page.keyboard.press("Escape")
-        except Exception:
-            pass
-        return False
-
-
-def collect_form_errors(page) -> list[str]:
-    """Read inline validation messages shown by Vinted after a failed publish attempt.
-
-    Vinted's error markup has shifted over time. We cast a wide net: aria-invalid inputs,
-    legacy error classes, anything whose class name contains 'error' or 'caution', plus
-    a text-prefix heuristic ("Rellena", "Selecciona", "Introduce", "Indica") for
-    validation copy that Vinted renders as plain divs without obvious classes.
-    """
-    try:
-        msgs = page.evaluate(r"""
-        () => {
-          const out = new Set();
-          const isVisible = el => {
-            if (!el) return false;
-            const r = el.getBoundingClientRect();
-            if (r.width === 0 || r.height === 0) return false;
-            const s = getComputedStyle(el);
-            return s.display !== 'none' && s.visibility !== 'hidden' && s.opacity !== '0';
-          };
-          // 1) aria-invalid inputs → read adjacent text via aria-describedby or nearest sibling
-          document.querySelectorAll('[aria-invalid="true"]').forEach(el => {
-            const ids = (el.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
-            ids.forEach(id => {
-              const d = document.getElementById(id);
-              if (d && isVisible(d)) {
-                const t = (d.innerText || '').trim();
-                if (t) out.add(t);
-              }
-            });
-          });
-          // 2) elements whose class contains 'error' or 'caution'
-          document.querySelectorAll('[class*="error" i], [class*="caution" i], [role="alert"]').forEach(el => {
-            if (!isVisible(el)) return;
-            const t = (el.innerText || '').trim();
-            if (t && t.length < 200) out.add(t);
-          });
-          // 3) text-prefix heuristic: Vinted error copy typically starts with these verbs
-          const prefixes = /^(rellena|selecciona|introduce|indica|a[nñ]ade|elige|falta|debes)\b/i;
-          document.querySelectorAll('div, span, p').forEach(el => {
-            if (!isVisible(el)) return;
-            if (el.children.length > 0) return;  // leaf nodes only
-            const t = (el.innerText || '').trim();
-            if (t && t.length < 200 && prefixes.test(t)) out.add(t);
-          });
-          return Array.from(out);
-        }
-        """) or []
-        return msgs
-    except Exception:
-        return []
-
-
-def _dump_form_buttons(page) -> list[dict]:
-    """Diagnostic helper: list all buttons visible on the upload form with their testids/text."""
-    try:
-        return page.evaluate("""
-        () => Array.from(document.querySelectorAll('button'))
-          .filter(b => b.offsetParent !== null)
-          .map(b => ({
-            testid: b.getAttribute('data-testid') || '',
-            text: (b.innerText || '').trim().slice(0, 40)
-          }))
-        """) or []
-    except Exception:
-        return []
-
-
-def _find_publish_button(page):
-    """Locate the publish button. Tries the known testid, then falls back to visible text."""
-    try:
-        btn = page.locator(f"button[data-testid='{PUBLISH_BUTTON_TESTID}']")
-        btn.wait_for(state="visible", timeout=3000)
-        return btn
-    except PlaywrightTimeout:
-        pass
-    # Fallback: match by visible text. Vinted's Spanish button reads "Subir" (or "Publicar").
-    for text in ("Subir", "Publicar", "Subir artículo"):
-        try:
-            btn = page.get_by_role("button", name=text, exact=True)
-            btn.wait_for(state="visible", timeout=1500)
-            return btn
-        except PlaywrightTimeout:
-            continue
-    return None
-
-
-def _dismiss_critical_error_dialog(page) -> bool:
-    """Dismiss Vinted's critical-error modal if present, using JS click (no scroll).
-
-    Returns True if a dialog was found and dismissed.
-    The modal (data-testid="item-upload-critical-error-dialog--overlay") appears after a
-    failed publish when Vinted decides the form has unrecoverable errors. It blocks all
-    further interaction — including the Save-draft button — until dismissed.
-    """
-    try:
-        dismissed = page.evaluate("""
-        () => {
-            const overlay = document.querySelector(
-                '[data-testid="item-upload-critical-error-dialog--overlay"]'
-            );
-            if (!overlay) return false;
-            // Try the close/OK button inside the dialog
-            const btn = overlay.querySelector('button');
-            if (btn) { btn.click(); return true; }
-            // Fallback: click outside the dialog card to close it
-            overlay.click();
-            return true;
-        }
-        """)
-        if dismissed:
-            human_delay(0.4, 0.7)
-        return bool(dismissed)
-    except Exception:
-        return False
-
-
-def _js_click_button(page, locator) -> None:
-    """Click a button via JavaScript to avoid Playwright's scroll-into-view behaviour.
-
-    Playwright's locator.click() scrolls the element into view before clicking,
-    causing the viewport to jump — which DataDome interprets as bot-like behaviour.
-    A JS click fires the event without moving the scroll position.
-    """
-    try:
-        el = locator.element_handle(timeout=3000)
-        if el:
-            page.evaluate("el => el.click()", el)
-    except Exception:
-        locator.click(timeout=10000)  # graceful fallback
-
-
-def publish_or_draft(
-    page, fallback_id_seed: str = "", save_as_draft_on_fail: bool = True
-) -> tuple[str, str, list[str]]:
-    """Try to publish; on validation failure, optionally fall back to saving a draft.
-
-    Returns (vinted_id, status, errors) with status ∈ {"published","draft","failed"}.
-    If the post-save URL doesn't expose an item ID (Vinted sometimes redirects to the
-    profile page), a synthetic id derived from fallback_id_seed is returned so
-    migration.json can still record the item and idempotency holds on re-runs.
-
-    save_as_draft_on_fail=False is used in retry mode: the draft already exists on
-    Vinted, so when publish fails we want to leave it in place and report errors
-    instead of clicking a "Guardar borrador" button that isn't on the edit page.
-    """
-    errors: list[str] = []
-    pub = _find_publish_button(page)
-    if pub is None:
-        buttons = _dump_form_buttons(page)
-        print(f"    WARNING: publish button not visible. Form buttons: {buttons}")
-    else:
-        try:
-            _js_click_button(page, pub)
-            try:
-                page.wait_for_url(lambda url: not is_form_url(url), timeout=15000)
-            except PlaywrightTimeout:
-                pass
-            human_delay(1, 2)
-            if not is_form_url(page.url):
-                vinted_id = extract_item_id_from_url(page.url) or f"published-{fallback_id_seed}"
-                print(f"    Published: {page.url}")
-                return vinted_id, "published", []
-            errors = collect_form_errors(page)
-            if errors:
-                print(f"    Publish rejected: {errors[:4]}")
-            else:
-                print(f"    Clicked publish but no navigation or inline errors — URL still: {page.url}")
-        except Exception as e:
-            print(f"    WARNING: publish failed: {e}")
-
-    if not save_as_draft_on_fail:
-        return "", "draft", errors
-
-    # A critical-error dialog may be blocking the Save-draft button — dismiss it first.
-    _dismiss_critical_error_dialog(page)
-
-    try:
-        draft_btn = page.locator(f"button[data-testid='{DRAFT_BUTTON_TESTID}']")
-        _js_click_button(page, draft_btn)
-        try:
-            page.wait_for_url(lambda url: not is_form_url(url), timeout=15000)
-        except PlaywrightTimeout:
-            pass
-        human_delay(1, 2)
-        if is_form_url(page.url):
-            print(f"    Error: draft not saved — URL: {page.url}")
-            return "", "failed", errors
-        vinted_id = extract_item_id_from_url(page.url) or f"draft-{fallback_id_seed}"
-        print(f"    Draft saved: {page.url} (recorded id: {vinted_id})")
-        return vinted_id, "draft", errors
-    except Exception as e:
-        print(f"    Error saving draft: {e}")
-        return "", "failed", errors
 
 
 def login(page, visible: bool = True):
@@ -1028,7 +396,7 @@ def scrape_drafts(page, member_url: str) -> list[dict]:
 
 
 def fill_dynamic_attributes(
-    page, item: dict, cat_id: str, learn: bool
+    new_item: NewItemPage, item: dict, cat_id: str, learn: bool
 ) -> tuple[list[str], list[str], list[tuple[str, str]]]:
     """Fill every dynamic dropdown Vinted renders for this category.
 
@@ -1054,10 +422,10 @@ def fill_dynamic_attributes(
 
     # Form mounts progressively — give it a moment to finish rendering all dropdowns
     human_delay(1.0, 1.8)
-    fields = scan_dynamic_fields(page)
+    fields = new_item.scan_dynamic_fields()
     # Second pass after a short wait in case fields are still mounting
     human_delay(0.6, 1.0)
-    extra = scan_dynamic_fields(page)
+    extra = new_item.scan_dynamic_fields()
     seen = {f["testid"] for f in fields}
     for f in extra:
         if f["testid"] not in seen:
@@ -1133,7 +501,11 @@ def fill_dynamic_attributes(
             value = cfg["default"]
 
         def _fill(t: str, v: str):
-            return fill_combobox(page, t, v) if kind == "combobox" else fill_dropdown(page, t, v)
+            return (
+                new_item.fill_combobox(t, v)
+                if kind == "combobox"
+                else new_item.fill_dropdown(t, v)
+            )
 
         if value:
             value_mapped = (cfg.get("value_map") or {}).get(value, value)
@@ -1145,13 +517,13 @@ def fill_dynamic_attributes(
                 print(f"    {label}: {value_mapped}")
             else:
                 print(f"    WARNING: option {value_mapped!r} not found in '{label}'")
-                if cfg.get("fallback") == "no_brand" and select_no_brand(page, testid):
+                if cfg.get("fallback") == "no_brand" and new_item.select_no_brand(testid):
                     print(f"    {label}: Publicar sin marca (fallback)")
                 else:
                     missing.append(label)
         else:
             if cfg.get("fallback") == "no_brand":
-                if select_no_brand(page, testid):
+                if new_item.select_no_brand(testid):
                     print(f"    {label}: Publicar sin marca (fallback)")
                 else:
                     missing.append(label)
@@ -1159,7 +531,7 @@ def fill_dynamic_attributes(
                 # Wallapop lacks a colour value. Pick Vinted's first suggestion in a
                 # single open cycle — it's the category-aware top choice, better than
                 # hardcoding "Negro" and better than leaving the item as a draft.
-                ok, options = fill_first_option(page, testid)
+                ok, options = new_item.fill_first_option(testid)
                 if options and "observed_options" not in cfg:
                     cfg["observed_options"] = options[:30]
                     dirty = True
@@ -1230,6 +602,8 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
         return {**empty, "error": "form did not load"}
     human_delay(1, 2)
 
+    new_item = NewItemPage(page)
+
     image_paths = [p for p in item.get("images", []) if p and Path(p).exists()]
     if not image_paths:
         print(f"    WARNING: no images for '{title}', skipping.")
@@ -1276,7 +650,7 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
         nav = resolve_nav_to_leaf(
             nav, hints, nodes=_VINTED_NODES, path_index=_VINTED_BY_PATH
         )
-        cat_ok, sub_options = select_category(page, nav)
+        cat_ok, sub_options = new_item.select_category(nav)
         human_delay(0.5, 1.0)
     else:
         print(f"    WARNING: no category mapping for category_id={cat_id}")
@@ -1284,7 +658,7 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
     # Estado is a common Vinted attribute — try regardless of cat_ok. Vinted exposes it
     # as soon as a category (even an intermediate one) is selected. set_condition() is
     # a silent no-op if the field isn't visible, so it's safe to call unconditionally.
-    set_condition(page)
+    new_item.set_condition()
     human_delay(0.5, 1.0)
 
     missing: list[str] = []
@@ -1311,14 +685,14 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
         missing.append(f"Category (incomplete nav path: {' > '.join(nav)})")
 
     if cat_id:
-        m, nm, u = fill_dynamic_attributes(page, item, cat_id, learn)
+        m, nm, u = fill_dynamic_attributes(new_item, item, cat_id, learn)
         missing.extend(m)
         new_mappings.extend(nm)
         unresolved.extend(u)
 
-    # Shipping package size: always pick "Mediano" — see select_package_size() docstring.
-    # Common Vinted requirement; called unconditionally (silent no-op if cells aren't rendered).
-    select_package_size(page)
+    # Shipping package size: always pick "Mediano" — see NewItemPage.select_package_size().
+    # Called unconditionally (silent no-op if cells aren't rendered — non-leaf category).
+    new_item.select_package_size()
 
     try:
         price_val = float(item.get("price", 0) or 0)
@@ -1334,7 +708,7 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
     else:
         print(f"    WARNING: price is 0 — leaving it blank; fill it in the draft.")
 
-    vinted_id, status, errors = publish_or_draft(page, fallback_id_seed=str(item.get("id", "")))
+    vinted_id, status, errors = new_item.publish_or_draft(fallback_id_seed=str(item.get("id", "")))
     return {
         "vinted_id": vinted_id,
         "status": status,
@@ -1370,15 +744,17 @@ def retry_draft_item(page, item: dict, draft_edit_url: str, draft_item_id: str, 
         return {**empty, "status": "failed", "error": "draft did not load"}
     human_delay(1.5, 2.5)
 
+    new_item = NewItemPage(page)
+
     cat_id = str(item.get("category_id") or "")
     missing, new_mappings, unresolved = [], [], []
     if cat_id:
-        missing, new_mappings, unresolved = fill_dynamic_attributes(page, item, cat_id, learn)
+        missing, new_mappings, unresolved = fill_dynamic_attributes(new_item, item, cat_id, learn)
 
-    select_package_size(page)
+    new_item.select_package_size()
 
-    vinted_id, status, errors = publish_or_draft(
-        page, fallback_id_seed=str(item.get("id", "")), save_as_draft_on_fail=False
+    vinted_id, status, errors = new_item.publish_or_draft(
+        fallback_id_seed=str(item.get("id", "")), save_as_draft_on_fail=False
     )
     # The draft already has a real Vinted id; prefer it over any synthetic fallback
     if not vinted_id or vinted_id.startswith(("draft-", "published-")):

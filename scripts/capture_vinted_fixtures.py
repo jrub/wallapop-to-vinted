@@ -32,6 +32,8 @@ from patchright.sync_api import sync_playwright
 # Repo-relative imports — the script is expected to run from the repo root.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from upload_vinted import login as vinted_login  # noqa: E402
+from vinted.pages._common import human_delay  # noqa: E402
+from vinted.pages.new_item import NewItemPage  # noqa: E402
 from vinted.session import build_session  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -85,6 +87,52 @@ def _capture_new_item(page) -> None:
     )
 
 
+def _capture_new_item_books(page) -> None:
+    """Capture the /items/new form after selecting a book category (No ficción).
+
+    This fixture is used to test that ``NewItemPage.scan_dynamic_fields`` correctly
+    detects the ISBN field (and other book-specific inputs) that fall outside the
+    ``*-single-list-input`` / ``*-dropdown-input`` patterns caught by the generic
+    scanner.
+
+    Navigation path: Libros, películas y música > Libros > No ficción
+    Adjust the ``_BOOKS_NAV`` constant below if Vinted's Spanish category tree has
+    changed — the anchor ``[data-testid='category-condition-single-list-input']``
+    should appear once a leaf category is selected.
+    """
+    _BOOKS_NAV = ["Libros, películas y música", "Libros", "No ficción"]
+
+    _ensure_logged_in_and_at(
+        page,
+        target_url=f"{BASE_URL}/items/new",
+        anchor="input[data-testid='title--input']",
+    )
+    human_delay(1.5, 2.5)
+
+    new_item_page = NewItemPage(page)
+    cat_ok, sub_opts = new_item_page.select_category(_BOOKS_NAV)
+    if not cat_ok:
+        raise RuntimeError(
+            f"Category navigation to {_BOOKS_NAV} failed (sub_options: {sub_opts}). "
+            "Verify the nav path against data/vinted_categories.json and update _BOOKS_NAV."
+        )
+
+    # Wait for dynamic fields to render after category selection.
+    # The condition field is a reliable indicator that the category was accepted.
+    human_delay(2.0, 3.0)
+    try:
+        page.wait_for_selector(
+            "[data-testid='category-condition-single-list-input']",
+            state="visible",
+            timeout=10000,
+        )
+    except Exception:
+        # Even if condition isn't visible, continue — some book sub-categories
+        # don't expose condition. The ISBN field is what matters.
+        pass
+    human_delay(1.5, 2.5)
+
+
 def _dump(page, scope: str) -> Path:
     target = FIXTURES_DIR / f"{scope}.html"
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -95,6 +143,8 @@ def _dump(page, scope: str) -> Path:
 def _capture(page, scope: str) -> Path:
     if scope == "new_item":
         _capture_new_item(page)
+    elif scope == "new_item_books":
+        _capture_new_item_books(page)
     else:
         # Per-scope handlers are added when the corresponding test lands.
         # For now reject unknown scopes loudly so the maintainer doesn't
