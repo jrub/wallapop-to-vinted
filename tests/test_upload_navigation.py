@@ -25,17 +25,47 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 NAVIGATION_SOURCES = [
     REPO_ROOT / "upload_vinted.py",
     REPO_ROOT / "vinted" / "pages" / "login.py",
+    REPO_ROOT / "vinted" / "pages" / "profile.py",
+    REPO_ROOT / "vinted" / "pages" / "edit_draft.py",
 ]
 
 
+def _is_playwright_page_target(target: ast.AST) -> bool:
+    """Return True when ``target`` is a Playwright ``Page`` reference.
+
+    By project convention, the Playwright page is bound either to the
+    local name ``page`` or to ``self.page`` (inside page-object methods).
+    Domain-level page objects (``EditDraftPage``, ``ProfilePage``, …)
+    expose their own ``goto(url)`` methods that internally wrap
+    ``self.page.goto(..., wait_until=...)`` — those calls must NOT be
+    flagged, since the wait-until is encoded one level deeper.
+    """
+    if isinstance(target, ast.Name) and target.id == "page":
+        return True
+    if (
+        isinstance(target, ast.Attribute)
+        and target.attr == "page"
+        and isinstance(target.value, ast.Name)
+        and target.value.id == "self"
+    ):
+        return True
+    return False
+
+
 def _goto_calls(tree: ast.AST) -> list[ast.Call]:
-    """Return every ``<something>.goto(...)`` call in ``tree``."""
+    """Return every ``page.goto(...)`` / ``self.page.goto(...)`` call in ``tree``.
+
+    Calls to wrapper methods like ``edit_page.goto(...)`` are intentionally
+    skipped — those are domain page-object methods, not the raw Playwright
+    ``Page.goto`` that needs ``wait_until=``.
+    """
     out: list[ast.Call] = []
     for node in ast.walk(tree):
         if (
             isinstance(node, ast.Call)
             and isinstance(node.func, ast.Attribute)
             and node.func.attr == "goto"
+            and _is_playwright_page_target(node.func.value)
         ):
             out.append(node)
     return out

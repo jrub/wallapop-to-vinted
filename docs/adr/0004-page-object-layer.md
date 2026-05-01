@@ -1,7 +1,7 @@
 # 4. Extract the Page Object layer + introduce HTML fixture testing
 
 Date: 2026-04-26
-Status: Accepted (2026-04-27, in progress — steps 0-2 landed)
+Status: Accepted (2026-04-27); Phase 4 done 2026-05-02 — all DOM interactions live in page objects (`login`, `new_item`, `edit_draft`, `profile`)
 
 ## Research
 
@@ -76,6 +76,19 @@ Validated in production: `python upload_vinted.py --limit 1 --visible` publishes
 
 **Step 3 — NewItemPage + package-size fix. ✅ DONE (2026-05-01).** `vinted/pages/new_item.py` extracted from `upload_vinted.py`. Package-size bug fixed: now clicks `[data-testid='package_type_selector_2--input']` (radio input) instead of the cell div, with 2 s timeout (was 5 s) so non-leaf fallback returns immediately. Shared utilities (`human_delay`, `human_type`, `js_click_button`, `_PANEL_SELECTOR`) moved to `vinted/pages/_common.py`; `upload_vinted.py` imports them from there. Two new playwright tests (`test_select_package_size_checks_radio_input`, `test_select_package_size_returns_false_when_block_absent`) confirm the fix. Books scanner test (`test_scan_dynamic_fields_finds_isbn_field`) auto-skips until `new_item_books` fixture is captured; capture handler added to `scripts/capture_vinted_fixtures.py`. 186 tests, 1 skipped.
 
-**Step 4 — LoginPage extraction. ✅ DONE (2026-05-01).** `vinted/pages/login.py` (`LoginPage` class) extracted from `upload_vinted.py:login()`. Credentials are now passed by argument (`LoginPage(page).login(email=, password=, visible=)`), decoupling the page object from `dotenv` so a future orchestrator can wire env-loading separately. Errors switched from `RuntimeError` to `LoginFailed` (the existing exception in `vinted/errors.py`). Captcha handling delegates to `vinted.session.abort_if_captcha` directly — no more `_abort_if_captcha` wrapper inside `login()`. The stealth-contract test (4× `js_click_button`, 0× native click) moved to `tests/vinted/pages/test_login.py` and now patches `vinted.pages.login.js_click_button` instead of the old `upload_vinted._js_click_button`. The navigation AST guard in `tests/test_upload_navigation.py` is parametrised over both `upload_vinted.py` and `vinted/pages/login.py`, so any new `page.goto` without `wait_until=` fails on either file. `upload_vinted.py` down from 1042 → ~984 lines. 189 tests, 1 skipped.
+**Step 4 — LoginPage extraction. ✅ DONE (2026-05-01, `2ab1dd0`).** `vinted/pages/login.py` (`LoginPage` class) extracted from `upload_vinted.py:login()`. Credentials are now passed by argument (`LoginPage(page).login(email=, password=, visible=)`), decoupling the page object from `dotenv` so a future orchestrator can wire env-loading separately. Errors switched from `RuntimeError` to `LoginFailed` (the existing exception in `vinted/errors.py`). Captcha handling delegates to `vinted.session.abort_if_captcha` directly — no more `_abort_if_captcha` wrapper inside `login()`. The stealth-contract test (4× `js_click_button`, 0× native click) moved to `tests/vinted/pages/test_login.py` and now patches `vinted.pages.login.js_click_button` instead of the old `upload_vinted._js_click_button`. The navigation AST guard in `tests/test_upload_navigation.py` is parametrised over both `upload_vinted.py` and `vinted/pages/login.py`, so any new `page.goto` without `wait_until=` fails on either file.
 
-**Step 4+ — remaining Page Objects (`edit_draft.py`, `profile.py`). ⏳ Pending.** `get_member_url()`, `scrape_drafts()`, and the draft-edit form helpers still live in `upload_vinted.py`. Capture `new_item_books` fixture next (needs `--visible`), fix the books scanner, then extract `EditDraftPage` and `ProfilePage`.
+**Step 4 (cont.) — ProfilePage + EditDraftPage. ✅ DONE (2026-05-02).**
+
+- `vinted/pages/profile.py` (`ProfilePage`) — owns `get_member_url()` and `scrape_drafts(member_url)`. The 4-fallback chain in `get_member_url` (JWT cookie → URL path → in-page `/api/v2/users/current` fetch → localStorage walker → `/settings/profile` link extraction) is preserved unchanged, including the operator-facing `print` lines, so the user-visible logs are byte-identical pre/post extraction.
+- `vinted/pages/edit_draft.py` (`EditDraftPage`) — inherits from `NewItemPage`. The edit form on `/items/<id>/edit` uses the same `data-testid`s as `/items/new`, so every form verb (category, condition, package size, brand, publish/draft) is reused unchanged. The only edit-specific behaviour is split into two methods:
+  - `goto(edit_url)` — navigates with `wait_until="domcontentloaded"`.
+  - `wait_for_form_loaded(timeout)` — waits for `input[data-testid='title--input']` to become visible; returns `False` on `PlaywrightTimeout`.
+
+  The split lets the orchestrator fire a captcha check (`_abort_if_captcha`) between the navigation and the form-load wait — preserving the original behaviour where DataDome interstitials abort the whole run instead of degrading to "draft did not load".
+
+The navigation AST guard was tightened in the same commit. Previously `_goto_calls` matched any `<x>.goto(...)` call, which broke the parametrised test on `upload_vinted.py` because `EditDraftPage.goto(url)` (a wrapper) was flagged for missing `wait_until`. The guard now only flags calls whose target is `page` (a `Name`) or `self.page` (an `Attribute(self, 'page')`) — i.e. raw Playwright pages. Domain wrappers that encode `wait_until` one level deeper are exempt by design.
+
+`upload_vinted.py`: 984 → 788 lines (-196). Across the day, 1042 → 788 (-254). 191 tests, 1 skipped (`new_item_books` fixture still pending).
+
+**Step 4+ — remaining work for Phase 5.** With every Vinted-side DOM interaction now in a page object, what remains in `upload_vinted.py` is genuinely orchestration: `fill_dynamic_attributes` (combines NewItemPage verbs with category-mapping reads/writes), `upload_item` and `retry_draft_item` (per-item flow), and `main()` (CLI + bootstrap). Phase 5 introduces the `wallapop-to-vinted.py` entry point that owns env loading and item iteration, leaving the per-item flow in domain orchestrators that compose page objects + domain modules.
