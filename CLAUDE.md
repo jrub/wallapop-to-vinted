@@ -90,6 +90,8 @@ python upload_vinted.py --visible         # visible browser — solve a DataDome
 python upload_vinted.py --limit 1         # one real upload attempt — pre-filters already-done and unmapped items first
 python upload_vinted.py --retry-drafts    # re-open existing drafts and try to publish them
 python upload_vinted.py --no-learn        # freeze category_mapping.json (no auto-learning)
+python upload_vinted.py --item <id>       # upload exactly one item by its Wallapop id (bypasses migration filter)
+python upload_vinted.py --item            # interactive: pick one pending item from a numbered menu
 ```
 
 ## Environment Variables
@@ -216,8 +218,4 @@ Maps Wallapop `category_id` → Vinted category tree navigation path plus per-ca
    - The upload flow consults `vinted_nav_override` first; falls back to the mapping + resolver chain if absent.
 
    This keeps `category_mapping.json` as a category-level default (partial path is fine) and delegates item-level disambiguation to a one-time interactive step, rather than silently producing drafts or misclassifying items.
-5. **`--item ID` and interactive item selection.** Right now you can scope a run via `--limit N` (process the first N pending items) or `--retry-drafts` (re-attempt every existing Vinted draft). Neither lets you target a specific Wallapop item, so iterating on a single problematic listing means waiting for it to come up in the natural order. Plan:
-   - `--item <wallapop_id>` runs the upload flow for exactly that item, bypassing the migration filter (the user is being explicit about wanting to retry, even on already-published or already-draft items).
-   - `--item` with no value (or a separate `--interactive`) prints a numbered list of pending items (title + Wallapop category) and prompts the user to pick one. The selection becomes the `--item ID` for the rest of the run.
-   - Fail loud on unknown ids: if the id isn't in `data/downloaded_items.json`, print the available ids (or a hint to re-run `extract_wallapop.py`) and exit non-zero. Don't silently fall back to the full queue.
-   - Tests cover the three pure pieces — id-lookup, list-selection by index, the `--item`/`--interactive` argparse contract — without touching the browser.
+5. **`--item ID` and interactive item selection. ✅ DONE (2026-05-02).** `--item <wallapop_id>` scopes a run to one item by id, bypassing the migration filter (the user is opting in to retry an already-published or already-draft item). `--item` with no value prints a numbered list of pending items and prompts for a 1-based selection. Mutually exclusive with `--retry-drafts`. Pure logic in `domain/item_select.py` (`select_by_id`, `prompt_selection` with injectable `input_fn`/`output_fn`). 25 new tests cover id-lookup edge cases, every prompt cancel path, the menu render, and the argparse contract — none touch the browser.

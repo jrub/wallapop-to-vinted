@@ -14,6 +14,7 @@ from patchright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeo
 
 from domain.categories import build_path_index, resolve_nav_to_leaf
 from domain.drafts import match_draft_to_item
+from domain.item_select import prompt_selection, select_by_id
 from domain.mapping import (
     COLOR_EN_TO_ES,
     LABEL_ALIASES,
@@ -504,7 +505,11 @@ def retry_draft_item(page, item: dict, draft_edit_url: str, draft_item_id: str, 
     }
 
 
-def main():
+_INTERACTIVE_ITEM = "__interactive__"
+
+
+def _build_parser() -> argparse.ArgumentParser:
+    """Build the CLI parser. Extracted from main() so tests can drive it directly."""
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--limit",
@@ -530,6 +535,22 @@ def main():
         help="Launch the browser in visible mode (to solve a DataDome captcha manually). "
              "Runs headless by default.",
     )
+    parser.add_argument(
+        "--item",
+        nargs="?",
+        const=_INTERACTIVE_ITEM,
+        default=None,
+        metavar="WALLAPOP_ID",
+        help="Upload exactly one item by its Wallapop id. Bypasses the migration filter "
+             "so already-published / already-draft items can be retried explicitly. "
+             "Pass --item with no value to pick interactively from a numbered menu of "
+             "pending items. Mutually exclusive with --retry-drafts.",
+    )
+    return parser
+
+
+def main():
+    parser = _build_parser()
     args = parser.parse_args()
 
     if not EMAIL or not PASSWORD:
@@ -552,25 +573,61 @@ def main():
     drafted = 0
     failed = 0
 
-    # --retry-drafts has its own filtering (match drafts to Wallapop items) — filter_pending
-    # honours the flag and returns items unchanged in that case. For the normal upload path,
-    # drop items that are already uploaded or have no Vinted category path *before* applying
-    # --limit, so --limit N means "N real upload attempts" rather than "the first N entries
-    # in downloaded_items.json" (which is useless once migration.json has entries).
-    pending, already_done, unmapped = filter_pending(
-        items,
-        migration,
-        get_nav,
-        retry_drafts=args.retry_drafts,
-        limit=args.limit or 0,
-    )
-    if not args.retry_drafts:
-        if already_done:
-            print(f"Items already uploaded (will be skipped): {already_done}")
-        if unmapped:
-            print(f"Items without Vinted mapping (will be skipped): {len(unmapped)}")
-        items = pending
-        print(f"Items to process: {len(items)}")
+    # --item / --item <id>: scope the run to a single Wallapop item, bypassing the
+    # migration filter. The user opts in explicitly to retrying an already-uploaded
+    # item, so we don't second-guess that decision. Mutually exclusive with --retry-drafts
+    # (different scopes — drafts pre-exist on Vinted; --item targets a Wallapop entry).
+    if args.item is not None:
+        if args.retry_drafts:
+            print("ERROR: --item and --retry-drafts are mutually exclusive.")
+            sys.exit(1)
+        if args.item == _INTERACTIVE_ITEM:
+            # Show only pending items in the picker — there's no point offering items
+            # that are already published or skipped for missing mapping.
+            pending_for_pick, _, _ = filter_pending(
+                items, migration, get_nav, retry_drafts=False, limit=0
+            )
+            if not pending_for_pick:
+                print("No pending items to choose from.")
+                sys.exit(0)
+            picked = prompt_selection(pending_for_pick)
+        else:
+            picked = select_by_id(items, args.item)
+            if picked is None:
+                print(f"ERROR: item id {args.item!r} not in {ITEMS_PATH}.")
+                print("Available ids (first 20):")
+                for it in items[:20]:
+                    title = (it.get("title") or "").strip() or "(no title)"
+                    print(f"  {it.get('id')} — {title}")
+                if len(items) > 20:
+                    print(f"  ... and {len(items) - 20} more")
+                sys.exit(1)
+        if picked is None:
+            print("No item selected; aborting.")
+            sys.exit(0)
+        items = [picked]
+        title = (picked.get("title") or "").strip() or "(no title)"
+        print(f"Scoping run to single item: [{picked.get('id')}] {title}")
+    else:
+        # --retry-drafts has its own filtering (match drafts to Wallapop items) — filter_pending
+        # honours the flag and returns items unchanged in that case. For the normal upload path,
+        # drop items that are already uploaded or have no Vinted category path *before* applying
+        # --limit, so --limit N means "N real upload attempts" rather than "the first N entries
+        # in downloaded_items.json" (which is useless once migration.json has entries).
+        pending, already_done, unmapped = filter_pending(
+            items,
+            migration,
+            get_nav,
+            retry_drafts=args.retry_drafts,
+            limit=args.limit or 0,
+        )
+        if not args.retry_drafts:
+            if already_done:
+                print(f"Items already uploaded (will be skipped): {already_done}")
+            if unmapped:
+                print(f"Items without Vinted mapping (will be skipped): {len(unmapped)}")
+            items = pending
+            print(f"Items to process: {len(items)}")
 
     drafts_summary: list[tuple[str, str, list[str]]] = []  # (cat_id, title, missing)
     all_new_mappings: list[tuple[str, str]] = []  # (cat_id, "Label ← key")
