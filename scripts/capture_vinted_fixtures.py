@@ -24,15 +24,17 @@ consumes each fixture.
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
+from dotenv import load_dotenv
 from patchright.sync_api import sync_playwright
 
 # Repo-relative imports — the script is expected to run from the repo root.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from upload_vinted import login as vinted_login  # noqa: E402
 from vinted.pages._common import human_delay  # noqa: E402
+from vinted.pages.login import LoginPage  # noqa: E402
 from vinted.pages.new_item import NewItemPage  # noqa: E402
 from vinted.session import build_session  # noqa: E402
 
@@ -41,6 +43,8 @@ AUTH_STATE_PATH = REPO_ROOT / "data" / "auth_state.json"
 FIXTURES_DIR = REPO_ROOT / "tests" / "fixtures" / "vinted_html"
 
 BASE_URL = "https://www.vinted.es"
+
+load_dotenv()
 
 
 SCOPES = (
@@ -65,7 +69,7 @@ def _ensure_logged_in_and_at(page, target_url: str, anchor: str) -> None:
     re-navigate. This reuses the same login path the uploader uses, so
     the capture script doesn't drift from production behaviour.
     """
-    page.goto(target_url)
+    page.goto(target_url, wait_until="domcontentloaded")
     locator = page.locator(anchor)
     try:
         locator.wait_for(state="visible", timeout=5000)
@@ -74,8 +78,15 @@ def _ensure_logged_in_and_at(page, target_url: str, anchor: str) -> None:
         pass
     print()
     print(f"Anchor not found at {page.url} — session likely expired. Logging in...")
-    vinted_login(page, visible=True)
-    page.goto(target_url)
+    email = os.getenv("VINTED_EMAIL")
+    password = os.getenv("VINTED_PASSWORD")
+    if not email or not password:
+        raise RuntimeError(
+            "VINTED_EMAIL / VINTED_PASSWORD missing from environment. "
+            "Populate .env before running the capture script."
+        )
+    LoginPage(page, base_url=BASE_URL).login(email=email, password=password, visible=True)
+    page.goto(target_url, wait_until="domcontentloaded")
     locator.wait_for(state="visible", timeout=15000)
 
 
