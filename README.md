@@ -65,13 +65,27 @@ python upload_vinted.py --visible         # visible browser — needed to solve 
 python upload_vinted.py --limit 1         # one real upload attempt (skips already-done & unmapped first)
 python upload_vinted.py --retry-drafts    # re-open existing drafts and try to publish them
 python upload_vinted.py --no-learn        # freeze category_mapping.json (no auto-learning)
+python upload_vinted.py --item <id>       # upload exactly one Wallapop item by its id (bypasses migration filter)
+python upload_vinted.py --item            # interactive: pick one pending item from a numbered menu
 ```
 
 The browser runs headless by default. Vinted uses DataDome for bot protection, which can challenge any request — login, navigation, uploads — when it flags the behaviour as suspicious (suspicious IP, JS disabled, interactions deemed too fast, etc.). When the script detects the challenge page it aborts with a clear message: re-run with `--visible`, solve the slider once, and the refreshed session in `data/auth_state.json` lets subsequent runs go back to headless.
 
+Use `--item <id>` to retry an item that's already published or stuck as a draft (the migration filter normally skips those). With no value, `--item` lists every pending item with a number — type the number to pick one. Mutually exclusive with `--retry-drafts`.
+
 Failed items are logged; the run doesn't abort.
 
 At the end of the run, the script prints a summary: drafts and their missing fields, newly auto-learned mappings, unresolved labels with the Vinted options seen, and categories still without a navigation path.
+
+## Pre-flight prompts
+
+Before the browser opens, the uploader checks for two cases where Vinted needs information Wallapop never asked for. You answer once at the terminal, the answer is saved into `data/downloaded_items.json`, and re-runs reuse it without prompting.
+
+**ISBN for books.** Vinted refuses to publish anything under "Libros" without an ISBN, but Wallapop treats ISBN as an optional free-text field that most sellers leave blank. For each book in the queue with no ISBN, you'll see the title and a prompt — type the ISBN to fill it, or press Enter to skip the item for this run *and all future runs* (a `skip_reason: "missing_isbn"` marker is persisted; clear it from `downloaded_items.json` to retry later). Filling the ISBN makes Vinted auto-populate Autor / Editorial / Idioma / Formato so you don't need to map those by hand.
+
+**Leaf disambiguation for vague categories.** Wallapop lets sellers stop at intermediate nodes (e.g. "Componentes de PC", "Chaquetas") that Vinted splits across many leaves (RAM / GPU / motherboard, or 12 chaqueta sub-types). When the automatic resolver can't pick a leaf from the item's title and description, you'll see the candidates numbered — type the number to pick. Your pick is saved as `vinted_nav_override` on that item so re-runs use the same leaf without asking. Press Enter to skip; the item falls back to a Vinted draft for you to finish in the UI.
+
+Both prompts are skipped under `--retry-drafts` (drafts already exist on Vinted and the data we'd need to prompt against is opaque at that stage).
 
 ## Auto-learning category mappings
 
@@ -84,13 +98,14 @@ The first time a listing from a new Wallapop category is uploaded:
 3. Resolved mappings are written to `data/category_mapping.json` under the category's `attributes` block, so subsequent uploads reuse them directly.
 4. Labels that couldn't be resolved are persisted with `from: null` and the list of options Vinted offered (`observed_options`), so you can finish the mapping by hand — either by setting `from` to the right Wallapop attribute or by adding a `value_map` for vocabulary mismatches.
 
-**Nav paths resolve per item.** If you leave a Wallapop category mapped to a partial Vinted path (one level short of a leaf), the uploader detects it when Vinted refuses to close the picker and tries to pick the right leaf **using the item's own title + description**. For each sub-option it stems the main word (crude `es`/`s` plural strip) and checks whether it appears in the item text; if exactly one sub-option matches, it clicks that leaf and continues. This matters because a single Wallapop category often maps to several Vinted leaves (e.g. "Dispositivos de red" → Routers / Repetidores / Módems) — the right leaf depends on the individual item, not on the category. When zero or multiple sub-options match, the sub-options Vinted offered are persisted to the category entry as `observed_leaf_options` and the item falls back to draft so you can finish it in Vinted's UI.
+**Nav paths resolve per item.** If you leave a Wallapop category mapped to a partial Vinted path (one level short of a leaf), the uploader tries to pick the right leaf **using the item's own title + description**. For each sub-option it stems the main word (crude `es`/`s` plural strip) and checks whether it appears in the item text; if exactly one sub-option matches, it picks that leaf and continues. This matters because a single Wallapop category often maps to several Vinted leaves (e.g. "Dispositivos de red" → Routers / Repetidores / Módems) — the right leaf depends on the individual item, not on the category. When zero or multiple sub-options match, you're prompted to pick interactively at pre-flight (see [Pre-flight prompts](#pre-flight-prompts)). If you skip the prompt, the item falls back to draft on Vinted so you can finish it in the UI.
 
 The result: `data/category_mapping.json` grows with every run until it covers your inventory. Pass `--no-learn` to freeze it.
 
 ## Known limitations
 
-- **Not every category works out of the box.** Vinted's form varies dramatically across categories (books need ISBN, phones need storage + SIM lock, etc.). When Wallapop doesn't provide the required value, the item stays as a draft for you to complete manually.
+- **Not every category works out of the box.** Vinted's form varies dramatically across categories (phones need storage + SIM lock, etc.). When Wallapop doesn't provide the required value, the item stays as a draft for you to complete manually. Books and ambiguous-leaf categories are handled by the [pre-flight prompts](#pre-flight-prompts).
+- **Package size: Vinted's default ("Mediano") is used as-is.** Wallapop has no equivalent attribute, so the uploader doesn't touch the package-size selector — Vinted's pre-selected "Mediano" applies to every listing. If a specific item needs Pequeño, Grande, or XGrande, edit the listing on Vinted after publish.
 - **DataDome captchas.** Vinted's bot-protection can challenge *any* request — login, navigation, or upload — when it flags the behaviour as suspicious. The script detects the challenge page, aborts in headless mode, and tells you to re-run with `--visible` so you can solve the slider manually.
 - **Manual publishing for some drafts.** Items saved as drafts need you to finish them in Vinted's UI (add the missing fields and click publish).
 - **Unofficial APIs break.** Wallapop's endpoints and Vinted's DOM change without notice. When they do, things stop working until the code is updated.
@@ -99,7 +114,7 @@ The result: `data/category_mapping.json` grows with every run until it covers yo
 
 ## Data files
 
-- `data/downloaded_items.json` — scraped from Wallapop, not versioned
+- `data/downloaded_items.json` — scraped from Wallapop, not versioned. The pre-flight prompts also write back to this file: `attributes.isbn` (gathered ISBN), `skip_reason` (item you opted out of, e.g. `"missing_isbn"`), and `vinted_nav_override` (leaf you picked manually). Edit the file by hand to undo any of these decisions.
 - `data/migration.json` — upload state per item (`status`, `missing_fields`, `last_error`), not versioned
 - `data/category_mapping.json` — Wallapop category → Vinted navigation path + attribute mappings, **versioned**
 - `data/wallapop_categories.json` — full Wallapop category tree (reference only), versioned. [Generated with this script](https://gist.github.com/jrub/106958f23d850497c265e72ab19c3194).
