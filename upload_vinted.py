@@ -462,9 +462,11 @@ def upload_item(page, item: dict, learn: bool = True, visible: bool = True) -> d
         new_mappings.extend(nm)
         unresolved.extend(u)
 
-    # Shipping package size: always pick "Mediano" — see NewItemPage.select_package_size().
-    # Called unconditionally (silent no-op if cells aren't rendered — non-leaf category).
-    new_item.select_package_size()
+    # Package size: we don't touch it. Wallapop has no equivalent attribute
+    # (``up_to_kg`` doesn't map to Vinted's shoebox/moving-box tiers), and
+    # Vinted pre-selects "Mediano" by default. Clicking the radio toggled
+    # the default off and items shipped as "Pequeño" instead, so the call
+    # is gone. Edit the draft on Vinted if a specific item needs another tier.
 
     try:
         price_val = float(item.get("price", 0) or 0)
@@ -519,7 +521,7 @@ def retry_draft_item(page, item: dict, draft_edit_url: str, draft_item_id: str, 
     if cat_id:
         missing, new_mappings, unresolved = fill_dynamic_attributes(edit_page, item, cat_id, learn)
 
-    edit_page.select_package_size()
+    # Package size: see comment in upload_item — we don't touch it.
 
     vinted_id, status, errors = edit_page.publish_or_draft(
         fallback_id_seed=str(item.get("id", "")), save_as_draft_on_fail=False
