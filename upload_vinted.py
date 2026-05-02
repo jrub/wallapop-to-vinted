@@ -15,6 +15,11 @@ from patchright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeo
 from domain.categories import build_path_index, resolve_nav_to_leaf
 from domain.drafts import match_draft_to_item
 from domain.item_select import prompt_selection, select_by_id
+from domain.preflight_isbn import (
+    apply_isbns,
+    find_books_missing_isbn,
+    prompt_for_isbns,
+)
 from domain.mapping import (
     COLOR_EN_TO_ES,
     LABEL_ALIASES,
@@ -104,6 +109,19 @@ def mark_migrated(
     """Thin wrapper that binds the canonical MIGRATION_PATH to domain.migration.mark_migrated."""
     _mark_migrated(
         migration, MIGRATION_PATH, item_id, vinted_id, status, missing_fields, error
+    )
+
+
+def _persist_items(items: list[dict]) -> None:
+    """Write the in-memory items list back to ``downloaded_items.json``.
+
+    The file is keyed by Wallapop id (``id`` is injected at load time);
+    we strip that synthetic key when serialising so the on-disk shape
+    matches what ``extract_wallapop.py`` produced.
+    """
+    items_data = {it["id"]: {k: v for k, v in it.items() if k != "id"} for it in items}
+    ITEMS_PATH.write_text(
+        json.dumps(items_data, indent=2, ensure_ascii=False), encoding="utf-8"
     )
 
 
@@ -564,6 +582,12 @@ def main():
     items_data = json.loads(ITEMS_PATH.read_text(encoding="utf-8"))
     # Inject the dict key (Wallapop item ID) into each item dict for uniform access
     items = [{"id": k, **v} for k, v in items_data.items()]
+    # Items the user explicitly opted out of (e.g., books without ISBN at
+    # pre-flight) are persisted in downloaded_items.json with a ``skip_reason``
+    # field. Drop them up-front so neither --item, --retry-drafts nor the
+    # default flow re-attempts them. To force a retry, edit the file and
+    # remove ``skip_reason`` from the entry, then run again.
+    items = [it for it in items if not it.get("skip_reason")]
 
     # migration.json provides idempotency: items already published or saved as draft are
     # skipped on re-runs. Failed items have no vinted_id and are retried automatically.
@@ -628,6 +652,35 @@ def main():
                 print(f"Items without Vinted mapping (will be skipped): {len(unmapped)}")
             items = pending
             print(f"Items to process: {len(items)}")
+
+    # Pre-flight: ISBN gather. Vinted refuses to publish books without one,
+    # but Wallapop treats ISBN as optional, so the catalogue arrives bare.
+    # Prompt the user once per book item; persist back to downloaded_items.json
+    # so re-runs don't re-prompt; drop user-skipped items from the queue.
+    # Skipped via --retry-drafts (the items list there is matched against
+    # existing Vinted drafts later, and the draft data is opaque to us at
+    # this point — pre-flight on retry-drafts would over-prompt).
+    if items and not args.retry_drafts:
+        missing_isbn = find_books_missing_isbn(items, get_nav)
+        if missing_isbn:
+            answers = prompt_for_isbns(missing_isbn)
+            if answers:
+                # ``apply_isbns`` mutates the *full* items list — pass everything
+                # so persistence captures the user's input.
+                full_items = [{"id": k, **v} for k, v in
+                              json.loads(ITEMS_PATH.read_text(encoding="utf-8")).items()]
+                # Mirror the freshly-collected answers onto both the in-memory
+                # `items` (used by the upload loop) and `full_items` (saved to
+                # disk) so the file and the queue stay in lockstep.
+                skipped_ids = apply_isbns(full_items, answers)
+                apply_isbns(items, answers)
+                _persist_items(full_items)
+                if skipped_ids:
+                    print(f"  Skipped {len(skipped_ids)} item(s) without ISBN; they will be excluded from this run.")
+                    items = [it for it in items if str(it.get("id")) not in set(skipped_ids)]
+                    if not items:
+                        print("All queued items were skipped at pre-flight. Nothing to upload.")
+                        sys.exit(0)
 
     drafts_summary: list[tuple[str, str, list[str]]] = []  # (cat_id, title, missing)
     all_new_mappings: list[tuple[str, str]] = []  # (cat_id, "Label ← key")
