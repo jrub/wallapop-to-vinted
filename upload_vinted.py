@@ -20,6 +20,11 @@ from domain.preflight_isbn import (
     find_books_missing_isbn,
     prompt_for_isbns,
 )
+from domain.preflight_leaf import (
+    apply_overrides as _apply_leaf_overrides,
+    find_ambiguous as _find_ambiguous_leaves,
+    prompt_for_overrides as _prompt_for_leaf_overrides,
+)
 from domain.mapping import (
     COLOR_EN_TO_ES,
     LABEL_ALIASES,
@@ -88,7 +93,16 @@ else:
 
 
 def get_nav(item: dict) -> list | None:
-    """Return the Vinted category navigation path for an item, or None if unmapped."""
+    """Return the Vinted category navigation path for an item, or None if unmapped.
+
+    A per-item ``vinted_nav_override`` (set by ``domain.preflight_leaf``)
+    takes precedence over the category-level mapping. The override
+    represents an explicit user decision recorded on a previous run, so
+    we honour it without consulting the resolver.
+    """
+    override = item.get("vinted_nav_override")
+    if override:
+        return list(override)
     entry = _CATEGORIES.get(item.get("category_id", ""))
     return entry["vinted"] if entry else None
 
@@ -681,6 +695,29 @@ def main():
                     if not items:
                         print("All queued items were skipped at pre-flight. Nothing to upload.")
                         sys.exit(0)
+
+    # Pre-flight: leaf disambiguation. Some Wallapop categories cover items
+    # Vinted splits across multiple leaves (10304 components → RAM/GPU/floppy).
+    # The resolver handles unambiguous cases via stem-matching; this prompt
+    # captures the human decision for the rest. Persists as
+    # ``vinted_nav_override`` so re-runs use the picked leaf without asking.
+    if items and not args.retry_drafts and _VINTED_BY_PATH:
+        ambiguous = _find_ambiguous_leaves(
+            items, get_nav, nodes=_VINTED_NODES, path_index=_VINTED_BY_PATH,
+        )
+        if ambiguous:
+            answers = _prompt_for_leaf_overrides(ambiguous)
+            if answers:
+                # Mirror onto the runtime list and the on-disk copy, same as ISBN.
+                full_items = [
+                    {"id": k, **v} for k, v in
+                    json.loads(ITEMS_PATH.read_text(encoding="utf-8")).items()
+                ]
+                applied_disk = _apply_leaf_overrides(full_items, answers)
+                applied_mem = _apply_leaf_overrides(items, answers)
+                if applied_disk:
+                    _persist_items(full_items)
+                    print(f"  Recorded {applied_mem} leaf override(s) for this run.")
 
     drafts_summary: list[tuple[str, str, list[str]]] = []  # (cat_id, title, missing)
     all_new_mappings: list[tuple[str, str]] = []  # (cat_id, "Label ← key")
