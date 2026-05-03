@@ -1,16 +1,9 @@
-"""Tests for NewItemPage verbs against minimal and captured HTML fixtures.
+"""Tests for NewItemPage verbs against synthetic HTML.
 
-Selector correctness for the two known bugs:
-
-1. Package size: clicking ``[data-testid='2-package-size--cell']`` (a div)
-   does not propagate to the nested ``<input type="radio">``.  The fix is to
-   click ``[data-testid='package_type_selector_2--input']`` directly.
-
-2. Books scanner: ``scan_dynamic_fields`` uses selectors that end in
-   ``'single-list-input'`` or ``'-dropdown-input'``.  Vinted's book-specific
-   fields (ISBN, Autor, Editorial…) use different testid patterns and are
-   therefore not returned.  This test auto-skips until the ``new_item_books``
-   fixture is captured.
+Locks the package-size selector contract against the bug where clicking
+``[data-testid='2-package-size--cell']`` (a div) did not propagate to the
+nested ``<input type="radio">``.  The fix clicks
+``[data-testid='package_type_selector_2--input']`` directly.
 """
 
 from __future__ import annotations
@@ -81,33 +74,3 @@ def test_select_package_size_returns_false_when_block_absent(page):
     result = new_item.select_package_size()
 
     assert result is False
-
-
-# ---------------------------------------------------------------------------
-# Books scanner — Bug #2 (auto-skips until fixture is captured)
-# ---------------------------------------------------------------------------
-
-
-@pytest.mark.playwright
-def test_scan_dynamic_fields_finds_isbn_field(load_vinted_fixture):
-    """scan_dynamic_fields must return an ISBN field when a book category is active.
-
-    Auto-skips if the ``new_item_books`` fixture hasn't been captured yet.
-    Capture it with::
-
-        python scripts/capture_vinted_fixtures.py --scope new_item_books
-
-    Once the fixture is present this test turns red (confirming Bug #2), the
-    selector in ``scan_dynamic_fields`` is extended, and the test turns green.
-    """
-    page = load_vinted_fixture("new_item_books")
-    new_item = NewItemPage(page)
-
-    fields = new_item.scan_dynamic_fields()
-    testids = [f["testid"] for f in fields]
-
-    assert any("isbn" in t.lower() for t in testids), (
-        f"No ISBN field detected among: {testids}\n"
-        "Vinted may have changed the ISBN testid — re-capture and update "
-        "the selector in NewItemPage.scan_dynamic_fields."
-    )

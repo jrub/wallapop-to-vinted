@@ -28,8 +28,6 @@ Findings from a structured pre-publish sweep. Critical (🔴) findings shipped i
 
 - **Issue + PR templates under `.github/`.** A `bug_report.md`, `feature_request.md`, and `PULL_REQUEST_TEMPLATE.md`. Keeps incoming issues structured.
 
-- **`make sanity` target that imports every entry-point script.** Would have caught the `scripts/capture_vinted_fixtures.py` broken `from upload_vinted import login` immediately when `LoginPage` was extracted (the test suite didn't, because nothing imports the script). Cheap insurance for one-shot tools that aren't in the regular test path.
-
 - **Delete `NewItemPage.select_package_size` and its tests.** Currently dead code (no call sites since 2026-05-03 walkback). Kept on "future-use" grounds but per project KISS/SRP rules that's premature — delete it; resurrect from git if Vinted ever stops pre-selecting "Mediano".
 
 - **Sort `data/category_mapping.json` by key.** Once contributors start adding mappings via PRs, merge conflicts on this file will be common. Stable key order improves diffability.

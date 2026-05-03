@@ -27,7 +27,6 @@ NAVIGATION_SOURCES = [
     REPO_ROOT / "vinted" / "pages" / "login.py",
     REPO_ROOT / "vinted" / "pages" / "profile.py",
     REPO_ROOT / "vinted" / "pages" / "edit_draft.py",
-    REPO_ROOT / "scripts" / "capture_vinted_fixtures.py",
 ]
 
 

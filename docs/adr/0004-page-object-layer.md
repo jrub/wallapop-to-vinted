@@ -1,7 +1,7 @@
 # 4. Extract the Page Object layer + introduce HTML fixture testing
 
 Date: 2026-04-26
-Status: Accepted (2026-04-27); Phase 4 done 2026-05-02 — all DOM interactions live in page objects (`login`, `new_item`, `edit_draft`, `profile`)
+Status: Partially superseded (2026-05-03) — Page Object extraction stands; the fixture-driven selector-test pattern was rolled back. See Step 7. The ADR-0005 pre-flight pattern subsumes the original "books scanner" use case.
 
 ## Research
 
@@ -95,4 +95,29 @@ The navigation AST guard was tightened in the same commit. Previously `_goto_cal
 
 **Step 5 — Bug #1 closed by removing the call, not fixing the click. ✅ DONE (2026-05-03).** Step 3 fixed the click *target* (radio input rather than the cell `div`), but production observation surfaced a second-order bug: Vinted pre-selects "Mediano" by default, and our click toggled that default off — items shipped as "Pequeño" instead of Mediano. Two fixes were on the table: (a) instrument `--visible` to confirm `radio.is_checked()` and add a short-circuit, (b) drop the call entirely and let Vinted's default stand. Wallapop has no source for package size (`up_to_kg` doesn't map to Vinted's shoebox/moving-box tiers), so we have nothing to override the default *with* in the first place. Option (b) shipped: both `upload_item` and `retry_draft_item` no longer call `select_package_size`. The verb stays on `NewItemPage` (with its tests) for the hypothetical case where Vinted ever stops pre-selecting. Documented in `CLAUDE.md` ("Package size: untouched, Vinted's default applies") and `README.md` ("Known limitations" → Package size).
 
-**Step 6 — Bug #2 status: half-shipped via ADR-0005, half-pending fixture capture. 🟡 IN PROGRESS (2026-05-03).** ADR-0005 introduces a pre-flight that gathers the ISBN from the operator before the browser opens and persists it to `attributes.isbn` on the item. That solves the *data-acquisition* half of the books-scanner bug. The *form-write* half — extending `NewItemPage.scan_dynamic_fields` to detect Vinted's ISBN testid so the gathered value lands in the field — is gated on capturing the `new_item_books` fixture in `--visible` mode (the existing red test `test_scan_dynamic_fields_finds_isbn_field` auto-skips until the fixture lands). Capture handler is in `scripts/capture_vinted_fixtures.py:_capture_new_item_books`; the script's broken `from upload_vinted import login` import was fixed in the same commit (`LoginPage(page).login(...)` now, with credentials read from `.env`).
+**Step 6 — Bug #2 status: half-shipped via ADR-0005, half-pending fixture capture. 🟡 IN PROGRESS (2026-05-03). Superseded by Step 7 — see below.** ADR-0005 introduces a pre-flight that gathers the ISBN from the operator before the browser opens and persists it to `attributes.isbn` on the item. That solves the *data-acquisition* half of the books-scanner bug. The *form-write* half — extending `NewItemPage.scan_dynamic_fields` to detect Vinted's ISBN testid so the gathered value lands in the field — is gated on capturing the `new_item_books` fixture in `--visible` mode (the existing red test `test_scan_dynamic_fields_finds_isbn_field` auto-skips until the fixture lands). Capture handler is in `scripts/capture_vinted_fixtures.py:_capture_new_item_books`; the script's broken `from upload_vinted import login` import was fixed in the same commit (`LoginPage(page).login(...)` now, with credentials read from `.env`).
+
+**Step 7 — Fixture-driven selector tests rolled back. ✅ DONE (2026-05-03).** Three forces converged on the same conclusion within hours:
+
+1. **Pre-publish security review (HIGH finding).** `tests/fixtures/vinted_html/new_item.html` (the only captured fixture) was a 2.1 MB dump of `/items/new` containing the maintainer's home address (`Juan Pablo Bonet, 18, Pr C, 50006 Zaragoza`), real name, email, Vinted internal user_id, login, anon_id, and a server-rendered `CSRF_TOKEN` embedded in the SSR JSON payload (`__next_f.push(...)`). The repo was about to go public. Hard-exclusion #11 ("test-only files") doesn't apply when the file's *literal content* is PII — the concern isn't a code-execution path through the test runner.
+
+2. **Product walk-through of what actually shipped.** Of the 8 scopes declared in `SCOPES` in the capture script, only 2 had handlers (`new_item`, `new_item_books`). Of those, `new_item` had exactly one consumer — the parametrised `test_fixture_loads_and_has_anchor` — which is structurally tautological: the capture script *waits* for the anchor `input[data-testid='title--input']` to be visible *before* dumping, and the test then checks that same anchor is present in the dumped file. Every fresh capture passes by construction; the test detects manual fixture editing and nothing else. `new_item_books` had a single skipped consumer (`test_scan_dynamic_fields_finds_isbn_field`) that needed the file to materialise. Net useful coverage from the fixture infrastructure today: 0 tests.
+
+3. **Cost/benefit of the books capture as the first non-tautological consumer.** Discovering the ISBN `data-testid` for the books scanner needs DevTools on a `--visible` session for ~2 minutes — not a 2 MB DOM capture pipeline. A 5-line `page.set_content("<input data-testid='...'>")` test locks the contract afterwards. The fixture infrastructure was built in ADR-0004 expecting many tests per fixture (ARIA snapshots, multi-verb selector suites); none of that materialised, and the ISBN bug didn't motivate it either.
+
+Removed in this step:
+- `tests/fixtures/vinted_html/new_item.html` (the leak; ~2 MB blob still in local git history pending `git filter-repo` before push).
+- `tests/fixtures/vinted_html/.gitkeep` and the `tests/fixtures/` directory tree (no other fixtures planned).
+- `tests/conftest.py` (only contained `load_vinted_fixture` and `FIXTURES_DIR`).
+- `tests/vinted/pages/test_fixtures.py` (only contained `test_fixture_loads_and_has_anchor`).
+- `test_scan_dynamic_fields_finds_isbn_field` from `tests/vinted/pages/test_new_item.py` plus the bug-#2 docstring header. To reinstate: ~5-line unit test with `page.set_content` once you've found the ISBN testid via DevTools.
+- `scripts/capture_vinted_fixtures.py` and the `scripts/` directory entirely. DevTools "Save As → Webpage, complete" covers any future ad-hoc DOM inspection.
+- The `scripts/capture_vinted_fixtures.py` entry from `tests/test_upload_navigation.py` `NAVIGATION_SOURCES`.
+
+Kept:
+- `pytest-playwright` in `requirements-dev.txt` — the two surviving `@pytest.mark.playwright` tests (`test_select_package_size_*`) still need the `page` fixture.
+- The `playwright` marker in `pytest.ini` and the `make test-fast` / `make test-browser` Makefile targets.
+- All four page object modules unchanged.
+- The historical Steps 0-6 above unedited — they record decisions taken in good faith at the time. The ADR philosophy is "ADRs are never edited after acceptance — a superseding decision gets its own ADR and updates the previous one's status." Status at the top of this ADR has been updated; this Step 7 entry is the superseding decision in-place because it's narrowly scoped (rollback of one already-documented sub-decision, not a new architectural direction).
+
+Test count: 253 passing, 0 skipped (was 255 + 1 skipped). Net loss: the tautological anchor test and the skipped books-fixture test. Net gain: no PII risk, no fixture-refresh maintenance burden, simpler mental model.
