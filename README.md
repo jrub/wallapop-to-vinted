@@ -19,7 +19,7 @@ Wallapop has no public API. Vinted has no public write API for individual accoun
 
 - Python 3.10+
 - A Wallapop account with active listings
-- A Vinted account in a supported country (`es`, `fr`, `de`, `it`, …)
+- A Vinted account on **vinted.es** only — the DOM selectors and URLs are hardcoded to the Spanish site
 
 ## Installation
 
@@ -32,7 +32,7 @@ source .venv/bin/activate
 
 pip install -r requirements.txt
 pip install -r requirements-dev.txt  # optional, only to run the test suite
-patchright install chromium
+patchright install chrome   # real Chrome — required for DataDome stealth, see vinted/session.py
 
 cp .env.example .env
 ```

@@ -79,7 +79,7 @@ data/
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 pip install -r requirements-dev.txt  # pytest + pytest-mock, only needed to run the test suite
-patchright install chromium
+patchright install chrome   # real Chrome (channel="chrome") — bundled Chromium is detected by DataDome
 
 # Run
 python extract_vinted_categories.py  # refresh Vinted category tree (run once, re-run if Vinted restructures)
